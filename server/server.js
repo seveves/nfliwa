@@ -66,8 +66,9 @@ app.use(function(req, res) {
 var db = require('./database/db');
 
 db.on('open', function() {
-  server.listen(process.env.PORT || 3000, function () {
-    console.log('server - listening on port 3000');
+  let port = process.env.PORT || 3000;
+  server.listen(port, function () {
+    console.log('server - listening on port ' + port);
   });
 });
 
