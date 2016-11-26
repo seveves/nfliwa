@@ -10,8 +10,8 @@
     "watch:nodemon": "nodemon server/server.js --config nodemon.json",
     "watch:sass": "gulp sass:watch",
     "serve": "concurrently \"npm run watch:sass\" \"npm run watch:nodemon\"",
-    "start:server": "cross-env NODE_ENV=production node server/server.js",
-    "start": "npm run client:build && npm run start:server"
+    "prestart": "npm run client:build",
+    "start": "node server/server.js"
   },
   "author": "Severin Friede",
   "license": "MIT",
