@@ -29,7 +29,6 @@ module.exports = {
 	],
 
 	plugins: ([
-		require('webpack-fail-plugin'),
 		new ExtractTextPlugin('style.css', { allChunks: true, }),
 		new HtmlWebpackPlugin({ template: './client/index.html', title: 'Naturfreunde Lichtenwald e.v.'})
 	]),

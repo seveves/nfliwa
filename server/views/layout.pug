@@ -24,7 +24,6 @@ html
         nav(class='mdl-navigation')
           if (!user)
             a(class='mdl-navigation__link', href='/admin/login') Login
-            a(class='mdl-navigation__link mdl-menu__item--full-bleed-divider', href='/admin/register') Register
           if (user)
             a(class='mdl-navigation__link mdl-menu__item--full-bleed-divider', href='/admin/logout') Logout
             a(class='mdl-navigation__link', href='/admin/posts') Posts

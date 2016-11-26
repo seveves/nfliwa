@@ -9,9 +9,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-var appConfig = process.env.NODE_ENV === 'production' ?
-  require('./config/env.prod.json') :
-  require('./config/env.dev.json');
+var appConfig = require('./config/app.config.js');
 
 var app = express();
 var server = require('http').Server(app);
@@ -28,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(methodOverride());
 app.use(require('express-session')({
-    secret: appConfig.sessionSecret,
+    secret: appConfig.secret,
     resave: false,
     saveUninitialized: false
 }));
@@ -68,7 +66,7 @@ app.use(function(req, res) {
 var db = require('./database/db');
 
 db.on('open', function() {
-  server.listen(3000, function () {
+  server.listen(process.env.PORT || 3000, function () {
     console.log('server - listening on port 3000');
   });
 });

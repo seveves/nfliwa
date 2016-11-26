@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var appConfig = require('../config/app.config.js');
 
 process.on('SIGINT', function() {  
   mongoose.connection.close(function () { 
@@ -7,5 +8,5 @@ process.on('SIGINT', function() {
   }); 
 });
 
-var db = mongoose.createConnection('mongodb://localhost/naturfreunde');
+var db = mongoose.createConnection(appConfig.mongodb);
 module.exports = db;
