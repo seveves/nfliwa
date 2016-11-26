@@ -38,7 +38,8 @@
     "preact-router": "^2.3.2",
     "proptypes": "^0.14.3",
     "pug": "^2.0.0-beta6",
-    "socket.io": "^1.6.0"
+    "socket.io": "^1.6.0",
+    "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.3",
