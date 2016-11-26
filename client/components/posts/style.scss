@@ -1,0 +1,69 @@
+@import '../../scss/helpers';
+
+.nf-load-more {
+  margin: auto;
+}
+
+.nf-post__footer {
+  margin-left: 20px;
+  margin-right: 20px;
+  border-bottom: 1px solid #CCCCCC;
+}
+
+.nf-post {
+  padding: 20px;
+}
+
+.nf-post__images {
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.nf-post__title {
+  color: #263238;
+  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 5px;
+}
+
+.nf-post__body {
+  color: #263238;
+  padding-bottom: 20px;
+  font-size: 16px;
+  line-height: 28px;
+  white-space: pre-wrap;
+}
+
+.nf-post__body > .nf-post__date {
+  color: #263238;
+  text-transform: uppercase;
+}
+
+.nf-post__body > .nf-post__date::after {
+  content: "—";
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.nf-post__body > .nf-post__date::before {
+  content: "|";
+  margin-right: 2px;
+}
+
+@media (max-width: $screen-sm) {
+  .nf-post {
+    padding: 0;
+  }
+
+  .nf-post__images {
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .nf-post__footer {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}

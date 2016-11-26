@@ -1,0 +1,17 @@
+.lazy-image {
+  background-repeat: no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  float: left;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+.lazy-image img {
+  opacity: 0;
+  width: 150px;
+}
+
+.fade-in {
+  transition: opacity 1500ms;
+}

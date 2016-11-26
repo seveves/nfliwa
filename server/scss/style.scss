@@ -1,0 +1,25 @@
+@import 'buttons';
+@import 'overlay';
+
+.full-width {
+    width: 100%;
+}
+
+.img-checkbox {
+    height: 100px;
+}
+.img-checkbox img {
+    height: 100%;
+    cursor: pointer;
+    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
+}
+
+.img-checkbox.is-checked img {
+    -webkit-filter: grayscale(100%) blur(2px);
+    filter: grayscale(100%) blur(2px);
+}
+
+.warning {
+    border-right: 2px solid darkred;
+}
