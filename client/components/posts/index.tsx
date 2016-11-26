@@ -11,7 +11,7 @@ declare const fetch: any;
 
 export default class Posts extends Component<{path}, {posts,next}> {
 
-	private url: string = 'http://localhost:3000';
+	private url: string = '//' + window.location.host;
 
 	fetchPosts(apiUrl) {
 		fetch(this.url + apiUrl)
