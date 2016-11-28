@@ -4088,8 +4088,7 @@
 	    __extends(Events, _super);
 	    function Events() {
 	        _super.apply(this, arguments);
-	        //private url: string = '//' + window.location.host;
-	        this.url = '//localhost:3000';
+	        this.url = '//' + window.location.host;
 	    }
 	    Events.prototype.fetchNextEvents = function () {
 	        var _this = this;
