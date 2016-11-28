@@ -8,8 +8,7 @@ declare const fetch: any;
 
 export default class Events extends Component<{path}, {nextEvents?,pastEvents?}> {
 
-	//private url: string = '//' + window.location.host;
-	private url: string = '//localhost:3000';
+	private url: string = '//' + window.location.host;
 
 	fetchNextEvents() {
 		fetch(this.url + '/api/events/next')
