@@ -14,6 +14,22 @@ function deletePost(id) {
   });
 }
 
+function deleteEvent(id) {
+  var url = "/admin/events/" + id;
+
+  $.ajax({ 
+    beforeSend: function (request) {
+      return confirm('Delete?');
+    },
+
+    type: "DELETE", 
+    url: url,
+    complete: function() {
+      location.reload();
+    }
+  });
+}
+
 window.onload = function() {
   var title = $('#title').val();  
   var body = $('#body').val();

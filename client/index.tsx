@@ -6,6 +6,11 @@ import 'material-design-lite';
 import 'material-design-lite/dist/material.green-light_green.min.css';
 import 'whatwg-fetch'
 
+import Promise from 'promise-polyfill';
+if (!window.Promise) {
+  window.Promise = Promise;
+}
+
 import { h, render } from 'preact';
 import './scss/index.scss';
 

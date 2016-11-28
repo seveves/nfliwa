@@ -1,0 +1,52 @@
+extends layout
+
+block content
+  if alerts
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Oops!
+        each alert in alerts
+          span(class='mdl-chip mdl-chip--contact mdl-color--red mdl-color-text--white')
+            span(class='mdl-chip__contact mdl-color--red-700 mdl-color-text--white') !
+            span(class='mdl-chip__text') #{alert}
+  form(action='/admin/events', method='post')
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Title
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if event
+            input(class='mdl-textfield__input', type='text', id='title', name='title', value=event.title)
+          if !event
+            input(class='mdl-textfield__input', type='text', id='title', name='title')
+          label(class='mdl-textfield__label', for='title') Title
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Location
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if event
+            input(class='mdl-textfield__input', type='text', id='location', name='location', value=event.location)
+          if !event
+            input(class='mdl-textfield__input', type='text', id='location', name='location')
+          label(class='mdl-textfield__label', for='location') Location
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Date/Time
+        h6 Expected format: YYYY-MM-DDTHH:mm (f.e. 2016-11-10T04:05)
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if event
+            input(class='mdl-textfield__input', type='datetime-local', id='eventDate', name='eventDate', value=event.eventDateString)
+          if !event
+            input(class='mdl-textfield__input', type='datetime-local', id='eventDate', name='eventDate')
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Body
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if event
+            textarea(class='mdl-textfield__input', type='text', rows='10', id='body', name='body') #{event.body}
+          if !event
+            textarea(class='mdl-textfield__input', type='text', rows='10', id='body', name='body')
+          label(class='mdl-textfield__label', for='body') Body
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        a(class='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect', href='/admin/events') Cancel
+        button(class='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect', type='submit') Submit
