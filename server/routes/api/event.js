@@ -36,6 +36,7 @@ router.get('/events/last', (req, res, next) => {
   date = moment(date).startOf('day').utc().toDate();    
 
   Event.find({ 'eventDate': { $lt: date } })
+    .sort('-eventDate')
     .limit(amount)
     .exec(function(err, events) {
       if (err) return next(err);
