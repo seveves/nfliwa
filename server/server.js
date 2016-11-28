@@ -42,8 +42,10 @@ passport.deserializeUser(Account.deserializeUser());
 
 // routes
 app.use('/api', require('./routes/api/post'));
+app.use('/api', require('./routes/api/event'));
 app.use('/admin', require('./routes/admin/login'));
 app.use('/admin', require('./routes/admin/posts')(io));
+app.use('/admin', require('./routes/admin/events')());
 
 // error handler
 app.use(logErrors);

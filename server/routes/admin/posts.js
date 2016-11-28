@@ -1,12 +1,12 @@
 function postsRouter(socketio) {
-  var io = socketio;
-  var multer  = require('multer');
-  var path = require('path');
-  var router = require('express').Router();
-  var upload = multer({
+  let io = socketio;
+  let multer  = require('multer');
+  let path = require('path');
+  let router = require('express').Router();
+  let upload = multer({
     dest: 'uploads/',
     fileFilter: (req, file, callback) => {
-      var ext = path.extname(file.originalname).toLowerCase();
+      let ext = path.extname(file.originalname).toLowerCase();
       if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
         return callback(new Error('Only images are allowed (jpg, png).'));
       }
@@ -18,16 +18,14 @@ function postsRouter(socketio) {
     }
   });
 
-  var ImageTask = require('../../tasks/image-task');
-  var Post = require('../../models/post');
+  let ImageTask = require('../../tasks/image-task');
+  let Post = require('../../models/post');
 
   io.of('/posts').on('connection', socket => {
     console.log('socket connected');
     this.socket = socket;
 
-    socket.on('disconnect', function () {
-      console.log('socket disconnected')
-    });
+    socket.on('disconnect', () => console.log('socket disconnected'));
   });
 
   // get all posts

@@ -57,6 +57,14 @@
 .full-width {
   width: 100%; }
 
+.demo-card-square.mdl-card {
+  width: 320px;
+  height: 320px; }
+
+.demo-card-square > .mdl-card__title {
+  color: #fff;
+  background: url("../img/posts.png") bottom right 15% no-repeat #757575; }
+
 .img-checkbox {
   height: 100px; }
 
