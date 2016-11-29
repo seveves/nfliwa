@@ -6,6 +6,7 @@ import Header from './header';
 import Sidebar from './sidebar';
 import Posts from './posts';
 import Events from './events';
+import EventDetails from './event-details';
 
 const React = { createElement: h };
 
@@ -31,6 +32,7 @@ export default class App extends Component<{},{}> {
 						<Router onChange={this.handleRoute}>
 							<Posts path="/" />
 							<Events path="/events" />
+							<EventDetails path="/events/:eventId" eventId=""/>
 						</Router>
 					</Layout.Content>
 				</Layout>

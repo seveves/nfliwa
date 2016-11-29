@@ -1,0 +1,7 @@
+@import '../../scss/helpers';
+
+@media (max-width: $screen-sm) {
+  .event-card {
+    width: 275px;
+  }
+}

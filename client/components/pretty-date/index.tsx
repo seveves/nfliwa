@@ -29,7 +29,7 @@ export default class PrettyDate extends Component<{date: Date}, {prettyDate: str
 		} else if (delta < this.day * 2) {
 			prettyDate = 'Gestern';
 		} else {
-			prettyDate = 'Am ' + date.getDate() + '. ' + this.getMonthName(date.getMonth()) + ' ' + date.getFullYear();
+			prettyDate = 'Am ' + date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
 		}
 
 		this.setState({ prettyDate: prettyDate });
