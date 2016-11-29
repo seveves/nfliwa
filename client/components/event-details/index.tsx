@@ -1,0 +1,51 @@
+import { h, Component, render } from 'preact';
+import { Grid, Card, Cell, Icon, Button } from 'preact-mdl';
+
+const React = { createElement: h };
+declare const fetch: any;
+
+import EventDate from '../event-date';
+
+export default class EventDetails extends Component<{eventId, path}, {event}> {
+
+  private url: string = '//' + window.location.host;
+
+  fetchNextEvents(eventId) {
+		fetch(this.url + '/api/events/' + eventId)
+			.then(res => res.json())
+			.then(json => json || {})
+			.then(result => {
+				this.setState({ event: result });
+			});
+	}
+
+	componentDidMount() {
+		this.fetchNextEvents(this.props.eventId);
+	}
+
+	render({ eventId, path }, { event=null }) {
+		return (
+			<section class="nf-container">
+				<Grid>
+					<Grid.Cell class="mdl-cell--12-col">
+					{ event ? 
+						<div class="nf-event">
+							<h3 class="nf-event__title">{event.title}</h3>
+							<h4 class="nf-event__date"><Icon icon="event"/> <EventDate date={new Date(event.eventDate)} /></h4>
+							<h4 class="nf-event__location"><Icon icon="location on"/> {event.location}</h4>
+							<h5>Beschreibung</h5>
+							<p class="nf-event__text">{event.body}</p>
+						</div> : '' }
+					</Grid.Cell>			
+				</Grid>
+				<Grid>
+					<Grid.Cell class="mdl-cell--2-col">
+						<a class="mdl-button mdl-button--colored" href="/events">
+							<Icon icon="arrow back"/> Zurück zur Übersicht
+						</a>
+					</Grid.Cell>
+				</Grid>
+			</section>
+		);
+	}
+}

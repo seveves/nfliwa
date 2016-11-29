@@ -1630,6 +1630,7 @@
 	var sidebar_1 = __webpack_require__(/*! ./sidebar */ 18);
 	var posts_1 = __webpack_require__(/*! ./posts */ 19);
 	var events_1 = __webpack_require__(/*! ./events */ 24);
+	var event_details_1 = __webpack_require__(/*! ./event-details */ 28);
 	var React = { createElement: preact_1.h };
 	var App = (function (_super) {
 	    __extends(App, _super);
@@ -1652,7 +1653,8 @@
 	                React.createElement(preact_mdl_1.Layout.Content, null, 
 	                    React.createElement(preact_router_1.Router, {onChange: this.handleRoute}, 
 	                        React.createElement(posts_1.default, {path: "/"}), 
-	                        React.createElement(events_1.default, {path: "/events"}))
+	                        React.createElement(events_1.default, {path: "/events"}), 
+	                        React.createElement(event_details_1.default, {path: "/events/:eventId", eventId: ""}))
 	                ))
 	        ));
 	    };
@@ -4020,7 +4022,7 @@
 	            prettyDate = 'Gestern';
 	        }
 	        else {
-	            prettyDate = 'Am ' + date.getDate() + '. ' + this.getMonthName(date.getMonth()) + ' ' + date.getFullYear();
+	            prettyDate = 'Am ' + date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
 	        }
 	        this.setState({ prettyDate: prettyDate });
 	    };
@@ -4083,6 +4085,7 @@
 	var preact_1 = __webpack_require__(/*! preact */ 11);
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
 	__webpack_require__(/*! ./style.scss */ 25);
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 26);
 	var React = { createElement: preact_1.h };
 	var Events = (function (_super) {
 	    __extends(Events, _super);
@@ -4128,18 +4131,10 @@
 	}(preact_1.Component));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = Events;
-	React.createElement("div", {class: "demo-card-square mdl-card mdl-shadow--2dp"}, 
-	    React.createElement("div", {class: "mdl-card__title mdl-card--expand"}, 
-	        React.createElement("h2", {class: "mdl-card__title-text"}, "Update")
-	    ), 
-	    React.createElement("div", {class: "mdl-card__supporting-text"}, "Lorem ipsum dolor sit amet, consectetur adipiscing elit." + ' ' + "Aenan convallis."), 
-	    React.createElement("div", {class: "mdl-card__actions mdl-card--border"}, 
-	        React.createElement("a", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"}, "View Updates")
-	    ));
 	var NextEvent = function (_a) {
 	    var event = _a.event;
 	    return (React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
-	        React.createElement("div", {class: "mdl-card mdl-shadow--2dp"}, 
+	        React.createElement("div", {class: "event-card mdl-card mdl-shadow--2dp"}, 
 	            React.createElement("div", {class: "mdl-card__title mdl-card--expand"}, 
 	                React.createElement("h4", null, event.title)
 	            ), 
@@ -4147,10 +4142,12 @@
 	                React.createElement("p", null, 
 	                    React.createElement("span", {class: "card-location"}, event.location), 
 	                    React.createElement("br", null), 
-	                    React.createElement("span", {class: "card-date"}, new Date(event.eventDate).toISOString()))
+	                    React.createElement("div", {class: "card-date"}, 
+	                        React.createElement(event_date_1.default, {date: new Date(event.eventDate)})
+	                    ))
 	            ), 
 	            React.createElement("div", {class: "mdl-card__actions mdl-card--border"}, 
-	                React.createElement("a", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"}, 
+	                React.createElement("a", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", href: '/events/' + event._id}, 
 	                    React.createElement(preact_mdl_1.Icon, {icon: "event"}), 
 	                    " Details")
 	            ))
@@ -4161,14 +4158,14 @@
 	    return (React.createElement("li", {class: "mdl-list__item mdl-list__item--three-line"}, 
 	        React.createElement("span", {class: "mdl-list__item-primary-content"}, 
 	            React.createElement(preact_mdl_1.Icon, {icon: "event", class: "mdl-list__item-avatar"}), 
-	            React.createElement("span", null, 
-	                event.title, 
-	                " (", 
-	                event.eventDate, 
-	                ")"), 
-	            React.createElement("span", {class: "mdl-list__item-text-body"}, event.location)), 
+	            React.createElement("span", null, event.title), 
+	            React.createElement("div", {class: "mdl-list__item-text-body"}, 
+	                React.createElement("div", null, event.location), 
+	                React.createElement("div", null, 
+	                    React.createElement(event_date_1.default, {date: event.eventDate})
+	                ))), 
 	        React.createElement("span", {class: "mdl-list__item-secondary-content"}, 
-	            React.createElement("a", {class: "mdl-list__item-secondary-action", href: "#"}, 
+	            React.createElement("a", {class: "mdl-list__item-secondary-action", href: '/events/' + event._id}, 
 	                React.createElement(preact_mdl_1.Icon, {icon: "details"})
 	            )
 	        )));
@@ -4183,6 +4180,158 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 26 */
+/*!************************************************!*\
+  !*** ./client/components/event-date/index.tsx ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	__webpack_require__(/*! ./style.scss */ 27);
+	var React = { createElement: preact_1.h };
+	var EventDate = (function (_super) {
+	    __extends(EventDate, _super);
+	    function EventDate() {
+	        _super.apply(this, arguments);
+	    }
+	    EventDate.prototype.createEventDate = function (date) {
+	        var eventDate = date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
+	        ;
+	        var hours = date.getUTCHours();
+	        var minutes = date.getUTCMinutes();
+	        var leadingHourZero = hours < 10 ? '0' : '';
+	        var leadingMinutesZero = minutes < 10 ? '0' : '';
+	        var eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
+	        this.setState({ eventDate: eventDate, eventTime: eventTime });
+	    };
+	    EventDate.prototype.getMonthName = function (month) {
+	        switch (month) {
+	            case 0:
+	                return 'Januar';
+	            case 1:
+	                return 'Februar';
+	            case 2:
+	                return 'März';
+	            case 3:
+	                return 'April';
+	            case 4:
+	                return 'Mai';
+	            case 5:
+	                return 'Juni';
+	            case 6:
+	                return 'Juli';
+	            case 7:
+	                return 'August';
+	            case 8:
+	                return 'September';
+	            case 9:
+	                return 'Oktober';
+	            case 10:
+	                return 'November';
+	            case 11:
+	                return 'Dezember';
+	        }
+	    };
+	    EventDate.prototype.componentDidMount = function () {
+	        this.createEventDate(new Date(this.props.date));
+	    };
+	    EventDate.prototype.render = function (_a, _b) {
+	        var date = _a.date;
+	        var _c = _b.eventDate, eventDate = _c === void 0 ? '' : _c, _d = _b.eventTime, eventTime = _d === void 0 ? '' : _d;
+	        return (React.createElement("span", null, 
+	            React.createElement("span", {class: "event-date"}, eventDate), 
+	            React.createElement("span", {class: "event-time"}, eventTime)));
+	    };
+	    return EventDate;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = EventDate;
+
+
+/***/ },
+/* 27 */
+/*!*************************************************!*\
+  !*** ./client/components/event-date/style.scss ***!
+  \*************************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 28 */
+/*!***************************************************!*\
+  !*** ./client/components/event-details/index.tsx ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var React = { createElement: preact_1.h };
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 26);
+	var EventDetails = (function (_super) {
+	    __extends(EventDetails, _super);
+	    function EventDetails() {
+	        _super.apply(this, arguments);
+	        this.url = '//' + window.location.host;
+	    }
+	    EventDetails.prototype.fetchNextEvents = function (eventId) {
+	        var _this = this;
+	        fetch(this.url + '/api/events/' + eventId)
+	            .then(function (res) { return res.json(); })
+	            .then(function (json) { return json || {}; })
+	            .then(function (result) {
+	            _this.setState({ event: result });
+	        });
+	    };
+	    EventDetails.prototype.componentDidMount = function () {
+	        this.fetchNextEvents(this.props.eventId);
+	    };
+	    EventDetails.prototype.render = function (_a, _b) {
+	        var eventId = _a.eventId, path = _a.path;
+	        var _c = _b.event, event = _c === void 0 ? null : _c;
+	        return (React.createElement("section", {class: "nf-container"}, 
+	            React.createElement(preact_mdl_1.Grid, null, 
+	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, event ?
+	                    React.createElement("div", {class: "nf-event"}, 
+	                        React.createElement("h3", {class: "nf-event__title"}, event.title), 
+	                        React.createElement("h4", {class: "nf-event__date"}, 
+	                            React.createElement(preact_mdl_1.Icon, {icon: "event"}), 
+	                            " ", 
+	                            React.createElement(event_date_1.default, {date: new Date(event.eventDate)})), 
+	                        React.createElement("h4", {class: "nf-event__location"}, 
+	                            React.createElement(preact_mdl_1.Icon, {icon: "location on"}), 
+	                            " ", 
+	                            event.location), 
+	                        React.createElement("h5", null, "Beschreibung"), 
+	                        React.createElement("p", {class: "nf-event__text"}, event.body)) : '')
+	            ), 
+	            React.createElement(preact_mdl_1.Grid, null, 
+	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--2-col"}, 
+	                    React.createElement("a", {class: "mdl-button mdl-button--colored", href: "/events"}, 
+	                        React.createElement(preact_mdl_1.Icon, {icon: "arrow back"}), 
+	                        " Zurück zur Übersicht")
+	                )
+	            )));
+	    };
+	    return EventDetails;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = EventDetails;
+
 
 /***/ }
 /******/ ]);

@@ -6081,5 +6081,12 @@ iframe.heightSet {
 .fade-in {
   -webkit-transition: opacity 1500ms;
   transition: opacity 1500ms; }
+@media (max-width: 750px) {
+  .event-card {
+    width: 275px; } }
+.event-date::after {
+  content: "-";
+  margin-left: 2px;
+  margin-right: 2px; }
 
 /*# sourceMappingURL=style.css.map*/

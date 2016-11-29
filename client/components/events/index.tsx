@@ -9,8 +9,7 @@ declare const fetch: any;
 
 export default class Events extends Component<{path}, {nextEvents?,pastEvents?}> {
 
-	//private url: string = '//' + window.location.host;
-	private url: string = '//localhost:3000';
+	private url: string = '//' + window.location.host;
 
 	fetchNextEvents() {
 		fetch(this.url + '/api/events/next')
@@ -66,11 +65,11 @@ const NextEvent = ({ event }) => (
 			<div class="mdl-card__supporting-text">
 				<p>
 				<span class="card-location">{event.location}</span><br/>
-				<span class="card-date"><EventDate date={new Date(event.eventDate)} /></span>
+				<div class="card-date"><EventDate date={new Date(event.eventDate)} /></div>
 				</p>
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
-				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href={'/events/' + event._id}>
 					<Icon icon="event" /> Details
 				</a>
 			</div>
@@ -83,12 +82,15 @@ const PastEvent = ({ event }) => (
 		<span class="mdl-list__item-primary-content">
       <Icon icon="event" class="mdl-list__item-avatar"></Icon>
       <span>{event.title}</span>
-      <span class="mdl-list__item-text-body">
-			{event.location}
-			<EventDate date={event.eventDate} /></span>
+      <div class="mdl-list__item-text-body">
+				<div>{event.location}</div>
+				<div>
+					<EventDate date={event.eventDate} />
+				</div>
+			</div>
     </span>
     <span class="mdl-list__item-secondary-content">
-      <a class="mdl-list__item-secondary-action" href="#">
+      <a class="mdl-list__item-secondary-action" href={'/events/' + event._id}>
 				<Icon icon="details" />
 			</a>
     </span>

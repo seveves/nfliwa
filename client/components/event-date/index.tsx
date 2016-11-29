@@ -52,10 +52,10 @@ export default class EventDate extends Component<{date: Date}, {eventDate: strin
 
   render({ date }, { eventDate='', eventTime='' }) {
 		return (
-			<div>
+			<span>
 				<span class="event-date">{eventDate}</span>
 				<span class="event-time">{eventTime}</span>
-			</div>
+			</span>
 		);
 	}
 }
