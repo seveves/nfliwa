@@ -77,7 +77,7 @@ db.on('open', function() {
 // error logging
 function logErrors (err, req, res, next) {
   console.error(err.stack);
-  next(err)
+  next(err);
 }
 
 function clientErrorHandler (err, req, res, next) {

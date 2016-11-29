@@ -1,42 +1,38 @@
-import { h, Component } from 'preact';
-import { Router } from 'preact-router';
+import { Component, h } from 'preact';
 import { Layout } from 'preact-mdl';
+import { Router } from 'preact-router';
 
-import Header from './header';
-import Sidebar from './sidebar';
-import Posts from './posts';
-import Events from './events';
 import EventDetails from './event-details';
+import Events from './events';
+import Header from './header';
+import Posts from './posts';
+import Sidebar from './sidebar';
 
 const React = { createElement: h };
 
-export default class App extends Component<{},{}> {
+export default class App extends Component<{}, {}> {
 
-	private currentUrl: string;
+  private currentUrl: string;
 
-	/** Gets fired when the route changes.
-	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
-	 *	@param {string} event.url	The newly routed URL
-	 */
-	handleRoute = e => {
-		this.currentUrl = e.url;
-	};
+  public render() {
+    return (
+      <div id="app">
+        <Layout fixed-header>
+          <Header />
+          <Sidebar />
+          <Layout.Content>
+            <Router onChange={this.handleRoute}>
+              <Posts path="/" />
+              <Events path="/events" />
+              <EventDetails path="/events/:eventId" eventId=""/>
+            </Router>
+          </Layout.Content>
+        </Layout>
+      </div>
+    );
+  }
 
-	render() {
-		return (
-			<div id="app">
-				<Layout fixed-header>
-					<Header />
-					<Sidebar />
-					<Layout.Content>
-						<Router onChange={this.handleRoute}>
-							<Posts path="/" />
-							<Events path="/events" />
-							<EventDetails path="/events/:eventId" eventId=""/>
-						</Router>
-					</Layout.Content>
-				</Layout>
-			</div>
-		);
-	}
+  private handleRoute = (e) => {
+    this.currentUrl = e.url;
+  }
 }
