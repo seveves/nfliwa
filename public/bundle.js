@@ -1624,23 +1624,19 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_router_1 = __webpack_require__(/*! preact-router */ 14);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	var header_1 = __webpack_require__(/*! ./header */ 16);
-	var sidebar_1 = __webpack_require__(/*! ./sidebar */ 18);
-	var posts_1 = __webpack_require__(/*! ./posts */ 19);
-	var events_1 = __webpack_require__(/*! ./events */ 24);
-	var event_details_1 = __webpack_require__(/*! ./event-details */ 28);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
+	var preact_router_1 = __webpack_require__(/*! preact-router */ 15);
+	var event_details_1 = __webpack_require__(/*! ./event-details */ 16);
+	var events_1 = __webpack_require__(/*! ./events */ 19);
+	var header_1 = __webpack_require__(/*! ./header */ 21);
+	var posts_1 = __webpack_require__(/*! ./posts */ 23);
+	var sidebar_1 = __webpack_require__(/*! ./sidebar */ 29);
 	var React = { createElement: preact_1.h };
 	var App = (function (_super) {
 	    __extends(App, _super);
 	    function App() {
 	        var _this = this;
 	        _super.apply(this, arguments);
-	        /** Gets fired when the route changes.
-	         *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
-	         *	@param {string} event.url	The newly routed URL
-	         */
 	        this.handleRoute = function (e) {
 	            _this.currentUrl = e.url;
 	        };
@@ -1666,354 +1662,6 @@
 
 /***/ },
 /* 14 */
-/*!***********************************************!*\
-  !*** ./~/preact-router/dist/preact-router.js ***!
-  \***********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	(function (global, factory) {
-		 true ? module.exports = factory(__webpack_require__(/*! preact */ 11)) :
-		typeof define === 'function' && define.amd ? define(['preact'], factory) :
-		(global.preactRouter = factory(global.preact));
-	}(this, (function (preact) { 'use strict';
-	
-	var EMPTY$1 = {};
-	
-	function exec(url, route) {
-		var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : EMPTY$1;
-	
-		var reg = /(?:\?([^#]*))?(#.*)?$/,
-		    c = url.match(reg),
-		    matches = {},
-		    ret = void 0;
-		if (c && c[1]) {
-			var p = c[1].split('&');
-			for (var i = 0; i < p.length; i++) {
-				var r = p[i].split('=');
-				matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
-			}
-		}
-		url = segmentize(url.replace(reg, ''));
-		route = segmentize(route || '');
-		var max = Math.max(url.length, route.length);
-		for (var _i = 0; _i < max; _i++) {
-			if (route[_i] && route[_i].charAt(0) === ':') {
-				var param = route[_i].replace(/(^\:|[+*?]+$)/g, ''),
-				    flags = (route[_i].match(/[+*?]+$/) || EMPTY$1)[0] || '',
-				    plus = ~flags.indexOf('+'),
-				    star = ~flags.indexOf('*'),
-				    val = url[_i] || '';
-				if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
-					ret = false;
-					break;
-				}
-				matches[param] = decodeURIComponent(val);
-				if (plus || star) {
-					matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
-					break;
-				}
-			} else if (route[_i] !== url[_i]) {
-				ret = false;
-				break;
-			}
-		}
-		if (opts.default !== true && ret === false) return false;
-		return matches;
-	}
-	
-	function pathRankSort(a, b) {
-		var aAttr = a.attributes || EMPTY$1,
-		    bAttr = b.attributes || EMPTY$1;
-		if (aAttr.default) return 1;
-		if (bAttr.default) return -1;
-		var diff = rank(aAttr.path) - rank(bAttr.path);
-		return diff || aAttr.path.length - bAttr.path.length;
-	}
-	
-	function segmentize(url) {
-		return strip(url).split('/');
-	}
-	
-	function rank(url) {
-		return (strip(url).match(/\/+/g) || '').length;
-	}
-	
-	function strip(url) {
-		return url.replace(/(^\/+|\/+$)/g, '');
-	}
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var customHistory = null;
-	
-	var ROUTERS = [];
-	
-	var EMPTY = {};
-	
-	// hangs off all elements created by preact
-	var ATTR_KEY = typeof Symbol !== 'undefined' ? Symbol.for('preactattr') : '__preactattr_';
-	
-	function isPreactElement(node) {
-		return ATTR_KEY in node;
-	}
-	
-	function setUrl(url) {
-		var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'push';
-	
-		if (customHistory && customHistory[type]) {
-			customHistory[type](url);
-		} else if (typeof history !== 'undefined' && history[type + 'State']) {
-			history[type + 'State'](null, null, url);
-		}
-	}
-	
-	function getCurrentUrl() {
-		var url = void 0;
-		if (customHistory && customHistory.location) {
-			url = customHistory.location;
-		} else if (customHistory && customHistory.getCurrentLocation) {
-			url = customHistory.getCurrentLocation();
-		} else {
-			url = typeof location !== 'undefined' ? location : EMPTY;
-		}
-		return '' + (url.pathname || '') + (url.search || '');
-	}
-	
-	function route(url) {
-		var replace = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-	
-		if (typeof url !== 'string' && url.url) {
-			replace = url.replace;
-			url = url.url;
-		}
-	
-		// only push URL into history if we can handle it
-		if (canRoute(url)) {
-			setUrl(url, replace ? 'replace' : 'push');
-		}
-	
-		return routeTo(url);
-	}
-	
-	/** Check if the given URL can be handled by any router instances. */
-	function canRoute(url) {
-		for (var i = ROUTERS.length; i--;) {
-			if (ROUTERS[i].canRoute(url)) return true;
-		}
-		return false;
-	}
-	
-	/** Tell all router instances to handle the given URL.  */
-	function routeTo(url) {
-		var didRoute = false;
-		for (var i = 0; i < ROUTERS.length; i++) {
-			if (ROUTERS[i].routeTo(url) === true) {
-				didRoute = true;
-			}
-		}
-		return didRoute;
-	}
-	
-	function routeFromLink(node) {
-		// only valid elements
-		if (!node || !node.getAttribute) return;
-	
-		var href = node.getAttribute('href'),
-		    target = node.getAttribute('target');
-	
-		// ignore links with targets and non-path URLs
-		if (!href || !href.match(/^\//g) || target && !target.match(/^_?self$/i)) return;
-	
-		// attempt to route, if no match simply cede control to browser
-		return route(href);
-	}
-	
-	function handleLinkClick(e) {
-		if (e.button !== 0) return;
-		routeFromLink(e.currentTarget || e.target || this);
-		return prevent(e);
-	}
-	
-	function prevent(e) {
-		if (e) {
-			if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-			if (e.stopPropagation) e.stopPropagation();
-			e.preventDefault();
-		}
-		return false;
-	}
-	
-	function delegateLinkHandler(e) {
-		// ignore events the browser takes care of already:
-		if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
-	
-		var t = e.target;
-		do {
-			if (String(t.nodeName).toUpperCase() === 'A' && t.getAttribute('href') && isPreactElement(t)) {
-				if (e.button !== 0) return;
-				// if link is handled by the router, prevent browser defaults
-				if (routeFromLink(t)) {
-					return prevent(e);
-				}
-			}
-		} while (t = t.parentNode);
-	}
-	
-	if (typeof addEventListener === 'function') {
-		addEventListener('popstate', function () {
-			return routeTo(getCurrentUrl());
-		});
-		addEventListener('click', delegateLinkHandler);
-	}
-	
-	var Link = function Link(props) {
-		return preact.h('a', _extends({}, props, { onClick: handleLinkClick }));
-	};
-	
-	var Router = function (_Component) {
-		_inherits(Router, _Component);
-	
-		function Router(props) {
-			_classCallCheck(this, Router);
-	
-			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
-	
-			if (props.history) {
-				customHistory = props.history;
-			}
-	
-			_this.state = {
-				url: _this.props.url || getCurrentUrl()
-			};
-			return _this;
-		}
-	
-		Router.prototype.shouldComponentUpdate = function shouldComponentUpdate(props) {
-			if (props.static !== true) return true;
-			return props.url !== this.props.url || props.onChange !== this.props.onChange;
-		};
-	
-		/** Check if the given URL can be matched against any children */
-	
-	
-		Router.prototype.canRoute = function canRoute(url) {
-			return this.getMatchingChildren(this.props.children, url, false).length > 0;
-		};
-	
-		/** Re-render children with a new URL to match against. */
-	
-	
-		Router.prototype.routeTo = function routeTo(url) {
-			this._didRoute = false;
-			this.setState({ url: url });
-	
-			// if we're in the middle of an update, don't synchronously re-route.
-			if (this.updating) return this.canRoute(url);
-	
-			this.forceUpdate();
-			return this._didRoute;
-		};
-	
-		Router.prototype.componentWillMount = function componentWillMount() {
-			ROUTERS.push(this);
-			this.updating = true;
-		};
-	
-		Router.prototype.componentDidMount = function componentDidMount() {
-			this.updating = false;
-		};
-	
-		Router.prototype.componentWillUnmount = function componentWillUnmount() {
-			ROUTERS.splice(ROUTERS.indexOf(this), 1);
-		};
-	
-		Router.prototype.componentWillUpdate = function componentWillUpdate() {
-			this.updating = true;
-		};
-	
-		Router.prototype.componentDidUpdate = function componentDidUpdate() {
-			this.updating = false;
-		};
-	
-		Router.prototype.getMatchingChildren = function getMatchingChildren(children, url, invoke) {
-			return children.slice().sort(pathRankSort).filter(function (_ref) {
-				var attributes = _ref.attributes;
-	
-				var path = attributes.path,
-				    matches = exec(url, path, attributes);
-				if (matches) {
-					if (invoke !== false) {
-						attributes.url = url;
-						attributes.matches = matches;
-						// copy matches onto props
-						for (var i in matches) {
-							if (matches.hasOwnProperty(i)) {
-								attributes[i] = matches[i];
-							}
-						}
-					}
-					return true;
-				}
-			});
-		};
-	
-		Router.prototype.render = function render(_ref2, _ref3) {
-			var children = _ref2.children,
-			    onChange = _ref2.onChange;
-			var url = _ref3.url;
-	
-			var active = this.getMatchingChildren(children, url, true);
-	
-			var current = active[0] || null;
-			this._didRoute = !!current;
-	
-			var previous = this.previousUrl;
-			if (url !== previous) {
-				this.previousUrl = url;
-				if (typeof onChange === 'function') {
-					onChange({
-						router: this,
-						url: url,
-						previous: previous,
-						active: active,
-						current: current
-					});
-				}
-			}
-	
-			return current;
-		};
-	
-		return Router;
-	}(preact.Component);
-	
-	var Route = function Route(_ref4) {
-		var component = _ref4.component,
-		    url = _ref4.url,
-		    matches = _ref4.matches;
-	
-		return preact.h(component, { url: url, matches: matches });
-	};
-	
-	Router.route = route;
-	Router.Router = Router;
-	Router.Route = Route;
-	Router.Link = Link;
-	
-	return Router;
-	
-	})));
-	//# sourceMappingURL=preact-router.js.map
-
-
-/***/ },
-/* 15 */
 /*!*****************************************!*\
   !*** ./~/preact-mdl/dist/preact-mdl.js ***!
   \*****************************************/
@@ -3719,10 +3367,358 @@
 	//# sourceMappingURL=preact-mdl.js.map
 
 /***/ },
+/* 15 */
+/*!***********************************************!*\
+  !*** ./~/preact-router/dist/preact-router.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	(function (global, factory) {
+		 true ? module.exports = factory(__webpack_require__(/*! preact */ 11)) :
+		typeof define === 'function' && define.amd ? define(['preact'], factory) :
+		(global.preactRouter = factory(global.preact));
+	}(this, (function (preact) { 'use strict';
+	
+	var EMPTY$1 = {};
+	
+	function exec(url, route) {
+		var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : EMPTY$1;
+	
+		var reg = /(?:\?([^#]*))?(#.*)?$/,
+		    c = url.match(reg),
+		    matches = {},
+		    ret = void 0;
+		if (c && c[1]) {
+			var p = c[1].split('&');
+			for (var i = 0; i < p.length; i++) {
+				var r = p[i].split('=');
+				matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
+			}
+		}
+		url = segmentize(url.replace(reg, ''));
+		route = segmentize(route || '');
+		var max = Math.max(url.length, route.length);
+		for (var _i = 0; _i < max; _i++) {
+			if (route[_i] && route[_i].charAt(0) === ':') {
+				var param = route[_i].replace(/(^\:|[+*?]+$)/g, ''),
+				    flags = (route[_i].match(/[+*?]+$/) || EMPTY$1)[0] || '',
+				    plus = ~flags.indexOf('+'),
+				    star = ~flags.indexOf('*'),
+				    val = url[_i] || '';
+				if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
+					ret = false;
+					break;
+				}
+				matches[param] = decodeURIComponent(val);
+				if (plus || star) {
+					matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
+					break;
+				}
+			} else if (route[_i] !== url[_i]) {
+				ret = false;
+				break;
+			}
+		}
+		if (opts.default !== true && ret === false) return false;
+		return matches;
+	}
+	
+	function pathRankSort(a, b) {
+		var aAttr = a.attributes || EMPTY$1,
+		    bAttr = b.attributes || EMPTY$1;
+		if (aAttr.default) return 1;
+		if (bAttr.default) return -1;
+		var diff = rank(aAttr.path) - rank(bAttr.path);
+		return diff || aAttr.path.length - bAttr.path.length;
+	}
+	
+	function segmentize(url) {
+		return strip(url).split('/');
+	}
+	
+	function rank(url) {
+		return (strip(url).match(/\/+/g) || '').length;
+	}
+	
+	function strip(url) {
+		return url.replace(/(^\/+|\/+$)/g, '');
+	}
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var customHistory = null;
+	
+	var ROUTERS = [];
+	
+	var EMPTY = {};
+	
+	// hangs off all elements created by preact
+	var ATTR_KEY = typeof Symbol !== 'undefined' ? Symbol.for('preactattr') : '__preactattr_';
+	
+	function isPreactElement(node) {
+		return ATTR_KEY in node;
+	}
+	
+	function setUrl(url) {
+		var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'push';
+	
+		if (customHistory && customHistory[type]) {
+			customHistory[type](url);
+		} else if (typeof history !== 'undefined' && history[type + 'State']) {
+			history[type + 'State'](null, null, url);
+		}
+	}
+	
+	function getCurrentUrl() {
+		var url = void 0;
+		if (customHistory && customHistory.location) {
+			url = customHistory.location;
+		} else if (customHistory && customHistory.getCurrentLocation) {
+			url = customHistory.getCurrentLocation();
+		} else {
+			url = typeof location !== 'undefined' ? location : EMPTY;
+		}
+		return '' + (url.pathname || '') + (url.search || '');
+	}
+	
+	function route(url) {
+		var replace = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+		if (typeof url !== 'string' && url.url) {
+			replace = url.replace;
+			url = url.url;
+		}
+	
+		// only push URL into history if we can handle it
+		if (canRoute(url)) {
+			setUrl(url, replace ? 'replace' : 'push');
+		}
+	
+		return routeTo(url);
+	}
+	
+	/** Check if the given URL can be handled by any router instances. */
+	function canRoute(url) {
+		for (var i = ROUTERS.length; i--;) {
+			if (ROUTERS[i].canRoute(url)) return true;
+		}
+		return false;
+	}
+	
+	/** Tell all router instances to handle the given URL.  */
+	function routeTo(url) {
+		var didRoute = false;
+		for (var i = 0; i < ROUTERS.length; i++) {
+			if (ROUTERS[i].routeTo(url) === true) {
+				didRoute = true;
+			}
+		}
+		return didRoute;
+	}
+	
+	function routeFromLink(node) {
+		// only valid elements
+		if (!node || !node.getAttribute) return;
+	
+		var href = node.getAttribute('href'),
+		    target = node.getAttribute('target');
+	
+		// ignore links with targets and non-path URLs
+		if (!href || !href.match(/^\//g) || target && !target.match(/^_?self$/i)) return;
+	
+		// attempt to route, if no match simply cede control to browser
+		return route(href);
+	}
+	
+	function handleLinkClick(e) {
+		if (e.button !== 0) return;
+		routeFromLink(e.currentTarget || e.target || this);
+		return prevent(e);
+	}
+	
+	function prevent(e) {
+		if (e) {
+			if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+			if (e.stopPropagation) e.stopPropagation();
+			e.preventDefault();
+		}
+		return false;
+	}
+	
+	function delegateLinkHandler(e) {
+		// ignore events the browser takes care of already:
+		if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+	
+		var t = e.target;
+		do {
+			if (String(t.nodeName).toUpperCase() === 'A' && t.getAttribute('href') && isPreactElement(t)) {
+				if (e.button !== 0) return;
+				// if link is handled by the router, prevent browser defaults
+				if (routeFromLink(t)) {
+					return prevent(e);
+				}
+			}
+		} while (t = t.parentNode);
+	}
+	
+	if (typeof addEventListener === 'function') {
+		addEventListener('popstate', function () {
+			return routeTo(getCurrentUrl());
+		});
+		addEventListener('click', delegateLinkHandler);
+	}
+	
+	var Link = function Link(props) {
+		return preact.h('a', _extends({}, props, { onClick: handleLinkClick }));
+	};
+	
+	var Router = function (_Component) {
+		_inherits(Router, _Component);
+	
+		function Router(props) {
+			_classCallCheck(this, Router);
+	
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+	
+			if (props.history) {
+				customHistory = props.history;
+			}
+	
+			_this.state = {
+				url: _this.props.url || getCurrentUrl()
+			};
+			return _this;
+		}
+	
+		Router.prototype.shouldComponentUpdate = function shouldComponentUpdate(props) {
+			if (props.static !== true) return true;
+			return props.url !== this.props.url || props.onChange !== this.props.onChange;
+		};
+	
+		/** Check if the given URL can be matched against any children */
+	
+	
+		Router.prototype.canRoute = function canRoute(url) {
+			return this.getMatchingChildren(this.props.children, url, false).length > 0;
+		};
+	
+		/** Re-render children with a new URL to match against. */
+	
+	
+		Router.prototype.routeTo = function routeTo(url) {
+			this._didRoute = false;
+			this.setState({ url: url });
+	
+			// if we're in the middle of an update, don't synchronously re-route.
+			if (this.updating) return this.canRoute(url);
+	
+			this.forceUpdate();
+			return this._didRoute;
+		};
+	
+		Router.prototype.componentWillMount = function componentWillMount() {
+			ROUTERS.push(this);
+			this.updating = true;
+		};
+	
+		Router.prototype.componentDidMount = function componentDidMount() {
+			this.updating = false;
+		};
+	
+		Router.prototype.componentWillUnmount = function componentWillUnmount() {
+			ROUTERS.splice(ROUTERS.indexOf(this), 1);
+		};
+	
+		Router.prototype.componentWillUpdate = function componentWillUpdate() {
+			this.updating = true;
+		};
+	
+		Router.prototype.componentDidUpdate = function componentDidUpdate() {
+			this.updating = false;
+		};
+	
+		Router.prototype.getMatchingChildren = function getMatchingChildren(children, url, invoke) {
+			return children.slice().sort(pathRankSort).filter(function (_ref) {
+				var attributes = _ref.attributes;
+	
+				var path = attributes.path,
+				    matches = exec(url, path, attributes);
+				if (matches) {
+					if (invoke !== false) {
+						attributes.url = url;
+						attributes.matches = matches;
+						// copy matches onto props
+						for (var i in matches) {
+							if (matches.hasOwnProperty(i)) {
+								attributes[i] = matches[i];
+							}
+						}
+					}
+					return true;
+				}
+			});
+		};
+	
+		Router.prototype.render = function render(_ref2, _ref3) {
+			var children = _ref2.children,
+			    onChange = _ref2.onChange;
+			var url = _ref3.url;
+	
+			var active = this.getMatchingChildren(children, url, true);
+	
+			var current = active[0] || null;
+			this._didRoute = !!current;
+	
+			var previous = this.previousUrl;
+			if (url !== previous) {
+				this.previousUrl = url;
+				if (typeof onChange === 'function') {
+					onChange({
+						router: this,
+						url: url,
+						previous: previous,
+						active: active,
+						current: current
+					});
+				}
+			}
+	
+			return current;
+		};
+	
+		return Router;
+	}(preact.Component);
+	
+	var Route = function Route(_ref4) {
+		var component = _ref4.component,
+		    url = _ref4.url,
+		    matches = _ref4.matches;
+	
+		return preact.h(component, { url: url, matches: matches });
+	};
+	
+	Router.route = route;
+	Router.Router = Router;
+	Router.Route = Route;
+	Router.Link = Link;
+	
+	return Router;
+	
+	})));
+	//# sourceMappingURL=preact-router.js.map
+
+
+/***/ },
 /* 16 */
-/*!********************************************!*\
-  !*** ./client/components/header/index.tsx ***!
-  \********************************************/
+/*!***************************************************!*\
+  !*** ./client/components/event-details/index.tsx ***!
+  \***************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3732,170 +3728,68 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 17);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
 	var React = { createElement: preact_1.h };
-	var Header = (function (_super) {
-	    __extends(Header, _super);
-	    function Header() {
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 17);
+	var EventDetails = (function (_super) {
+	    __extends(EventDetails, _super);
+	    function EventDetails() {
 	        _super.apply(this, arguments);
+	        this.url = '//' + window.location.host;
 	    }
-	    Header.prototype.render = function () {
-	        return (React.createElement(preact_mdl_1.Layout.Header, null, 
-	            React.createElement(preact_mdl_1.Layout.HeaderRow, null, 
-	                React.createElement(preact_mdl_1.Layout.Title, null, "Naturfreunde Lichtenwald"), 
-	                React.createElement(preact_mdl_1.Layout.Spacer, null))
-	        ));
+	    EventDetails.prototype.shouldComponentUpdate = function (_a) {
+	        var eventId = _a.eventId;
+	        return eventId !== this.props.eventId;
 	    };
-	    return Header;
+	    EventDetails.prototype.componentDidMount = function () {
+	        this.fetchNextEvents(this.props.eventId);
+	    };
+	    EventDetails.prototype.render = function (_a, _b) {
+	        var eventId = _a.eventId, path = _a.path;
+	        var _c = _b.event, event = _c === void 0 ? null : _c;
+	        return (React.createElement("section", {class: "nf-container"}, 
+	            React.createElement(preact_mdl_1.Grid, null, 
+	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, event ?
+	                    React.createElement("div", {class: "nf-event"}, 
+	                        React.createElement("h3", {class: "nf-event__title"}, event.title), 
+	                        React.createElement("h4", {class: "nf-event__date"}, 
+	                            React.createElement(preact_mdl_1.Icon, {icon: "event"}), 
+	                            " ", 
+	                            React.createElement(event_date_1.default, {date: new Date(event.eventDate)})), 
+	                        React.createElement("h4", {class: "nf-event__location"}, 
+	                            React.createElement(preact_mdl_1.Icon, {icon: "location on"}), 
+	                            " ", 
+	                            event.location), 
+	                        React.createElement("h5", null, "Beschreibung"), 
+	                        React.createElement("p", {class: "nf-event__text"}, event.body)) : '')
+	            ), 
+	            React.createElement(preact_mdl_1.Grid, null, 
+	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--2-col"}, 
+	                    React.createElement("a", {class: "mdl-button mdl-button--colored", href: "/events"}, 
+	                        React.createElement(preact_mdl_1.Icon, {icon: "arrow back"}), 
+	                        " Zurück zur Übersicht")
+	                )
+	            )));
+	    };
+	    EventDetails.prototype.fetchNextEvents = function (eventId) {
+	        var _this = this;
+	        fetch(this.url + '/api/events/' + eventId)
+	            .then(function (res) { return res.json(); })
+	            .then(function (json) { return json || {}; })
+	            .then(function (result) {
+	            _this.setState({ event: result });
+	        });
+	    };
+	    return EventDetails;
 	}(preact_1.Component));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Header;
+	exports.default = EventDetails;
 
 
 /***/ },
 /* 17 */
-/*!*********************************************!*\
-  !*** ./client/components/header/style.scss ***!
-  \*********************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 18 */
-/*!*********************************************!*\
-  !*** ./client/components/sidebar/index.tsx ***!
-  \*********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	var React = { createElement: preact_1.h };
-	var Sidebar = (function (_super) {
-	    __extends(Sidebar, _super);
-	    function Sidebar() {
-	        var _this = this;
-	        _super.apply(this, arguments);
-	        this.hide = function () {
-	            _this.base.classList.remove('is-visible');
-	        };
-	    }
-	    Sidebar.prototype.shouldComponentUpdate = function () {
-	        return false;
-	    };
-	    Sidebar.prototype.render = function () {
-	        return (React.createElement(preact_mdl_1.Layout.Drawer, {onClick: this.hide}, 
-	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"), 
-	            React.createElement(preact_mdl_1.Navigation, null, 
-	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/"}, "Neuigkeiten"), 
-	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/events"}, "Termine"))));
-	    };
-	    return Sidebar;
-	}(preact_1.Component));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Sidebar;
-
-
-/***/ },
-/* 19 */
-/*!*******************************************!*\
-  !*** ./client/components/posts/index.tsx ***!
-  \*******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 20);
-	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 21);
-	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 23);
-	var React = { createElement: preact_1.h };
-	var Posts = (function (_super) {
-	    __extends(Posts, _super);
-	    function Posts() {
-	        var _this = this;
-	        _super.apply(this, arguments);
-	        this.url = '//' + window.location.host;
-	        this.loadMore = function () {
-	            _this.fetchPosts(_this.state.next);
-	        };
-	    }
-	    Posts.prototype.fetchPosts = function (apiUrl) {
-	        var _this = this;
-	        fetch(this.url + apiUrl)
-	            .then(function (res) { return res.json(); })
-	            .then(function (json) { return json || []; })
-	            .then(function (result) {
-	            var posts = _this.state.posts || [];
-	            _this.setState({ posts: posts.concat(result.posts), next: result.next });
-	        });
-	    };
-	    Posts.prototype.componentDidMount = function () {
-	        this.fetchPosts('/api/posts?a=6&p=0');
-	    };
-	    Posts.prototype.render = function (_a, _b) {
-	        var _c = _b.posts, posts = _c === void 0 ? [] : _c;
-	        return (React.createElement("section", {class: "nf-container"}, 
-	            posts.map(function (post, i) { return (React.createElement(Post, {data: post, last: i === (posts.length - 1)})); }), 
-	            this.state.next ?
-	                React.createElement(preact_mdl_1.Grid, null, 
-	                    React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, 
-	                        React.createElement("div", {class: "nf-post"}, 
-	                            React.createElement(preact_mdl_1.Button, {class: "nf-load-more", raised: true, accent: true, onClick: this.loadMore}, 
-	                                "Weitere laden", 
-	                                React.createElement(preact_mdl_1.Icon, {icon: "expand more"}))
-	                        )
-	                    )
-	                ) : null));
-	    };
-	    return Posts;
-	}(preact_1.Component));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = Posts;
-	var Post = function (_a) {
-	    var data = _a.data, last = _a.last;
-	    return (React.createElement(preact_mdl_1.Grid, null, 
-	        React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
-	            React.createElement("div", {class: "nf-post"}, 
-	                React.createElement("h3", {class: "nf-post__title"}, data.title), 
-	                React.createElement("div", {class: "nf-post__body"}, 
-	                    React.createElement("span", {class: "nf-post__date"}, 
-	                        React.createElement(pretty_date_1.default, {date: data.date})
-	                    ), 
-	                    React.createElement("span", {class: "nf-post__text"}, data.body)))
-	        ), 
-	        React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
-	            React.createElement("div", {class: "nf-post__images"}, data.images.map(function (image) { return (React.createElement(lazy_image_1.default, {image: image})); }))
-	        ), 
-	        last ? null : React.createElement(preact_mdl_1.Grid.Cell, {class: "nf-post__footer mdl-cell--12-col"})));
-	};
-
-
-/***/ },
-/* 20 */
-/*!********************************************!*\
-  !*** ./client/components/posts/style.scss ***!
-  \********************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 21 */
 /*!************************************************!*\
-  !*** ./client/components/lazy-image/index.tsx ***!
+  !*** ./client/components/event-date/index.tsx ***!
   \************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -3906,127 +3800,33 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 22);
+	__webpack_require__(/*! ./style.scss */ 18);
 	var React = { createElement: preact_1.h };
-	var LazyImage = (function (_super) {
-	    __extends(LazyImage, _super);
-	    function LazyImage() {
+	var EventDate = (function (_super) {
+	    __extends(EventDate, _super);
+	    function EventDate() {
 	        _super.apply(this, arguments);
 	    }
-	    LazyImage.prototype.render = function (_a) {
-	        var image = _a.image;
-	        var style = { backgroundImage: 'url(' + image.base64 + ')' };
-	        return (React.createElement("div", {class: "lazy-image", style: style}, 
-	            React.createElement(InnerImage, {imageUrl: image.imageUrl})
-	        ));
+	    EventDate.prototype.componentDidMount = function () {
+	        this.createEventDate(new Date(this.props.date));
 	    };
-	    return LazyImage;
-	}(preact_1.Component));
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = LazyImage;
-	var InnerImage = (function (_super) {
-	    __extends(InnerImage, _super);
-	    function InnerImage() {
-	        _super.apply(this, arguments);
-	    }
-	    InnerImage.prototype.setOpacity = function () {
-	        var _this = this;
-	        setTimeout(function () {
-	            _this.setState({ opacity: 1 });
-	        }, 100);
+	    EventDate.prototype.render = function (_a, _b) {
+	        var date = _a.date;
+	        var _c = _b.eventDate, eventDate = _c === void 0 ? '' : _c, _d = _b.eventTime, eventTime = _d === void 0 ? '' : _d;
+	        return (React.createElement("span", null, 
+	            React.createElement("span", {class: "event-date"}, eventDate), 
+	            React.createElement("span", {class: "event-time"}, eventTime)));
 	    };
-	    InnerImage.prototype.update = function (imageUrl) {
-	        var _this = this;
-	        fetch(imageUrl)
-	            .then(function (response) { return response.blob(); })
-	            .then(function (blob) { return URL.createObjectURL(blob); })
-	            .then(function (imgSource) {
-	            _this.setState({ imgSource: imgSource });
-	            _this.setOpacity();
-	        });
+	    EventDate.prototype.createEventDate = function (date) {
+	        var eventDate = date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
+	        var hours = date.getUTCHours();
+	        var minutes = date.getUTCMinutes();
+	        var leadingHourZero = hours < 10 ? '0' : '';
+	        var leadingMinutesZero = minutes < 10 ? '0' : '';
+	        var eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
+	        this.setState({ eventDate: eventDate, eventTime: eventTime });
 	    };
-	    // on first mount, we'll always load the image
-	    InnerImage.prototype.componentDidMount = function () {
-	        this.update(this.props.imageUrl);
-	    };
-	    // if we get re-rendered with a new imageUrl, update the image
-	    InnerImage.prototype.componentDidUpdate = function (prevProps) {
-	        if (this.props.imageUrl !== prevProps.imageUrl) {
-	            this.update(this.props.imageUrl);
-	        }
-	    };
-	    InnerImage.prototype.render = function (_a, _b) {
-	        var imageUrl = _a.imageUrl;
-	        var _c = _b.imgSource, imgSource = _c === void 0 ? '' : _c, _d = _b.opacity, opacity = _d === void 0 ? 0 : _d;
-	        return (React.createElement("img", {class: "fade-in", src: imgSource, style: { opacity: opacity }}));
-	    };
-	    return InnerImage;
-	}(preact_1.Component));
-
-
-/***/ },
-/* 22 */
-/*!*************************************************!*\
-  !*** ./client/components/lazy-image/style.scss ***!
-  \*************************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 23 */
-/*!*************************************************!*\
-  !*** ./client/components/pretty-date/index.tsx ***!
-  \*************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var React = { createElement: preact_1.h };
-	var PrettyDate = (function (_super) {
-	    __extends(PrettyDate, _super);
-	    function PrettyDate() {
-	        _super.apply(this, arguments);
-	        this.minute = 60;
-	        this.hour = this.minute * 60;
-	        this.day = this.hour * 24;
-	        this.week = this.day * 7;
-	    }
-	    PrettyDate.prototype.prettifyDate = function (date) {
-	        var delta = Math.round((Date.now() - +date) / 1000);
-	        var prettyDate = '';
-	        if (delta < 30) {
-	            prettyDate = 'Gerade eben';
-	        }
-	        else if (delta < this.minute) {
-	            prettyDate = 'Vor ' + delta + ' Sekunden.';
-	        }
-	        else if (delta < 2 * this.minute) {
-	            prettyDate = 'Vor einer Minute';
-	        }
-	        else if (delta < this.hour) {
-	            prettyDate = 'Vor ' + Math.floor(delta / this.minute) + ' Minuten';
-	        }
-	        else if (Math.floor(delta / this.hour) == 1) {
-	            prettyDate = 'Vor einer Stunde';
-	        }
-	        else if (delta < this.day) {
-	            prettyDate = 'Vor ' + Math.floor(delta / this.hour) + ' Stunden';
-	        }
-	        else if (delta < this.day * 2) {
-	            prettyDate = 'Gestern';
-	        }
-	        else {
-	            prettyDate = 'Am ' + date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
-	        }
-	        this.setState({ prettyDate: prettyDate });
-	    };
-	    PrettyDate.prototype.getMonthName = function (month) {
+	    EventDate.prototype.getMonthName = function (month) {
 	        switch (month) {
 	            case 0:
 	                return 'Januar';
@@ -4052,25 +3852,27 @@
 	                return 'November';
 	            case 11:
 	                return 'Dezember';
+	            default:
+	                return 'Unbekannter Monat';
 	        }
 	    };
-	    // on first mount, we'll always load the image
-	    PrettyDate.prototype.componentDidMount = function () {
-	        this.prettifyDate(new Date(this.props.date));
-	    };
-	    PrettyDate.prototype.render = function (_a, _b) {
-	        var date = _a.date;
-	        var _c = _b.prettyDate, prettyDate = _c === void 0 ? '' : _c;
-	        return (React.createElement("span", null, prettyDate));
-	    };
-	    return PrettyDate;
+	    return EventDate;
 	}(preact_1.Component));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = PrettyDate;
+	exports.default = EventDate;
 
 
 /***/ },
-/* 24 */
+/* 18 */
+/*!*************************************************!*\
+  !*** ./client/components/event-date/style.scss ***!
+  \*************************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 19 */
 /*!********************************************!*\
   !*** ./client/components/events/index.tsx ***!
   \********************************************/
@@ -4083,9 +3885,9 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 25);
-	var event_date_1 = __webpack_require__(/*! ../event-date */ 26);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
+	__webpack_require__(/*! ./style.scss */ 20);
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 17);
 	var React = { createElement: preact_1.h };
 	var Events = (function (_super) {
 	    __extends(Events, _super);
@@ -4093,6 +3895,22 @@
 	        _super.apply(this, arguments);
 	        this.url = '//' + window.location.host;
 	    }
+	    Events.prototype.componentDidMount = function () {
+	        this.fetchNextEvents();
+	        this.fetchPastEvents();
+	    };
+	    Events.prototype.render = function (_a, _b) {
+	        var _c = _b.nextEvents, nextEvents = _c === void 0 ? [] : _c, _d = _b.pastEvents, pastEvents = _d === void 0 ? [] : _d;
+	        return (React.createElement("section", {class: "nf-container"}, 
+	            React.createElement(preact_mdl_1.Grid, null, 
+	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--8-col"}, 
+	                    React.createElement("h3", null, "Kommende Termine"), 
+	                    React.createElement(preact_mdl_1.Grid, null, nextEvents.map(function (event) { return (React.createElement(NextEvent, {event: event})); }))), 
+	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--4-col"}, 
+	                    React.createElement("h3", null, "Vergangene Termine"), 
+	                    React.createElement("ul", {class: "mdl-list"}, pastEvents.map(function (event) { return (React.createElement(PastEvent, {event: event})); }))))
+	        ));
+	    };
 	    Events.prototype.fetchNextEvents = function () {
 	        var _this = this;
 	        fetch(this.url + '/api/events/next')
@@ -4110,22 +3928,6 @@
 	            .then(function (result) {
 	            _this.setState({ pastEvents: result });
 	        });
-	    };
-	    Events.prototype.componentDidMount = function () {
-	        this.fetchNextEvents();
-	        this.fetchPastEvents();
-	    };
-	    Events.prototype.render = function (_a, _b) {
-	        var _c = _b.nextEvents, nextEvents = _c === void 0 ? [] : _c, _d = _b.pastEvents, pastEvents = _d === void 0 ? [] : _d;
-	        return (React.createElement("section", {class: "nf-container"}, 
-	            React.createElement(preact_mdl_1.Grid, null, 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--8-col"}, 
-	                    React.createElement("h3", null, "Kommende Termine"), 
-	                    React.createElement(preact_mdl_1.Grid, null, nextEvents.map(function (event) { return (React.createElement(NextEvent, {event: event})); }))), 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--4-col"}, 
-	                    React.createElement("h3", null, "Vergangene Termine"), 
-	                    React.createElement("ul", {class: "mdl-list"}, pastEvents.map(function (event) { return (React.createElement(PastEvent, {event: event})); }))))
-	        ));
 	    };
 	    return Events;
 	}(preact_1.Component));
@@ -4173,7 +3975,7 @@
 
 
 /***/ },
-/* 25 */
+/* 20 */
 /*!*********************************************!*\
   !*** ./client/components/events/style.scss ***!
   \*********************************************/
@@ -4182,9 +3984,145 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 26 */
+/* 21 */
+/*!********************************************!*\
+  !*** ./client/components/header/index.tsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
+	__webpack_require__(/*! ./style.scss */ 22);
+	var React = { createElement: preact_1.h };
+	var Header = (function (_super) {
+	    __extends(Header, _super);
+	    function Header() {
+	        _super.apply(this, arguments);
+	    }
+	    Header.prototype.render = function () {
+	        return (React.createElement(preact_mdl_1.Layout.Header, null, 
+	            React.createElement(preact_mdl_1.Layout.HeaderRow, null, 
+	                React.createElement(preact_mdl_1.Layout.Title, null, "Naturfreunde Lichtenwald"), 
+	                React.createElement(preact_mdl_1.Layout.Spacer, null))
+	        ));
+	    };
+	    return Header;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Header;
+
+
+/***/ },
+/* 22 */
+/*!*********************************************!*\
+  !*** ./client/components/header/style.scss ***!
+  \*********************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 23 */
+/*!*******************************************!*\
+  !*** ./client/components/posts/index.tsx ***!
+  \*******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
+	__webpack_require__(/*! ./style.scss */ 24);
+	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 25);
+	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 28);
+	var React = { createElement: preact_1.h };
+	var Posts = (function (_super) {
+	    __extends(Posts, _super);
+	    function Posts() {
+	        var _this = this;
+	        _super.apply(this, arguments);
+	        this.url = '//' + window.location.host;
+	        this.loadMore = function () {
+	            _this.fetchPosts(_this.state.next);
+	        };
+	    }
+	    Posts.prototype.shouldComponentUpdate = function () {
+	        return false;
+	    };
+	    Posts.prototype.componentDidMount = function () {
+	        this.fetchPosts('/api/posts?a=6&p=0');
+	    };
+	    Posts.prototype.render = function (_a, _b) {
+	        var _c = _b.posts, posts = _c === void 0 ? [] : _c;
+	        return (React.createElement("section", {class: "nf-container"}, 
+	            posts.map(function (post, i) { return (React.createElement(Post, {data: post, last: i === (posts.length - 1)})); }), 
+	            this.state.next ?
+	                React.createElement(preact_mdl_1.Grid, null, 
+	                    React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, 
+	                        React.createElement("div", {class: "nf-post"}, 
+	                            React.createElement(preact_mdl_1.Button, {class: "nf-load-more", raised: true, accent: true, onClick: this.loadMore}, 
+	                                "Weitere laden", 
+	                                React.createElement(preact_mdl_1.Icon, {icon: "expand more"}))
+	                        )
+	                    )
+	                ) : null));
+	    };
+	    Posts.prototype.fetchPosts = function (apiUrl) {
+	        var _this = this;
+	        fetch(this.url + apiUrl)
+	            .then(function (res) { return res.json(); })
+	            .then(function (json) { return json || []; })
+	            .then(function (result) {
+	            var posts = _this.state.posts || [];
+	            _this.setState({ posts: posts.concat(result.posts), next: result.next });
+	        });
+	    };
+	    return Posts;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Posts;
+	var Post = function (_a) {
+	    var data = _a.data, last = _a.last;
+	    return (React.createElement(preact_mdl_1.Grid, null, 
+	        React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
+	            React.createElement("div", {class: "nf-post"}, 
+	                React.createElement("h3", {class: "nf-post__title"}, data.title), 
+	                React.createElement("div", {class: "nf-post__body"}, 
+	                    React.createElement("span", {class: "nf-post__date"}, 
+	                        React.createElement(pretty_date_1.default, {date: data.date})
+	                    ), 
+	                    React.createElement("span", {class: "nf-post__text"}, data.body)))
+	        ), 
+	        React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
+	            React.createElement("div", {class: "nf-post__images"}, data.images.map(function (image) { return (React.createElement(lazy_image_1.default, {image: image})); }))
+	        ), 
+	        last ? null : React.createElement(preact_mdl_1.Grid.Cell, {class: "nf-post__footer mdl-cell--12-col"})));
+	};
+
+
+/***/ },
+/* 24 */
+/*!********************************************!*\
+  !*** ./client/components/posts/style.scss ***!
+  \********************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 25 */
 /*!************************************************!*\
-  !*** ./client/components/event-date/index.tsx ***!
+  !*** ./client/components/lazy-image/index.tsx ***!
   \************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4195,24 +4133,154 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 27);
+	__webpack_require__(/*! ./style.scss */ 26);
+	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 27);
 	var React = { createElement: preact_1.h };
-	var EventDate = (function (_super) {
-	    __extends(EventDate, _super);
-	    function EventDate() {
+	var LazyImage = (function (_super) {
+	    __extends(LazyImage, _super);
+	    function LazyImage() {
 	        _super.apply(this, arguments);
 	    }
-	    EventDate.prototype.createEventDate = function (date) {
-	        var eventDate = date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
-	        ;
-	        var hours = date.getUTCHours();
-	        var minutes = date.getUTCMinutes();
-	        var leadingHourZero = hours < 10 ? '0' : '';
-	        var leadingMinutesZero = minutes < 10 ? '0' : '';
-	        var eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
-	        this.setState({ eventDate: eventDate, eventTime: eventTime });
+	    LazyImage.prototype.render = function (_a) {
+	        var image = _a.image;
+	        var style = { backgroundImage: 'url(' + image.base64 + ')' };
+	        return (React.createElement("div", {class: "lazy-image", style: style}, 
+	            React.createElement(inner_image_1.default, {imageUrl: image.imageUrl})
+	        ));
 	    };
-	    EventDate.prototype.getMonthName = function (month) {
+	    return LazyImage;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = LazyImage;
+
+
+/***/ },
+/* 26 */
+/*!*************************************************!*\
+  !*** ./client/components/lazy-image/style.scss ***!
+  \*************************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 27 */
+/*!************************************************************!*\
+  !*** ./client/components/lazy-image/inner-image/index.tsx ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var React = { createElement: preact_1.h };
+	var InnerImage = (function (_super) {
+	    __extends(InnerImage, _super);
+	    function InnerImage() {
+	        _super.apply(this, arguments);
+	    }
+	    InnerImage.prototype.componentDidMount = function () {
+	        this.update(this.props.imageUrl);
+	    };
+	    InnerImage.prototype.componentDidUpdate = function (prevProps) {
+	        if (this.props.imageUrl !== prevProps.imageUrl) {
+	            this.update(this.props.imageUrl);
+	        }
+	    };
+	    InnerImage.prototype.render = function (_a, _b) {
+	        var imageUrl = _a.imageUrl;
+	        var _c = _b.imgSource, imgSource = _c === void 0 ? '' : _c, _d = _b.opacity, opacity = _d === void 0 ? 0 : _d;
+	        return (React.createElement("img", {class: "fade-in", src: imgSource, style: { opacity: opacity }}));
+	    };
+	    InnerImage.prototype.setOpacity = function () {
+	        var _this = this;
+	        setTimeout(function () {
+	            _this.setState({ opacity: 1 });
+	        }, 100);
+	    };
+	    InnerImage.prototype.update = function (imageUrl) {
+	        var _this = this;
+	        fetch(imageUrl)
+	            .then(function (response) { return response.blob(); })
+	            .then(function (blob) { return URL.createObjectURL(blob); })
+	            .then(function (imgSource) {
+	            _this.setState({ imgSource: imgSource });
+	            _this.setOpacity();
+	        });
+	    };
+	    return InnerImage;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = InnerImage;
+
+
+/***/ },
+/* 28 */
+/*!*************************************************!*\
+  !*** ./client/components/pretty-date/index.tsx ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var React = { createElement: preact_1.h };
+	var PrettyDate = (function (_super) {
+	    __extends(PrettyDate, _super);
+	    function PrettyDate() {
+	        _super.apply(this, arguments);
+	        this.minute = 60;
+	        this.hour = this.minute * 60;
+	        this.day = this.hour * 24;
+	        this.week = this.day * 7;
+	    }
+	    PrettyDate.prototype.componentDidMount = function () {
+	        this.prettifyDate(new Date(this.props.date));
+	    };
+	    PrettyDate.prototype.render = function (_a, _b) {
+	        var date = _a.date;
+	        var _c = _b.prettyDate, prettyDate = _c === void 0 ? '' : _c;
+	        return (React.createElement("span", null, prettyDate));
+	    };
+	    PrettyDate.prototype.prettifyDate = function (date) {
+	        var delta = Math.round((Date.now() - +date) / 1000);
+	        var prettyDate = '';
+	        if (delta < 30) {
+	            prettyDate = 'Gerade eben';
+	        }
+	        else if (delta < this.minute) {
+	            prettyDate = 'Vor ' + delta + ' Sekunden.';
+	        }
+	        else if (delta < 2 * this.minute) {
+	            prettyDate = 'Vor einer Minute';
+	        }
+	        else if (delta < this.hour) {
+	            prettyDate = 'Vor ' + Math.floor(delta / this.minute) + ' Minuten';
+	        }
+	        else if (Math.floor(delta / this.hour) === 1) {
+	            prettyDate = 'Vor einer Stunde';
+	        }
+	        else if (delta < this.day) {
+	            prettyDate = 'Vor ' + Math.floor(delta / this.hour) + ' Stunden';
+	        }
+	        else if (delta < this.day * 2) {
+	            prettyDate = 'Gestern';
+	        }
+	        else {
+	            prettyDate = 'Am ' + date.getUTCDate() + '. ' +
+	                this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
+	        }
+	        this.setState({ prettyDate: prettyDate });
+	    };
+	    PrettyDate.prototype.getMonthName = function (month) {
 	        switch (month) {
 	            case 0:
 	                return 'Januar';
@@ -4238,38 +4306,21 @@
 	                return 'November';
 	            case 11:
 	                return 'Dezember';
+	            default:
+	                return 'Unbekannter Monat';
 	        }
 	    };
-	    EventDate.prototype.componentDidMount = function () {
-	        this.createEventDate(new Date(this.props.date));
-	    };
-	    EventDate.prototype.render = function (_a, _b) {
-	        var date = _a.date;
-	        var _c = _b.eventDate, eventDate = _c === void 0 ? '' : _c, _d = _b.eventTime, eventTime = _d === void 0 ? '' : _d;
-	        return (React.createElement("span", null, 
-	            React.createElement("span", {class: "event-date"}, eventDate), 
-	            React.createElement("span", {class: "event-time"}, eventTime)));
-	    };
-	    return EventDate;
+	    return PrettyDate;
 	}(preact_1.Component));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = EventDate;
+	exports.default = PrettyDate;
 
 
 /***/ },
-/* 27 */
-/*!*************************************************!*\
-  !*** ./client/components/event-date/style.scss ***!
-  \*************************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 28 */
-/*!***************************************************!*\
-  !*** ./client/components/event-details/index.tsx ***!
-  \***************************************************/
+/* 29 */
+/*!*********************************************!*\
+  !*** ./client/components/sidebar/index.tsx ***!
+  \*********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4279,58 +4330,32 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
 	var React = { createElement: preact_1.h };
-	var event_date_1 = __webpack_require__(/*! ../event-date */ 26);
-	var EventDetails = (function (_super) {
-	    __extends(EventDetails, _super);
-	    function EventDetails() {
-	        _super.apply(this, arguments);
-	        this.url = '//' + window.location.host;
-	    }
-	    EventDetails.prototype.fetchNextEvents = function (eventId) {
+	var Sidebar = (function (_super) {
+	    __extends(Sidebar, _super);
+	    function Sidebar() {
 	        var _this = this;
-	        fetch(this.url + '/api/events/' + eventId)
-	            .then(function (res) { return res.json(); })
-	            .then(function (json) { return json || {}; })
-	            .then(function (result) {
-	            _this.setState({ event: result });
-	        });
+	        _super.apply(this, arguments);
+	        this.hide = function () {
+	            var layout = _this.base.parentNode;
+	            layout.MaterialLayout.toggleDrawer();
+	        };
+	    }
+	    Sidebar.prototype.shouldComponentUpdate = function () {
+	        return false;
 	    };
-	    EventDetails.prototype.componentDidMount = function () {
-	        this.fetchNextEvents(this.props.eventId);
+	    Sidebar.prototype.render = function () {
+	        return (React.createElement(preact_mdl_1.Layout.Drawer, {onClick: this.hide, "aria-hidden": "true"}, 
+	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"), 
+	            React.createElement(preact_mdl_1.Navigation, null, 
+	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/"}, "Neuigkeiten"), 
+	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/events"}, "Termine"))));
 	    };
-	    EventDetails.prototype.render = function (_a, _b) {
-	        var eventId = _a.eventId, path = _a.path;
-	        var _c = _b.event, event = _c === void 0 ? null : _c;
-	        return (React.createElement("section", {class: "nf-container"}, 
-	            React.createElement(preact_mdl_1.Grid, null, 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, event ?
-	                    React.createElement("div", {class: "nf-event"}, 
-	                        React.createElement("h3", {class: "nf-event__title"}, event.title), 
-	                        React.createElement("h4", {class: "nf-event__date"}, 
-	                            React.createElement(preact_mdl_1.Icon, {icon: "event"}), 
-	                            " ", 
-	                            React.createElement(event_date_1.default, {date: new Date(event.eventDate)})), 
-	                        React.createElement("h4", {class: "nf-event__location"}, 
-	                            React.createElement(preact_mdl_1.Icon, {icon: "location on"}), 
-	                            " ", 
-	                            event.location), 
-	                        React.createElement("h5", null, "Beschreibung"), 
-	                        React.createElement("p", {class: "nf-event__text"}, event.body)) : '')
-	            ), 
-	            React.createElement(preact_mdl_1.Grid, null, 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--2-col"}, 
-	                    React.createElement("a", {class: "mdl-button mdl-button--colored", href: "/events"}, 
-	                        React.createElement(preact_mdl_1.Icon, {icon: "arrow back"}), 
-	                        " Zurück zur Übersicht")
-	                )
-	            )));
-	    };
-	    return EventDetails;
+	    return Sidebar;
 	}(preact_1.Component));
 	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = EventDetails;
+	exports.default = Sidebar;
 
 
 /***/ }
