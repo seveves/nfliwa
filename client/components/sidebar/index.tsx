@@ -12,7 +12,7 @@ export default class Sidebar extends Component<{}, {}> {
 
   public render() {
     return (
-      <Layout.Drawer onClick={this.hide}>
+      <Layout.Drawer onClick={this.hide} aria-hidden="true">
         <Layout.Title>Navigation</Layout.Title>
         <Navigation>
           <Navigation.Link href="/">Neuigkeiten</Navigation.Link>
@@ -23,6 +23,7 @@ export default class Sidebar extends Component<{}, {}> {
   }
 
   private hide = () => {
-    this.base.classList.remove('is-visible');
+    let layout = this.base.parentNode as any;
+    layout.MaterialLayout.toggleDrawer();
   }
 }

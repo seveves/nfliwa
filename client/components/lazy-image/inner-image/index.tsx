@@ -1,5 +1,4 @@
 import { Component, h } from 'preact';
-import './style.scss';
 
 const React = { createElement: h };
 declare const fetch: any;

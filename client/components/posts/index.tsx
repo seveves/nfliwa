@@ -12,6 +12,10 @@ export default class Posts extends Component<{path}, {posts, next}> {
 
   private url: string = '//' + window.location.host;
 
+  public shouldComponentUpdate() {
+    return false;
+  }
+
   public componentDidMount() {
     this.fetchPosts('/api/posts?a=6&p=0');
   }

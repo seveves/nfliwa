@@ -2,7 +2,16 @@
   "name": "naturfreunde-lichtenwald",
   "version": "0.0.1",
   "description": "A homepage for the Naturfreunde Lichtenwald e.V.",
-  "main": "index.ts",
+  "main": "server/server.js",
+  "author": "Severin Friede <sevefriede@gmail.com>",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seveves/nfliwa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seveves/nfliwa"
+  },
   "scripts": {
     "client:build": "webpack --devtool source-map --output-pathinfo",
     "client:serve": "webpack-dev-server --debug --devtool source-map --output-pathinfo",
@@ -11,7 +20,6 @@
     "watch:sass": "gulp sass:watch",
     "serve": "concurrently \"npm run watch:sass\" \"npm run watch:nodemon\""
   },
-  "author": "Severin Friede",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.2",
@@ -34,13 +42,12 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
     "preact": "^6.4.0",
-    "preact-compat": "^3.9.2",
     "preact-mdl": "^1.3.1",
     "preact-router": "^2.3.2",
     "promise-polyfill": "^6.0.2",
     "proptypes": "^0.14.3",
     "pug": "^2.0.0-beta6",
-    "socket.io": "^1.6.0",
+    "socket.io": "^1.7.1",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
@@ -56,10 +63,8 @@
     "html-webpack-plugin": "^2.24.1",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
-    "json-loader": "^0.5.4",
     "node-sass": "^3.13.0",
     "nodemon": "^1.11.0",
-    "path": "^0.12.7",
     "postcss-loader": "^1.1.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^4.0.2",
@@ -70,7 +75,6 @@
     "typescript": "^2.0.10",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3",
-    "webpack-dev-server": "^1.16.2",
-    "webpack-fail-plugin": "^1.0.5"
+    "webpack-dev-server": "^1.16.2"
   }
 }
