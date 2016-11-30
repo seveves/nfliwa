@@ -4,7 +4,7 @@ import 'material-design-icons/iconfont/MaterialIcons-Regular.woff';
 import 'material-design-icons/iconfont/MaterialIcons-Regular.woff2';
 import 'material-design-lite';
 import 'material-design-lite/dist/material.green-light_green.min.css';
-import 'whatwg-fetch'
+import 'whatwg-fetch';
 
 import Promise from 'promise-polyfill';
 if (!window.Promise) {

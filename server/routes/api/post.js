@@ -30,19 +30,17 @@ router.get('/posts', function(req, res, next) {
         return next(err);
       }
 
-      let next = null;
+      let nextLink = null;
       if (posts.length >= amount) {
-        next ='/api/posts' + '?a=' + amount + '&p=' + (page + 1);
+        nextLink ='/api/posts' + '?a=' + amount + '&p=' + (page + 1);
       }
 
-      let prev = null;
+      let prevLink = null;
       if (page > 0) {
-        prev = '/api/posts' + '?a=' + amount + '&p=' + (page - 1);
+        prevLink = '/api/posts' + '?a=' + amount + '&p=' + (page - 1);
       }
 
-      let response = { next, prev, posts }
-
-      res.json(response);
+      res.json({ next: nextLink, prev: prevLink, posts: posts });
   });
 });
 

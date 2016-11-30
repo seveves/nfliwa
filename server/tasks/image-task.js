@@ -12,7 +12,7 @@ cloudinary.config({
 
 var ImageTask = function(socket) {
   this.socket = socket;
-}
+};
 
 ImageTask.prototype.uploadImages = function(files, uploadOptions) {
   if (files && files.length) {
@@ -26,7 +26,7 @@ ImageTask.prototype.uploadImages = function(files, uploadOptions) {
   } else {
     return Promise.resolve();
   }
-}
+};
 
 ImageTask.prototype.deleteImagesById = deleteImagesById;
 
@@ -71,7 +71,7 @@ function resizeImage(args) {
   return new Promise((resolve, reject) => {
     jimp.read(args.originalImage)
       .then(image => {
-        args.resizedImage = args.originalImage + "-resized.png"
+        args.resizedImage = args.originalImage + "-resized.png";
         image.resize(800, jimp.AUTO)
             .quality(90)
             .write(args.resizedImage, err => {
@@ -149,8 +149,10 @@ function rollback(reason) {
   switch(reason.task) {
     case 'removeTempFiles':
       console.log('Error while removing temp files', reason.error);
+      break;
     case 'uploadImage':
       console.log('Error while uploading image', reason.error);
+      break;      
     case 'resizeImage':
       console.log('Error while resizing image', reason.error);
       break;
