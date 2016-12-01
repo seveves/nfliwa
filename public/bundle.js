@@ -3735,12 +3735,8 @@
 	    __extends(EventDetails, _super);
 	    function EventDetails() {
 	        _super.apply(this, arguments);
-	        this.url = '//' + window.location.host;
+	        this.url = '//nfliwa.herokuapp.com';
 	    }
-	    EventDetails.prototype.shouldComponentUpdate = function (_a) {
-	        var eventId = _a.eventId;
-	        return eventId !== this.props.eventId;
-	    };
 	    EventDetails.prototype.componentDidMount = function () {
 	        this.fetchNextEvents(this.props.eventId);
 	    };
@@ -3893,7 +3889,7 @@
 	    __extends(Events, _super);
 	    function Events() {
 	        _super.apply(this, arguments);
-	        this.url = '//' + window.location.host;
+	        this.url = '//nfliwa.herokuapp.com';
 	    }
 	    Events.prototype.componentDidMount = function () {
 	        this.fetchNextEvents();
@@ -3905,9 +3901,11 @@
 	            React.createElement(preact_mdl_1.Grid, null, 
 	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--8-col"}, 
 	                    React.createElement("h3", null, "Kommende Termine"), 
+	                    nextEvents.length ? '' : React.createElement("h4", null, "Keine Termine geplant."), 
 	                    React.createElement(preact_mdl_1.Grid, null, nextEvents.map(function (event) { return (React.createElement(NextEvent, {event: event})); }))), 
 	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--4-col"}, 
 	                    React.createElement("h3", null, "Vergangene Termine"), 
+	                    pastEvents.length ? '' : React.createElement("h4", null, "Keine vergangene Termine."), 
 	                    React.createElement("ul", {class: "mdl-list"}, pastEvents.map(function (event) { return (React.createElement(PastEvent, {event: event})); }))))
 	        ));
 	    };
@@ -4051,14 +4049,11 @@
 	    function Posts() {
 	        var _this = this;
 	        _super.apply(this, arguments);
-	        this.url = '//' + window.location.host;
+	        this.url = '//nfliwa.herokuapp.com';
 	        this.loadMore = function () {
 	            _this.fetchPosts(_this.state.next);
 	        };
 	    }
-	    Posts.prototype.shouldComponentUpdate = function () {
-	        return false;
-	    };
 	    Posts.prototype.componentDidMount = function () {
 	        this.fetchPosts('/api/posts?a=6&p=0');
 	    };

@@ -10,11 +10,7 @@ declare const fetch: any;
 
 export default class Posts extends Component<{path}, {posts, next}> {
 
-  private url: string = '//' + window.location.host;
-
-  public shouldComponentUpdate() {
-    return false;
-  }
+  private url: string = '//nfliwa.herokuapp.com';
 
   public componentDidMount() {
     this.fetchPosts('/api/posts?a=6&p=0');
