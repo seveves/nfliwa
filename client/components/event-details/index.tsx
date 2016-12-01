@@ -8,11 +8,7 @@ import EventDate from '../event-date';
 
 export default class EventDetails extends Component<{eventId, path}, {event}> {
 
-  private url: string = '//' + window.location.host;
-
-  public shouldComponentUpdate({eventId}) {
-    return eventId !== this.props.eventId;
-  }
+  private url: string = '//nfliwa.herokuapp.com';
 
   public componentDidMount() {
     this.fetchNextEvents(this.props.eventId);

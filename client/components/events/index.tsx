@@ -9,7 +9,7 @@ declare const fetch: any;
 
 export default class Events extends Component<{path}, {nextEvents?, pastEvents?}> {
 
-  private url: string = '//' + window.location.host;
+  private url: string = '//nfliwa.herokuapp.com';
 
   public componentDidMount() {
     this.fetchNextEvents();
@@ -22,12 +22,14 @@ export default class Events extends Component<{path}, {nextEvents?, pastEvents?}
         <Grid>
           <Grid.Cell class="mdl-cell--8-col">
             <h3>Kommende Termine</h3>
+            { nextEvents.length ? '' : <h4>Keine Termine geplant.</h4> }
             <Grid>
               { nextEvents.map((event) => ( <NextEvent event={event} />)) }
             </Grid>
           </Grid.Cell>
           <Grid.Cell class="mdl-cell--4-col">
             <h3>Vergangene Termine</h3>
+            { pastEvents.length ? '' : <h4>Keine vergangene Termine.</h4> }            
             <ul class="mdl-list">
               { pastEvents.map((event) => ( <PastEvent event={event} />)) }
             </ul>
