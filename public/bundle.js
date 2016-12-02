@@ -1659,11 +1659,11 @@
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
 	var preact_router_1 = __webpack_require__(/*! preact-router */ 16);
 	var event_details_1 = __webpack_require__(/*! ../event-details */ 17);
-	var events_1 = __webpack_require__(/*! ../events */ 20);
-	var header_1 = __webpack_require__(/*! ../header */ 22);
-	var posts_1 = __webpack_require__(/*! ../posts */ 24);
-	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 30);
-	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 31);
+	var events_1 = __webpack_require__(/*! ../events */ 21);
+	var header_1 = __webpack_require__(/*! ../header */ 23);
+	var posts_1 = __webpack_require__(/*! ../posts */ 25);
+	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 31);
+	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 32);
 	var React = { createElement: preact_1.h };
 	var SiteLayout = (function (_super) {
 	    __extends(SiteLayout, _super);
@@ -3766,6 +3766,7 @@
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
 	var React = { createElement: preact_1.h };
 	var event_date_1 = __webpack_require__(/*! ../event-date */ 18);
+	var location_1 = __webpack_require__(/*! ../location */ 20);
 	var EventDetails = (function (_super) {
 	    __extends(EventDetails, _super);
 	    function EventDetails() {
@@ -3791,6 +3792,7 @@
 	                            React.createElement(preact_mdl_1.Icon, {icon: "location on"}), 
 	                            " ", 
 	                            event.location), 
+	                        React.createElement(location_1.default, {lat: event.lat, long: event.long}), 
 	                        React.createElement("h5", null, "Beschreibung"), 
 	                        React.createElement("p", {class: "nf-event__text"}, event.body)) : '')
 	            ), 
@@ -3904,6 +3906,57 @@
 
 /***/ },
 /* 20 */
+/*!**********************************************!*\
+  !*** ./client/components/location/index.tsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var React = { createElement: preact_1.h };
+	var Location = (function (_super) {
+	    __extends(Location, _super);
+	    function Location() {
+	        _super.apply(this, arguments);
+	    }
+	    Location.prototype.componentDidMount = function () {
+	        this.update();
+	    };
+	    Location.prototype.render = function (_a, _b) {
+	        var lat = _a.lat, long = _a.long;
+	        var _c = _b.imgSource, imgSource = _c === void 0 ? '' : _c;
+	        return (React.createElement("div", null, 
+	            React.createElement("div", null, 
+	                React.createElement("img", {src: imgSource, style: "margin-bottom: 10px; max-width: 100%; height: auto;"})
+	            ), 
+	            React.createElement("a", {class: "mdl-button mdl-js-button mdl-button--raised", href: 'https://maps.google.com/?q=' + lat + ',' + long}, 
+	                React.createElement(preact_mdl_1.Icon, {icon: "directions"}), 
+	                " In Google Maps öffnen")));
+	    };
+	    Location.prototype.update = function () {
+	        var _this = this;
+	        var imageUrl = 'http://localhost:3000/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
+	        fetch(imageUrl)
+	            .then(function (response) { return response.blob(); })
+	            .then(function (blob) { return URL.createObjectURL(blob); })
+	            .then(function (imgSource) {
+	            _this.setState({ imgSource: imgSource });
+	        });
+	    };
+	    return Location;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Location;
+
+
+/***/ },
+/* 21 */
 /*!********************************************!*\
   !*** ./client/components/events/index.tsx ***!
   \********************************************/
@@ -3917,7 +3970,7 @@
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 21);
+	__webpack_require__(/*! ./style.scss */ 22);
 	var event_date_1 = __webpack_require__(/*! ../event-date */ 18);
 	var React = { createElement: preact_1.h };
 	var Events = (function (_super) {
@@ -4001,14 +4054,14 @@
 	                ))), 
 	        React.createElement("span", {class: "mdl-list__item-secondary-content"}, 
 	            React.createElement("a", {class: "mdl-list__item-secondary-action", href: '/events/' + event._id}, 
-	                React.createElement(preact_mdl_1.Icon, {icon: "details"})
+	                React.createElement(preact_mdl_1.Icon, {class: "mdl-list__item-avatar", icon: "arrow forward"})
 	            )
 	        )));
 	};
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /*!*********************************************!*\
   !*** ./client/components/events/style.scss ***!
   \*********************************************/
@@ -4017,7 +4070,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 22 */
+/* 23 */
 /*!********************************************!*\
   !*** ./client/components/header/index.tsx ***!
   \********************************************/
@@ -4031,7 +4084,7 @@
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 23);
+	__webpack_require__(/*! ./style.scss */ 24);
 	var React = { createElement: preact_1.h };
 	var Header = (function (_super) {
 	    __extends(Header, _super);
@@ -4052,7 +4105,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /*!*********************************************!*\
   !*** ./client/components/header/style.scss ***!
   \*********************************************/
@@ -4061,7 +4114,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 24 */
+/* 25 */
 /*!*******************************************!*\
   !*** ./client/components/posts/index.tsx ***!
   \*******************************************/
@@ -4075,9 +4128,9 @@
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 25);
-	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 26);
-	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 29);
+	__webpack_require__(/*! ./style.scss */ 26);
+	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 27);
+	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 30);
 	var React = { createElement: preact_1.h };
 	var Posts = (function (_super) {
 	    __extends(Posts, _super);
@@ -4141,7 +4194,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /*!********************************************!*\
   !*** ./client/components/posts/style.scss ***!
   \********************************************/
@@ -4150,7 +4203,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 26 */
+/* 27 */
 /*!************************************************!*\
   !*** ./client/components/lazy-image/index.tsx ***!
   \************************************************/
@@ -4163,8 +4216,8 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 27);
-	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 28);
+	__webpack_require__(/*! ./style.scss */ 28);
+	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 29);
 	var React = { createElement: preact_1.h };
 	var LazyImage = (function (_super) {
 	    __extends(LazyImage, _super);
@@ -4185,7 +4238,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /*!*************************************************!*\
   !*** ./client/components/lazy-image/style.scss ***!
   \*************************************************/
@@ -4194,7 +4247,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 28 */
+/* 29 */
 /*!************************************************************!*\
   !*** ./client/components/lazy-image/inner-image/index.tsx ***!
   \************************************************************/
@@ -4249,7 +4302,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /*!*************************************************!*\
   !*** ./client/components/pretty-date/index.tsx ***!
   \*************************************************/
@@ -4347,7 +4400,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /*!*********************************************!*\
   !*** ./client/components/sidebar/index.tsx ***!
   \*********************************************/
@@ -4385,7 +4438,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /*!*************************************************************!*\
   !*** ./client/components/layout/material-layout-helper.tsx ***!
   \*************************************************************/
