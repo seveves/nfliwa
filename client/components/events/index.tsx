@@ -93,7 +93,7 @@ const PastEvent = ({ event }) => (
     </span>
     <span class="mdl-list__item-secondary-content">
       <a class="mdl-list__item-secondary-action" href={'/events/' + event._id}>
-        <Icon icon="details" />
+        <Icon class="mdl-list__item-avatar" icon="arrow forward" />
       </a>
     </span>
   </li>

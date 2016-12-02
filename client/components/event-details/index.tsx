@@ -5,6 +5,7 @@ const React = { createElement: h };
 declare const fetch: any;
 
 import EventDate from '../event-date';
+import Location from '../location';
 
 export default class EventDetails extends Component<{eventId?, path}, {event}> {
 
@@ -24,6 +25,7 @@ export default class EventDetails extends Component<{eventId?, path}, {event}> {
               <h3 class="nf-event__title">{event.title}</h3>
               <h4 class="nf-event__date"><Icon icon="event"/> <EventDate date={new Date(event.eventDate)} /></h4>
               <h4 class="nf-event__location"><Icon icon="location on"/> {event.location}</h4>
+              <Location lat={event.lat} long={event.long}/>
               <h5>Beschreibung</h5>
               <p class="nf-event__text">{event.body}</p>
             </div> : '' }

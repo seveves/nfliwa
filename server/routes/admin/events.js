@@ -63,6 +63,8 @@ function eventsRouter() {
     event.title = req.body.title;
     event.body = req.body.body;
     event.location = req.body.location;
+    event.lat = req.body.lat;
+    event.long = req.body.long;
     event.eventDate = new Date(req.body.eventDate);
 
     event.save(err => {
@@ -77,6 +79,8 @@ function eventsRouter() {
       title: req.body.title,
       body: req.body.body,
       location: req.body.location,
+      lat: req.body.lat,
+      long: req.body.long,
       eventDate: new Date(req.body.eventDate)
     });
 
@@ -91,11 +95,21 @@ function eventsRouter() {
     let alerts = [];
     let title = req.body.title;
     let body = req.body.body;
+    let lat = req.body.lat;
+    let long = req.body.long;
     let location = req.body.location;
     let eventDate = req.body.eventDate;
 
     if (isEmpty(title) || isBlank(title)) {
       alerts.push('Title cannot be empty or contain only whitespaces.');
+    }
+
+    if (isEmpty(lat) || isBlank(lat)) {
+      alerts.push('Latitude cannot be empty or contain only whitespaces.');
+    }
+
+    if (isEmpty(long) || isBlank(long)) {
+      alerts.push('Longitude cannot be empty or contain only whitespaces.');
     }
 
     if (isEmpty(location) || isBlank(location)) {
@@ -136,10 +150,20 @@ function eventsRouter() {
     let title = req.body.title;
     let body = req.body.body;
     let location = req.body.location;
+    let lat = req.body.lat;
+    let long = req.body.long;
     let eventDateString = req.body.eventDate;
 
     if (isEmpty(title) || isBlank(title)) {
       alerts.push('Title cannot be empty or contain only whitespaces.');
+    }
+
+    if (isEmpty(lat) || isBlank(lat)) {
+      alerts.push('Latitude cannot be empty or contain only whitespaces.');
+    }
+
+    if (isEmpty(long) || isBlank(long)) {
+      alerts.push('Longitude cannot be empty or contain only whitespaces.');
     }
 
     if (isEmpty(location) || isBlank(location)) {

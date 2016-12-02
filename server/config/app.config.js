@@ -5,5 +5,6 @@ module.exports = {
     "key": process.env.CLOUDINARY_KEY,
     "secret": process.env.CLOUDINARY_SECRET
   },
-  "mongodb": process.env.MONGODB_URI || 'mongodb://localhost/naturfreunde'
+  "mongodb": process.env.MONGODB_URI || 'mongodb://localhost/naturfreunde',
+  "googlemaps": process.env.GOOGLE_MAPS
 };
