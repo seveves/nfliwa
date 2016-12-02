@@ -29,7 +29,7 @@ module.exports = {
 
 	plugins: ([
 		new ExtractTextPlugin('style.css', { allChunks: true, }),
-		new HtmlWebpackPlugin({ template: './client/index.html', title: 'Naturfreunde Lichtenwald e.v.'})
+		new HtmlWebpackPlugin({ template: './client/index.html', title: 'Naturfreunde Lichtenwald e.V.'})
 	]),
 
 	devtool: 'source-map'
