@@ -7,6 +7,8 @@ declare const fetch: any;
 export default class Location
   extends Component<{ lat, long }, { imgSource?: string }> {
 
+  private url: string = '//nfliwa.herokuapp.com';
+
   public componentDidMount() {
     this.update();
   }
@@ -25,7 +27,7 @@ export default class Location
   }
 
   private update() {
-    let imageUrl = 'http://localhost:3000/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
+    let imageUrl = this.url + '/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
 
     fetch(imageUrl)
       .then((response) => response.blob())

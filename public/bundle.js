@@ -3924,6 +3924,7 @@
 	    __extends(Location, _super);
 	    function Location() {
 	        _super.apply(this, arguments);
+	        this.url = '//nfliwa.herokuapp.com';
 	    }
 	    Location.prototype.componentDidMount = function () {
 	        this.update();
@@ -3941,7 +3942,7 @@
 	    };
 	    Location.prototype.update = function () {
 	        var _this = this;
-	        var imageUrl = 'http://localhost:3000/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
+	        var imageUrl = this.url + '/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
 	        fetch(imageUrl)
 	            .then(function (response) { return response.blob(); })
 	            .then(function (blob) { return URL.createObjectURL(blob); })
