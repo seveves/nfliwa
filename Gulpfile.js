@@ -11,7 +11,7 @@ gulp.task('lint:js', function() {
 });
 
 gulp.task("lint:ts", function() {
-  return gulp.src("./client/**/*.tsx")
+  return gulp.src( ["./client/**/*.tsx", "./client/**/*.ts"])
       .pipe(tslint({
           formatter: "prose"
       }))

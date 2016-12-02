@@ -15,7 +15,10 @@
   "scripts": {
     "client:build": "webpack --devtool source-map --output-pathinfo",
     "client:serve": "webpack-dev-server --debug --devtool source-map --output-pathinfo",
-    "lint": "gulp lint:js",
+    "lint:js": "gulp lint:js",
+    "lint:ts": "gulp lint:ts",
+    "lint": "npm run lint:js && npm run lint:ts",
+    "test": "npm run lint",
     "watch:nodemon": "nodemon server/server.js --config nodemon.json",
     "watch:sass": "gulp sass:watch",
     "serve": "concurrently \"npm run watch:sass\" \"npm run watch:nodemon\""
