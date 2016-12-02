@@ -52,11 +52,11 @@ app.use(logErrors);
 app.use(clientErrorHandler);
 app.use(errorHandler);
 
-// 404
+// client routes (SPA) and 404
 app.use(function(req, res) {
 
   if (req.url.startsWith('/events')) {
-    res.redirect('/');
+    res.sendFile(path.join(__dirname, '../public/index.html'));
     return;
   }
 
