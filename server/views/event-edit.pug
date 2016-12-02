@@ -24,6 +24,15 @@ block content
           label(class='mdl-textfield__label', for='location') Location
     div(class='mdl-grid')
       div(class='mdl-cell mdl-cell--4-col')
+        h5 Latitude and Longitude
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          input(class='mdl-textfield__input', type='text', id='lat', name='lat', value=event.lat)
+          label(class='mdl-textfield__label', for='lat') Latitude
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          input(class='mdl-textfield__input', type='text', id='long', name='long', value=event.long)
+          label(class='mdl-textfield__label', for='long') Longitude
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
         h5 Date/Time
         h6 Expected format: YYYY-MM-DDTHH:mm (f.e. 2016-11-10T04:05)
         div(class='mdl-textfield mdl-js-textfield full-width')

@@ -4,15 +4,15 @@ import { Link } from 'preact-router';
 
 const React = { createElement: h };
 
-export default class Sidebar extends Component<{}, {}> {
+export default class Sidebar extends Component<{onClick}, {}> {
 
   public shouldComponentUpdate() {
     return false;
   }
 
-  public render() {
+  public render({ onClick }) {
     return (
-      <Layout.Drawer onClick={this.hide} aria-hidden="true">
+      <Layout.Drawer onClick={onClick} aria-hidden="true">
         <Layout.Title>Navigation</Layout.Title>
         <Navigation>
           <Navigation.Link href="/">Neuigkeiten</Navigation.Link>
@@ -20,10 +20,5 @@ export default class Sidebar extends Component<{}, {}> {
         </Navigation>
       </Layout.Drawer>
     );
-  }
-
-  private hide = () => {
-    let layout = this.base.parentNode as any;
-    layout.MaterialLayout.toggleDrawer();
   }
 }

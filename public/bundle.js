@@ -1624,34 +1624,16 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
-	var preact_router_1 = __webpack_require__(/*! preact-router */ 15);
-	var event_details_1 = __webpack_require__(/*! ./event-details */ 16);
-	var events_1 = __webpack_require__(/*! ./events */ 19);
-	var header_1 = __webpack_require__(/*! ./header */ 21);
-	var posts_1 = __webpack_require__(/*! ./posts */ 23);
-	var sidebar_1 = __webpack_require__(/*! ./sidebar */ 29);
+	var layout_1 = __webpack_require__(/*! ./layout */ 14);
 	var React = { createElement: preact_1.h };
 	var App = (function (_super) {
 	    __extends(App, _super);
 	    function App() {
-	        var _this = this;
 	        _super.apply(this, arguments);
-	        this.handleRoute = function (e) {
-	            _this.currentUrl = e.url;
-	        };
 	    }
 	    App.prototype.render = function () {
 	        return (React.createElement("div", {id: "app"}, 
-	            React.createElement(preact_mdl_1.Layout, {"fixed-header": true}, 
-	                React.createElement(header_1.default, null), 
-	                React.createElement(sidebar_1.default, null), 
-	                React.createElement(preact_mdl_1.Layout.Content, null, 
-	                    React.createElement(preact_router_1.Router, {onChange: this.handleRoute}, 
-	                        React.createElement(posts_1.default, {path: "/"}), 
-	                        React.createElement(events_1.default, {path: "/events"}), 
-	                        React.createElement(event_details_1.default, {path: "/events/:eventId", eventId: ""}))
-	                ))
+	            React.createElement(layout_1.default, null)
 	        ));
 	    };
 	    return App;
@@ -1662,6 +1644,59 @@
 
 /***/ },
 /* 14 */
+/*!********************************************!*\
+  !*** ./client/components/layout/index.tsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var preact_router_1 = __webpack_require__(/*! preact-router */ 16);
+	var event_details_1 = __webpack_require__(/*! ../event-details */ 17);
+	var events_1 = __webpack_require__(/*! ../events */ 21);
+	var header_1 = __webpack_require__(/*! ../header */ 23);
+	var posts_1 = __webpack_require__(/*! ../posts */ 25);
+	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 31);
+	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 32);
+	var React = { createElement: preact_1.h };
+	var SiteLayout = (function (_super) {
+	    __extends(SiteLayout, _super);
+	    function SiteLayout() {
+	        var _this = this;
+	        _super.apply(this, arguments);
+	        this.toggleDrawer = function () {
+	            var layout = new material_layout_helper_1.default(_this);
+	            if (layout.hasFixedDrawer && !layout.isSmallScreen) {
+	                return;
+	            }
+	            layout.toggleDrawer();
+	        };
+	    }
+	    SiteLayout.prototype.render = function () {
+	        return (React.createElement(preact_mdl_1.Layout, {"fixed-header": true}, 
+	            React.createElement(header_1.default, null), 
+	            React.createElement(sidebar_1.default, {onClick: this.toggleDrawer}), 
+	            React.createElement(preact_mdl_1.Layout.Content, null, 
+	                React.createElement(preact_router_1.Router, null, 
+	                    React.createElement(posts_1.default, {path: "/"}), 
+	                    React.createElement(events_1.default, {path: "/events"}), 
+	                    React.createElement(event_details_1.default, {path: "/events/:eventId"}))
+	            )));
+	    };
+	    return SiteLayout;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = SiteLayout;
+
+
+/***/ },
+/* 15 */
 /*!*****************************************!*\
   !*** ./~/preact-mdl/dist/preact-mdl.js ***!
   \*****************************************/
@@ -3367,7 +3402,7 @@
 	//# sourceMappingURL=preact-mdl.js.map
 
 /***/ },
-/* 15 */
+/* 16 */
 /*!***********************************************!*\
   !*** ./~/preact-router/dist/preact-router.js ***!
   \***********************************************/
@@ -3715,7 +3750,7 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /*!***************************************************!*\
   !*** ./client/components/event-details/index.tsx ***!
   \***************************************************/
@@ -3728,9 +3763,10 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
 	var React = { createElement: preact_1.h };
-	var event_date_1 = __webpack_require__(/*! ../event-date */ 17);
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 18);
+	var location_1 = __webpack_require__(/*! ../location */ 20);
 	var EventDetails = (function (_super) {
 	    __extends(EventDetails, _super);
 	    function EventDetails() {
@@ -3756,6 +3792,7 @@
 	                            React.createElement(preact_mdl_1.Icon, {icon: "location on"}), 
 	                            " ", 
 	                            event.location), 
+	                        React.createElement(location_1.default, {lat: event.lat, long: event.long}), 
 	                        React.createElement("h5", null, "Beschreibung"), 
 	                        React.createElement("p", {class: "nf-event__text"}, event.body)) : '')
 	            ), 
@@ -3783,7 +3820,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /*!************************************************!*\
   !*** ./client/components/event-date/index.tsx ***!
   \************************************************/
@@ -3796,7 +3833,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 18);
+	__webpack_require__(/*! ./style.scss */ 19);
 	var React = { createElement: preact_1.h };
 	var EventDate = (function (_super) {
 	    __extends(EventDate, _super);
@@ -3859,7 +3896,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /*!*************************************************!*\
   !*** ./client/components/event-date/style.scss ***!
   \*************************************************/
@@ -3868,7 +3905,58 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 19 */
+/* 20 */
+/*!**********************************************!*\
+  !*** ./client/components/location/index.tsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var React = { createElement: preact_1.h };
+	var Location = (function (_super) {
+	    __extends(Location, _super);
+	    function Location() {
+	        _super.apply(this, arguments);
+	    }
+	    Location.prototype.componentDidMount = function () {
+	        this.update();
+	    };
+	    Location.prototype.render = function (_a, _b) {
+	        var lat = _a.lat, long = _a.long;
+	        var _c = _b.imgSource, imgSource = _c === void 0 ? '' : _c;
+	        return (React.createElement("div", null, 
+	            React.createElement("div", null, 
+	                React.createElement("img", {src: imgSource, style: "margin-bottom: 10px; max-width: 100%; height: auto;"})
+	            ), 
+	            React.createElement("a", {class: "mdl-button mdl-js-button mdl-button--raised", href: 'https://maps.google.com/?q=' + lat + ',' + long}, 
+	                React.createElement(preact_mdl_1.Icon, {icon: "directions"}), 
+	                " In Google Maps öffnen")));
+	    };
+	    Location.prototype.update = function () {
+	        var _this = this;
+	        var imageUrl = 'http://localhost:3000/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
+	        fetch(imageUrl)
+	            .then(function (response) { return response.blob(); })
+	            .then(function (blob) { return URL.createObjectURL(blob); })
+	            .then(function (imgSource) {
+	            _this.setState({ imgSource: imgSource });
+	        });
+	    };
+	    return Location;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = Location;
+
+
+/***/ },
+/* 21 */
 /*!********************************************!*\
   !*** ./client/components/events/index.tsx ***!
   \********************************************/
@@ -3881,9 +3969,9 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
-	__webpack_require__(/*! ./style.scss */ 20);
-	var event_date_1 = __webpack_require__(/*! ../event-date */ 17);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	__webpack_require__(/*! ./style.scss */ 22);
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 18);
 	var React = { createElement: preact_1.h };
 	var Events = (function (_super) {
 	    __extends(Events, _super);
@@ -3966,14 +4054,14 @@
 	                ))), 
 	        React.createElement("span", {class: "mdl-list__item-secondary-content"}, 
 	            React.createElement("a", {class: "mdl-list__item-secondary-action", href: '/events/' + event._id}, 
-	                React.createElement(preact_mdl_1.Icon, {icon: "details"})
+	                React.createElement(preact_mdl_1.Icon, {class: "mdl-list__item-avatar", icon: "arrow forward"})
 	            )
 	        )));
 	};
 
 
 /***/ },
-/* 20 */
+/* 22 */
 /*!*********************************************!*\
   !*** ./client/components/events/style.scss ***!
   \*********************************************/
@@ -3982,7 +4070,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 21 */
+/* 23 */
 /*!********************************************!*\
   !*** ./client/components/header/index.tsx ***!
   \********************************************/
@@ -3995,8 +4083,8 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
-	__webpack_require__(/*! ./style.scss */ 22);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	__webpack_require__(/*! ./style.scss */ 24);
 	var React = { createElement: preact_1.h };
 	var Header = (function (_super) {
 	    __extends(Header, _super);
@@ -4017,7 +4105,7 @@
 
 
 /***/ },
-/* 22 */
+/* 24 */
 /*!*********************************************!*\
   !*** ./client/components/header/style.scss ***!
   \*********************************************/
@@ -4026,7 +4114,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 23 */
+/* 25 */
 /*!*******************************************!*\
   !*** ./client/components/posts/index.tsx ***!
   \*******************************************/
@@ -4039,10 +4127,10 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
-	__webpack_require__(/*! ./style.scss */ 24);
-	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 25);
-	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 28);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	__webpack_require__(/*! ./style.scss */ 26);
+	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 27);
+	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 30);
 	var React = { createElement: preact_1.h };
 	var Posts = (function (_super) {
 	    __extends(Posts, _super);
@@ -4106,7 +4194,7 @@
 
 
 /***/ },
-/* 24 */
+/* 26 */
 /*!********************************************!*\
   !*** ./client/components/posts/style.scss ***!
   \********************************************/
@@ -4115,7 +4203,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 25 */
+/* 27 */
 /*!************************************************!*\
   !*** ./client/components/lazy-image/index.tsx ***!
   \************************************************/
@@ -4128,8 +4216,8 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 26);
-	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 27);
+	__webpack_require__(/*! ./style.scss */ 28);
+	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 29);
 	var React = { createElement: preact_1.h };
 	var LazyImage = (function (_super) {
 	    __extends(LazyImage, _super);
@@ -4150,7 +4238,7 @@
 
 
 /***/ },
-/* 26 */
+/* 28 */
 /*!*************************************************!*\
   !*** ./client/components/lazy-image/style.scss ***!
   \*************************************************/
@@ -4159,7 +4247,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 27 */
+/* 29 */
 /*!************************************************************!*\
   !*** ./client/components/lazy-image/inner-image/index.tsx ***!
   \************************************************************/
@@ -4214,7 +4302,7 @@
 
 
 /***/ },
-/* 28 */
+/* 30 */
 /*!*************************************************!*\
   !*** ./client/components/pretty-date/index.tsx ***!
   \*************************************************/
@@ -4312,7 +4400,7 @@
 
 
 /***/ },
-/* 29 */
+/* 31 */
 /*!*********************************************!*\
   !*** ./client/components/sidebar/index.tsx ***!
   \*********************************************/
@@ -4325,23 +4413,19 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 14);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
 	var React = { createElement: preact_1.h };
 	var Sidebar = (function (_super) {
 	    __extends(Sidebar, _super);
 	    function Sidebar() {
-	        var _this = this;
 	        _super.apply(this, arguments);
-	        this.hide = function () {
-	            var layout = _this.base.parentNode;
-	            layout.MaterialLayout.toggleDrawer();
-	        };
 	    }
 	    Sidebar.prototype.shouldComponentUpdate = function () {
 	        return false;
 	    };
-	    Sidebar.prototype.render = function () {
-	        return (React.createElement(preact_mdl_1.Layout.Drawer, {onClick: this.hide, "aria-hidden": "true"}, 
+	    Sidebar.prototype.render = function (_a) {
+	        var onClick = _a.onClick;
+	        return (React.createElement(preact_mdl_1.Layout.Drawer, {onClick: onClick, "aria-hidden": "true"}, 
 	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"), 
 	            React.createElement(preact_mdl_1.Navigation, null, 
 	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/"}, "Neuigkeiten"), 
@@ -4351,6 +4435,41 @@
 	}(preact_1.Component));
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = Sidebar;
+
+
+/***/ },
+/* 32 */
+/*!*************************************************************!*\
+  !*** ./client/components/layout/material-layout-helper.tsx ***!
+  \*************************************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	var MaterialLayoutHelper = (function () {
+	    function MaterialLayoutHelper(layout) {
+	        this.layout = layout;
+	    }
+	    MaterialLayoutHelper.prototype.toggleDrawer = function () {
+	        this.layout.base.MaterialLayout.toggleDrawer();
+	    };
+	    Object.defineProperty(MaterialLayoutHelper.prototype, "isSmallScreen", {
+	        get: function () {
+	            return this.layout.base.classList.contains('is-small-screen');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(MaterialLayoutHelper.prototype, "hasFixedDrawer", {
+	        get: function () {
+	            return this.layout.base.classList.contains('mdl-layout--fixed-drawer');
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    return MaterialLayoutHelper;
+	}());
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = MaterialLayoutHelper;
 
 
 /***/ }
