@@ -1686,7 +1686,7 @@
 	                React.createElement(preact_router_1.Router, null, 
 	                    React.createElement(posts_1.default, {path: "/"}), 
 	                    React.createElement(events_1.default, {path: "/events"}), 
-	                    React.createElement(event_details_1.default, {path: "/events/:eventId", eventId: ""}))
+	                    React.createElement(event_details_1.default, {path: "/events/:eventId"}))
 	            )));
 	    };
 	    return SiteLayout;

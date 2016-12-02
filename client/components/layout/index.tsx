@@ -25,7 +25,7 @@ export default class SiteLayout extends Component<{}, {}> {
             <Router>
               <Posts path="/" />
               <Events path="/events" />
-              <EventDetails path="/events/:eventId" eventId=""/>
+              <EventDetails path="/events/:eventId"/>
             </Router>
           </Layout.Content>
         </Layout>

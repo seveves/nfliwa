@@ -6,7 +6,7 @@ declare const fetch: any;
 
 import EventDate from '../event-date';
 
-export default class EventDetails extends Component<{eventId, path}, {event}> {
+export default class EventDetails extends Component<{eventId?, path}, {event}> {
 
   private url: string = '//nfliwa.herokuapp.com';
 
