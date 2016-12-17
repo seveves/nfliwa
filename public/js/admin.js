@@ -28,6 +28,22 @@ function deletePost(id) {
   });
 }
 
+function deleteStatic(id) {
+  var url = "/admin/static/" + id;
+
+  $.ajax({ 
+    beforeSend: function (request) {
+      return confirm('Delete?');
+    },
+
+    type: "DELETE", 
+    url: url,
+    complete: function() {
+      location.reload();
+    }
+  });
+}
+
 function deleteEvent(id) {
   var url = "/admin/events/" + id;
 

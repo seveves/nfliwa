@@ -23,14 +23,15 @@ router.delete('/tempfiles', ensureAuthenticated, (req, res) => {
     });
 
     if (!err && files.length) {
-      del(files).then(paths => {
-        res.status(200).send({ data: paths });
-      }, reason => {
-        console.error('Cannot delete temp files', err);
-        res.status(500).send({ data: null, message: err.message });
+      del(files).then((paths) => {
+        res.json({ data: paths });
+      }, (reason) => {
+        console.error('Cannot delete temp files', reason);
+        res.json(500, { data: null, message: 'Cannot delete temp files.' });
       });
     } else {
       console.error('Cannot delete temp files', err);
+      res.json(500, { data: null, message: err.message });
     }
   });
 });

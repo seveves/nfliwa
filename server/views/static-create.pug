@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  if alerts
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Oops!
+        each alert in alerts
+          span(class='mdl-chip mdl-chip--contact mdl-color--red mdl-color-text--white')
+            span(class='mdl-chip__contact mdl-color--red-700 mdl-color-text--white') !
+            span(class='mdl-chip__text') #{alert}
+  form(action='/admin/static', method='post')
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Title
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if staticPage
+            input(class='mdl-textfield__input', type='text', id='title', name='title', value=staticPage.title)
+          if !staticPage
+            input(class='mdl-textfield__input', type='text', id='title', name='title')
+          label(class='mdl-textfield__label', for='title') Title
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Page Index
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if staticPage
+            input(class='mdl-textfield__input', type='number', id='pageIndex', name='pageIndex', value=staticPage.pageIndex)
+          if !staticPage
+            input(class='mdl-textfield__input', type='number', id='pageIndex', name='pageIndex')
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        h5 Body
+        div(class='mdl-textfield mdl-js-textfield full-width')
+          if staticPage
+            textarea(class='mdl-textfield__input', type='text', rows='15', id='body', name='body') #{staticPage.body}
+          if !staticPage
+            textarea(class='mdl-textfield__input', type='text', rows='15', id='body', name='body')
+          label(class='mdl-textfield__label', for='body') Body
+    div(class='mdl-grid')
+      div(class='mdl-cell mdl-cell--4-col')
+        a(class='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect', href='/admin/static') Cancel
+        button(class='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect', type='submit') Submit
