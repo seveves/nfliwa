@@ -1,3 +1,17 @@
+function deleteTempFiles() {
+  var url = "/admin/tempfiles";
+
+  $.ajax({ 
+    type: "DELETE", 
+    url: url,
+    complete: function() {
+      setTimeout(function() {
+        location.reload();
+      }, 1000);
+    }
+  });
+}
+
 function deletePost(id) {
   var url = "/admin/posts/" + id;
 
