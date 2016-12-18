@@ -51,7 +51,7 @@ export default class Posts extends Component<{path}, {posts, next}> {
 
 const Post = ({ data, last }) => (
     <Grid>
-      <Grid.Cell class="mdl-cell--6-col">
+      <Grid.Cell class={ data.images.length > 0 ? 'mdl-cell--6-col' : 'mdl-cell--12-col'}>
         <div class="nf-post">
           <h3 class="nf-post__title">{data.title}</h3>
           <div class="nf-post__body">
@@ -60,11 +60,12 @@ const Post = ({ data, last }) => (
           </div>
         </div>
       </Grid.Cell>
+      { data.images.length > 0 ?
       <Grid.Cell class="mdl-cell--6-col">
         <div class="nf-post__images">
           { data.images.map((image) => ( <LazyImage image={image} />))}
         </div>
-      </Grid.Cell>
+      </Grid.Cell> : null }
       { last ? null : <Grid.Cell class="nf-post__footer mdl-cell--12-col"></Grid.Cell> }
     </Grid>
 );

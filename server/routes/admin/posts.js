@@ -22,9 +22,7 @@ function postsRouter(socketio) {
   let Post = require('../../models/post');
 
   io.of('/posts').on('connection', socket => {
-    console.log('socket connected');
     this.socket = socket;
-
     socket.on('disconnect', () => console.log('socket disconnected'));
   });
 

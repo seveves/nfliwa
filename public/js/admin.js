@@ -1,5 +1,35 @@
+function deleteTempFiles() {
+  var url = "/admin/tempfiles";
+
+  $.ajax({ 
+    type: "DELETE", 
+    url: url,
+    complete: function() {
+      setTimeout(function() {
+        location.reload();
+      }, 1000);
+    }
+  });
+}
+
 function deletePost(id) {
   var url = "/admin/posts/" + id;
+
+  $.ajax({ 
+    beforeSend: function (request) {
+      return confirm('Delete?');
+    },
+
+    type: "DELETE", 
+    url: url,
+    complete: function() {
+      location.reload();
+    }
+  });
+}
+
+function deleteStatic(id) {
+  var url = "/admin/static/" + id;
 
   $.ajax({ 
     beforeSend: function (request) {
