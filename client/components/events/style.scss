@@ -1,5 +1,23 @@
 @import '../../scss/helpers';
 
+.nf-event__title {
+  color: #263238;
+  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 5px;
+}
+
+.nf-event__sub-title {
+  color: #263238;
+  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 5px;
+}
+
 @media (max-width: $screen-sm) {
   .event-card {
     width: 275px;

@@ -28,7 +28,7 @@ export default class EventDetails extends Component<{eventId?, path}, {event}> {
               <Location lat={event.lat} long={event.long}/>
               <h5>Beschreibung</h5>
               <p class="nf-event__text">{event.body}</p>
-            </div> : '' }
+            </div> : null }
           </Grid.Cell>
         </Grid>
         <Grid>

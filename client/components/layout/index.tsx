@@ -7,25 +7,31 @@ import Events from '../events';
 import Header from '../header';
 import Posts from '../posts';
 import Sidebar from '../sidebar';
+import StaticPage from '../static';
 
 import MaterialLayoutHelper from './material-layout-helper';
 
 const React = { createElement: h };
 
-export default class SiteLayout extends Component<{}, {}> {
+export default class SiteLayout extends Component<{}, { pages }> {
 
   private currentUrl: string;
 
-  public render() {
+  public shouldComponentUpdate() {
+    return false;
+  }
+
+  public render({},{ pages = [] }) {
     return (
-        <Layout fixed-header>
+        <Layout fixed-header fixed-drawer>
           <Header />
           <Sidebar onClick={this.toggleDrawer} />
           <Layout.Content>
             <Router>
               <Posts path="/" />
               <Events path="/events" />
-              <EventDetails path="/events/:eventId"/>
+              <EventDetails path="/events/:eventId" />
+              <StaticPage path="/static/:url" />
             </Router>
           </Layout.Content>
         </Layout>

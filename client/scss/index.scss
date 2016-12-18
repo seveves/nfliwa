@@ -4,3 +4,14 @@
 	position: static;
 	overflow: visible;
 }
+
+.nf-container {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+@media (max-width: $screen-sm) {
+  .nf-container {
+    padding: 0;
+  }
+}
