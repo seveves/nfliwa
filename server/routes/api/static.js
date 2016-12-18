@@ -18,7 +18,7 @@ router.get('/static/:url', (req, res, next) => {
       } else {
         res.json(500, { data: null, error: err });
       }
-    })
+    });
   } else {
     res.json(404, { data: null, error: 'Cannot find page with url ' + url });
   }
