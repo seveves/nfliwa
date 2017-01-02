@@ -13,7 +13,7 @@ router.get('/events/next', (req, res, next) => {
   date = moment(date).startOf('day').utc().toDate();
 
   Event.find({ 'eventDate': { $gte: date } })
-    .sort('+eventDate')
+    .sort({ eventDate: 1 })
     .exec(function(err, events) {
       if (err) return next(err);
 
