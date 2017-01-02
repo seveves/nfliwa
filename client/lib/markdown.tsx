@@ -8,7 +8,8 @@ const React = { createElement: h };
 export default class Markdown extends Component<{markdown, props?}, {}> {
 
   private options: any = {
-    // sanitize: true
+    breaks: true,
+    gfm: true,
   };
 
   public render({ markdown, props }, {}) {
