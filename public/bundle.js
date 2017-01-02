@@ -5327,8 +5327,8 @@
 	    function Markdown() {
 	        var _this = _super.apply(this, arguments) || this;
 	        _this.options = {
-	            gfm: true,
 	            breaks: true,
+	            gfm: true,
 	        };
 	        return _this;
 	    }
