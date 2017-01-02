@@ -117,11 +117,15 @@ function postsRouter(socketio) {
           .catch(reason => {
             console.log("Error while deleting images", reason);
           });
-        post.images = post.images.filter(image => {
-          return imageIds.some(imageId => {
-            return imageId !== image.imageId;
-          });
-        });
+        let postImages = [].concat(post.images);
+        let imagesLength = post.images.length;
+        for(let i = imagesLength; i--;) {
+          for(let imageId of imageIds) {
+            if (postImages[i].imageId === imageId) {
+              post.images.splice(i, 1);
+            }
+          }
+        }
       }
 
       if (req.files && req.files.length) {

@@ -6051,7 +6051,6 @@ iframe.heightSet {
 @media (max-width: 750px) {
   .event-card {
     width: 275px; } }
-@charset "UTF-8";
 .nf-load-more {
   margin: auto; }
 
@@ -6082,11 +6081,6 @@ iframe.heightSet {
 .nf-post__body > .nf-post__date {
   color: #263238;
   text-transform: uppercase; }
-
-.nf-post__body > .nf-post__date::after {
-  content: "\2014";
-  margin-left: 2px;
-  margin-right: 2px; }
 
 .nf-post__body > .nf-post__date::before {
   content: "|";
