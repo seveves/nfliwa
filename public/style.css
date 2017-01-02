@@ -6017,6 +6017,34 @@ iframe.heightSet {
 
 .demo-wrapper iframe {
   border: 1px solid rgba(0, 0, 0, 0.5); }
+.markup {
+  text-align: justify; }
+
+.markup ul {
+  margin-top: 1rem;
+  margin-bottom: 1rem; }
+
+.markup p {
+  margin-top: 1rem;
+  margin-bottom: 1rem; }
+
+.markup h1,
+.markup h2,
+.markup h3,
+.markup h4,
+.markup h5,
+.markup h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem; }
+
+.markup h1:first-child,
+.markup h2:first-child,
+.markup h3:first-child,
+.markup h4:first-child,
+.markup h5:first-child,
+.markup h6:first-child {
+  margin-top: 0; }
+
 #app {
   position: static;
   overflow: visible; }
@@ -6076,7 +6104,7 @@ iframe.heightSet {
   padding-bottom: 20px;
   font-size: 16px;
   line-height: 28px;
-  white-space: pre-wrap; }
+  white-space: normal; }
 
 .nf-post__body > .nf-post__date {
   color: #263238;
@@ -6095,7 +6123,7 @@ iframe.heightSet {
     margin-right: 10px; } }
 .lazy-image {
   background-repeat: no-repeat;
-  background-size: 150px auto;
+  background-size: 150px 112px;
   width: 150px;
   float: left;
   margin-left: 5px;
@@ -6103,7 +6131,8 @@ iframe.heightSet {
 
 .lazy-image img {
   opacity: 0;
-  width: 150px; }
+  width: 150px;
+  min-height: 112px; }
 
 .fade-in {
   -webkit-transition: opacity 1500ms;
@@ -6121,6 +6150,6 @@ iframe.heightSet {
   padding-bottom: 20px;
   font-size: 16px;
   line-height: 28px;
-  white-space: pre-wrap; }
+  white-space: normal; }
 
 /*# sourceMappingURL=style.css.map*/

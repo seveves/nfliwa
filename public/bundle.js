@@ -5326,7 +5326,10 @@
 	    __extends(Markdown, _super);
 	    function Markdown() {
 	        var _this = _super.apply(this, arguments) || this;
-	        _this.options = {};
+	        _this.options = {
+	            gfm: true,
+	            breaks: true,
+	        };
 	        return _this;
 	    }
 	    Markdown.prototype.render = function (_a, _b) {
