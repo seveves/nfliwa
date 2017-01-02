@@ -13,20 +13,20 @@ export default class StaticPage extends Component<{url?, path}, {page}> {
     this.fetchStaticPageContent(this.props.url);
   }
 
-	public componentWillReceiveProps(props): void {
+  public componentWillReceiveProps(props): void {
     if (this.props.url !== props.url) {
       this.fetchStaticPageContent(props.url);
     }
   }
 
-	public shouldComponentUpdate(props): boolean {
+  public shouldComponentUpdate(props): boolean {
     return true;
   }
 
   public render({ url, path }, { page }) {
     return (
       <section class="nf-container">
-      { page ? 
+      { page ?
         <Grid>
           <Grid.Cell class="mdl-cell--12-col">
             <div class="nf-page">
@@ -45,7 +45,7 @@ export default class StaticPage extends Component<{url?, path}, {page}> {
     fetch(this.url + '/api/static/' + url)
       .then((res) => res.json())
       .then((json) => {
-        this.setState({ page: json.data })
+        this.setState({ page: json.data });
       });
   }
 }

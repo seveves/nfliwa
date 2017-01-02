@@ -6013,10 +6013,34 @@ iframe.heightSet {
 #app {
   position: static;
   overflow: visible; }
+
+.nf-container {
+  padding-left: 20px;
+  padding-right: 20px; }
+
+@media (max-width: 750px) {
+  .nf-container {
+    padding: 0; } }
 .event-date::after {
   content: "-";
   margin-left: 2px;
   margin-right: 2px; }
+.nf-event__title {
+  color: #263238;
+  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 5px; }
+
+.nf-event__sub-title {
+  color: #263238;
+  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 5px; }
+
 @media (max-width: 750px) {
   .event-card {
     width: 275px; } }
@@ -6028,9 +6052,6 @@ iframe.heightSet {
   margin-left: 20px;
   margin-right: 20px;
   border-bottom: 1px solid #CCCCCC; }
-
-.nf-post {
-  padding: 20px; }
 
 .nf-post__images {
   padding: 20px;
@@ -6065,8 +6086,6 @@ iframe.heightSet {
   margin-right: 2px; }
 
 @media (max-width: 750px) {
-  .nf-post {
-    padding: 0; }
   .nf-post__images {
     padding: 0;
     margin-top: 0; }
@@ -6088,5 +6107,19 @@ iframe.heightSet {
 .fade-in {
   -webkit-transition: opacity 1500ms;
   transition: opacity 1500ms; }
+.nf-page__title {
+  color: #263238;
+  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 5px; }
+
+.nf-page__body {
+  color: #263238;
+  padding-bottom: 20px;
+  font-size: 16px;
+  line-height: 28px;
+  white-space: pre-wrap; }
 
 /*# sourceMappingURL=style.css.map*/

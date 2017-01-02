@@ -53,7 +53,7 @@ function staticRouter() {
 
   function updateStatic(req, res, staticPage) {
     staticPage.title = req.body.title;
-    staticPage.url = makeUrl(staticPage.title),
+    staticPage.url = makeUrl(staticPage.title);
     staticPage.body = req.body.body;
     staticPage.pageIndex = +req.body.pageIndex;
 

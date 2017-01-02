@@ -21,7 +21,7 @@ export default class SiteLayout extends Component<{}, { pages }> {
     return false;
   }
 
-  public render({},{ pages = [] }) {
+  public render({}, { pages = [] }) {
     return (
         <Layout fixed-header fixed-drawer>
           <Header />

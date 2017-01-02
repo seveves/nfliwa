@@ -59,10 +59,10 @@
 	if (!window.Promise) {
 	    window.Promise = promise_polyfill_1.default;
 	}
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./scss/index.scss */ 12);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	__webpack_require__(/*! ./scss/index.scss */ 13);
 	var React = { createElement: preact_1.h };
-	var app_1 = __webpack_require__(/*! ./components/app */ 13);
+	var app_1 = __webpack_require__(/*! ./components/app */ 14);
 	preact_1.render(React.createElement(app_1.default, null), document.body);
 
 
@@ -838,7 +838,7 @@
 	
 	})(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/timers-browserify/main.js */ 9).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../timers-browserify/main.js */ 9).setImmediate))
 
 /***/ },
 /* 9 */
@@ -847,11 +847,7 @@
   \*************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(/*! process/browser.js */ 10).nextTick;
 	var apply = Function.prototype.apply;
-	var slice = Array.prototype.slice;
-	var immediateIds = {};
-	var nextImmediateId = 0;
 	
 	// DOM APIs, for completeness
 	
@@ -862,7 +858,11 @@
 	  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
 	};
 	exports.clearTimeout =
-	exports.clearInterval = function(timeout) { timeout.close(); };
+	exports.clearInterval = function(timeout) {
+	  if (timeout) {
+	    timeout.close();
+	  }
+	};
 	
 	function Timeout(id, clearFn) {
 	  this._id = id;
@@ -896,39 +896,212 @@
 	  }
 	};
 	
-	// That's not how node.js implements it but the exposed api is the same.
-	exports.setImmediate = typeof setImmediate === "function" ? setImmediate : function(fn) {
-	  var id = nextImmediateId++;
-	  var args = arguments.length < 2 ? false : slice.call(arguments, 1);
-	
-	  immediateIds[id] = true;
-	
-	  nextTick(function onNextTick() {
-	    if (immediateIds[id]) {
-	      // fn.call() is faster so we optimize for the common use-case
-	      // @see http://jsperf.com/call-apply-segu
-	      if (args) {
-	        fn.apply(null, args);
-	      } else {
-	        fn.call(null);
-	      }
-	      // Prevent ids from leaking
-	      exports.clearImmediate(id);
-	    }
-	  });
-	
-	  return id;
-	};
-	
-	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
-	  delete immediateIds[id];
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/timers-browserify/main.js */ 9).setImmediate, __webpack_require__(/*! ./~/timers-browserify/main.js */ 9).clearImmediate))
+	// setimmediate attaches itself to the global object
+	__webpack_require__(/*! setimmediate */ 10);
+	exports.setImmediate = setImmediate;
+	exports.clearImmediate = clearImmediate;
+
 
 /***/ },
 /* 10 */
+/*!****************************************!*\
+  !*** ./~/setimmediate/setImmediate.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+	    "use strict";
+	
+	    if (global.setImmediate) {
+	        return;
+	    }
+	
+	    var nextHandle = 1; // Spec says greater than zero
+	    var tasksByHandle = {};
+	    var currentlyRunningATask = false;
+	    var doc = global.document;
+	    var registerImmediate;
+	
+	    function setImmediate(callback) {
+	      // Callback can either be a function or a string
+	      if (typeof callback !== "function") {
+	        callback = new Function("" + callback);
+	      }
+	      // Copy function arguments
+	      var args = new Array(arguments.length - 1);
+	      for (var i = 0; i < args.length; i++) {
+	          args[i] = arguments[i + 1];
+	      }
+	      // Store and register the task
+	      var task = { callback: callback, args: args };
+	      tasksByHandle[nextHandle] = task;
+	      registerImmediate(nextHandle);
+	      return nextHandle++;
+	    }
+	
+	    function clearImmediate(handle) {
+	        delete tasksByHandle[handle];
+	    }
+	
+	    function run(task) {
+	        var callback = task.callback;
+	        var args = task.args;
+	        switch (args.length) {
+	        case 0:
+	            callback();
+	            break;
+	        case 1:
+	            callback(args[0]);
+	            break;
+	        case 2:
+	            callback(args[0], args[1]);
+	            break;
+	        case 3:
+	            callback(args[0], args[1], args[2]);
+	            break;
+	        default:
+	            callback.apply(undefined, args);
+	            break;
+	        }
+	    }
+	
+	    function runIfPresent(handle) {
+	        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+	        // So if we're currently running a task, we'll need to delay this invocation.
+	        if (currentlyRunningATask) {
+	            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+	            // "too much recursion" error.
+	            setTimeout(runIfPresent, 0, handle);
+	        } else {
+	            var task = tasksByHandle[handle];
+	            if (task) {
+	                currentlyRunningATask = true;
+	                try {
+	                    run(task);
+	                } finally {
+	                    clearImmediate(handle);
+	                    currentlyRunningATask = false;
+	                }
+	            }
+	        }
+	    }
+	
+	    function installNextTickImplementation() {
+	        registerImmediate = function(handle) {
+	            process.nextTick(function () { runIfPresent(handle); });
+	        };
+	    }
+	
+	    function canUsePostMessage() {
+	        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+	        // where `global.postMessage` means something completely different and can't be used for this purpose.
+	        if (global.postMessage && !global.importScripts) {
+	            var postMessageIsAsynchronous = true;
+	            var oldOnMessage = global.onmessage;
+	            global.onmessage = function() {
+	                postMessageIsAsynchronous = false;
+	            };
+	            global.postMessage("", "*");
+	            global.onmessage = oldOnMessage;
+	            return postMessageIsAsynchronous;
+	        }
+	    }
+	
+	    function installPostMessageImplementation() {
+	        // Installs an event handler on `global` for the `message` event: see
+	        // * https://developer.mozilla.org/en/DOM/window.postMessage
+	        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+	
+	        var messagePrefix = "setImmediate$" + Math.random() + "$";
+	        var onGlobalMessage = function(event) {
+	            if (event.source === global &&
+	                typeof event.data === "string" &&
+	                event.data.indexOf(messagePrefix) === 0) {
+	                runIfPresent(+event.data.slice(messagePrefix.length));
+	            }
+	        };
+	
+	        if (global.addEventListener) {
+	            global.addEventListener("message", onGlobalMessage, false);
+	        } else {
+	            global.attachEvent("onmessage", onGlobalMessage);
+	        }
+	
+	        registerImmediate = function(handle) {
+	            global.postMessage(messagePrefix + handle, "*");
+	        };
+	    }
+	
+	    function installMessageChannelImplementation() {
+	        var channel = new MessageChannel();
+	        channel.port1.onmessage = function(event) {
+	            var handle = event.data;
+	            runIfPresent(handle);
+	        };
+	
+	        registerImmediate = function(handle) {
+	            channel.port2.postMessage(handle);
+	        };
+	    }
+	
+	    function installReadyStateChangeImplementation() {
+	        var html = doc.documentElement;
+	        registerImmediate = function(handle) {
+	            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+	            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+	            var script = doc.createElement("script");
+	            script.onreadystatechange = function () {
+	                runIfPresent(handle);
+	                script.onreadystatechange = null;
+	                html.removeChild(script);
+	                script = null;
+	            };
+	            html.appendChild(script);
+	        };
+	    }
+	
+	    function installSetTimeoutImplementation() {
+	        registerImmediate = function(handle) {
+	            setTimeout(runIfPresent, 0, handle);
+	        };
+	    }
+	
+	    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+	    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+	    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+	
+	    // Don't get fooled by e.g. browserify environments.
+	    if ({}.toString.call(global.process) === "[object process]") {
+	        // For Node.js before 0.9
+	        installNextTickImplementation();
+	
+	    } else if (canUsePostMessage()) {
+	        // For non-IE10 modern browsers
+	        installPostMessageImplementation();
+	
+	    } else if (global.MessageChannel) {
+	        // For web workers, where supported
+	        installMessageChannelImplementation();
+	
+	    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+	        // For IE 6–8
+	        installReadyStateChangeImplementation();
+	
+	    } else {
+	        // For older browsers
+	        installSetTimeoutImplementation();
+	    }
+	
+	    attachTo.setImmediate = setImmediate;
+	    attachTo.clearImmediate = clearImmediate;
+	}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(/*! ./../node-libs-browser/~/process/browser.js */ 11)))
+
+/***/ },
+/* 11 */
 /*!**************************************************!*\
-  !*** ./~/timers-browserify/~/process/browser.js ***!
+  !*** ./~/node-libs-browser/~/process/browser.js ***!
   \**************************************************/
 /***/ function(module, exports) {
 
@@ -1115,7 +1288,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /*!*********************************!*\
   !*** ./~/preact/dist/preact.js ***!
   \*********************************/
@@ -1203,8 +1376,8 @@
 	    }
 	    function isSameNodeType(node, vnode) {
 	        if (isString(vnode)) return node instanceof Text;
-	        if (isString(vnode.nodeName)) return isNamedNode(node, vnode.nodeName);
-	        if (isFunction(vnode.nodeName)) return node._componentConstructor === vnode.nodeName || isFunctionalComponent(vnode); else ;
+	        if (isString(vnode.nodeName)) return !node._componentConstructor && isNamedNode(node, vnode.nodeName);
+	        if (isFunction(vnode.nodeName)) return (node._componentConstructor ? node._componentConstructor === vnode.nodeName : !0) || isFunctionalComponent(vnode); else ;
 	    }
 	    function isNamedNode(node, nodeName) {
 	        return node.normalizedNodeName === nodeName || toLowerCase(node.nodeName) === toLowerCase(nodeName);
@@ -1229,9 +1402,7 @@
 	                if (!isString(old)) for (var i in old) if (!(i in value)) node.style[i] = '';
 	                for (var i in value) node.style[i] = 'number' == typeof value[i] && !NON_DIMENSION_PROPS[i] ? value[i] + 'px' : value[i];
 	            }
-	        } else if ('dangerouslySetInnerHTML' === name) {
-	            if (value) node.innerHTML = value.__html;
-	        } else if ('o' == name[0] && 'n' == name[1]) {
+	        } else if ('dangerouslySetInnerHTML' === name) node.innerHTML = value && value.__html || ''; else if ('o' == name[0] && 'n' == name[1]) {
 	            var l = node._listeners || (node._listeners = {});
 	            name = toLowerCase(name.substring(2));
 	            if (value) {
@@ -1275,10 +1446,16 @@
 	        }
 	    }
 	    function diff(dom, vnode, context, mountAll, parent, componentRoot) {
-	        if (!diffLevel++) isSvgMode = parent instanceof SVGElement;
+	        if (!diffLevel++) {
+	            isSvgMode = parent instanceof SVGElement;
+	            hydrating = dom && !(ATTR_KEY in dom);
+	        }
 	        var ret = idiff(dom, vnode, context, mountAll);
 	        if (parent && ret.parentNode !== parent) parent.appendChild(ret);
-	        if (!--diffLevel && !componentRoot) flushMounts();
+	        if (!--diffLevel) {
+	            hydrating = !1;
+	            if (!componentRoot) flushMounts();
+	        }
 	        return ret;
 	    }
 	    function idiff(dom, vnode, context, mountAll) {
@@ -1286,33 +1463,33 @@
 	        while (isFunctionalComponent(vnode)) vnode = buildFunctionalComponent(vnode, context);
 	        if (null == vnode) vnode = '';
 	        if (isString(vnode)) {
-	            if (dom) {
-	                if (dom instanceof Text && dom.parentNode) {
-	                    if (dom.nodeValue != vnode) dom.nodeValue = vnode;
-	                    return dom;
-	                }
-	                recollectNodeTree(dom);
+	            if (dom && dom instanceof Text) {
+	                if (dom.nodeValue != vnode) dom.nodeValue = vnode;
+	            } else {
+	                if (dom) recollectNodeTree(dom);
+	                dom = document.createTextNode(vnode);
 	            }
-	            return document.createTextNode(vnode);
+	            dom[ATTR_KEY] = !0;
+	            return dom;
 	        }
 	        if (isFunction(vnode.nodeName)) return buildComponentFromVNode(dom, vnode, context, mountAll);
-	        var out = dom, nodeName = vnode.nodeName, prevSvgMode = isSvgMode, vchildren = vnode.children;
-	        if (!isString(nodeName)) nodeName = String(nodeName);
+	        var out = dom, nodeName = String(vnode.nodeName), prevSvgMode = isSvgMode, vchildren = vnode.children;
 	        isSvgMode = 'svg' === nodeName ? !0 : 'foreignObject' === nodeName ? !1 : isSvgMode;
 	        if (!dom) out = createNode(nodeName, isSvgMode); else if (!isNamedNode(dom, nodeName)) {
 	            out = createNode(nodeName, isSvgMode);
 	            while (dom.firstChild) out.appendChild(dom.firstChild);
+	            if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
 	            recollectNodeTree(dom);
 	        }
-	        if (vchildren && 1 === vchildren.length && 'string' == typeof vchildren[0] && 1 === out.childNodes.length && out.firstChild instanceof Text) {
-	            if (out.firstChild.nodeValue != vchildren[0]) out.firstChild.nodeValue = vchildren[0];
-	        } else if (vchildren && vchildren.length || out.firstChild) innerDiffNode(out, vchildren, context, mountAll);
-	        var props = out[ATTR_KEY];
+	        var fc = out.firstChild, props = out[ATTR_KEY];
 	        if (!props) {
 	            out[ATTR_KEY] = props = {};
 	            for (var a = out.attributes, i = a.length; i--; ) props[a[i].name] = a[i].value;
 	        }
 	        diffAttributes(out, vnode.attributes, props);
+	        if (!hydrating && vchildren && 1 === vchildren.length && 'string' == typeof vchildren[0] && fc && fc instanceof Text && !fc.nextSibling) {
+	            if (fc.nodeValue != vchildren[0]) fc.nodeValue = vchildren[0];
+	        } else if (vchildren && vchildren.length || fc) innerDiffNode(out, vchildren, context, mountAll);
 	        if (originalAttributes && 'function' == typeof originalAttributes.ref) (props.ref = originalAttributes.ref)(out);
 	        isSvgMode = prevSvgMode;
 	        return out;
@@ -1320,11 +1497,11 @@
 	    function innerDiffNode(dom, vchildren, context, mountAll) {
 	        var j, c, vchild, child, originalChildren = dom.childNodes, children = [], keyed = {}, keyedLen = 0, min = 0, len = originalChildren.length, childrenLen = 0, vlen = vchildren && vchildren.length;
 	        if (len) for (var i = 0; i < len; i++) {
-	            var _child = originalChildren[i], key = vlen ? (c = _child._component) ? c.__key : (c = _child[ATTR_KEY]) ? c.key : null : null;
-	            if (key || 0 === key) {
+	            var _child = originalChildren[i], props = _child[ATTR_KEY], key = vlen ? (c = _child._component) ? c.__key : props ? props.key : null : null;
+	            if (null != key) {
 	                keyedLen++;
 	                keyed[key] = _child;
-	            } else children[childrenLen++] = _child;
+	            } else if (hydrating || props) children[childrenLen++] = _child;
 	        }
 	        if (vlen) for (var i = 0; i < vlen; i++) {
 	            vchild = vchildren[i];
@@ -1336,37 +1513,35 @@
 	                    keyed[key] = void 0;
 	                    keyedLen--;
 	                }
-	            } else if (!child && min < childrenLen) {
-	                for (j = min; j < childrenLen; j++) {
-	                    c = children[j];
-	                    if (c && isSameNodeType(c, vchild)) {
-	                        child = c;
-	                        children[j] = void 0;
-	                        if (j === childrenLen - 1) childrenLen--;
-	                        if (j === min) min++;
-	                        break;
-	                    }
-	                }
-	                if (!child && min < childrenLen && isFunction(vchild.nodeName) && mountAll) {
-	                    child = children[min];
-	                    children[min++] = void 0;
+	            } else if (!child && min < childrenLen) for (j = min; j < childrenLen; j++) {
+	                c = children[j];
+	                if (c && isSameNodeType(c, vchild)) {
+	                    child = c;
+	                    children[j] = void 0;
+	                    if (j === childrenLen - 1) childrenLen--;
+	                    if (j === min) min++;
+	                    break;
 	                }
 	            }
 	            child = idiff(child, vchild, context, mountAll);
-	            if (child && child !== dom && child !== originalChildren[i]) dom.insertBefore(child, originalChildren[i] || null);
+	            if (child && child !== dom) if (i >= len) dom.appendChild(child); else if (child !== originalChildren[i]) {
+	                if (child === originalChildren[i + 1]) removeNode(originalChildren[i]);
+	                dom.insertBefore(child, originalChildren[i] || null);
+	            }
 	        }
 	        if (keyedLen) for (var i in keyed) if (keyed[i]) recollectNodeTree(keyed[i]);
-	        if (min < childrenLen) removeOrphanedChildren(children);
-	    }
-	    function removeOrphanedChildren(children, unmountOnly) {
-	        for (var i = children.length; i--; ) if (children[i]) recollectNodeTree(children[i], unmountOnly);
+	        while (min <= childrenLen) {
+	            child = children[childrenLen--];
+	            if (child) recollectNodeTree(child);
+	        }
 	    }
 	    function recollectNodeTree(node, unmountOnly) {
 	        var component = node._component;
 	        if (component) unmountComponent(component, !unmountOnly); else {
 	            if (node[ATTR_KEY] && node[ATTR_KEY].ref) node[ATTR_KEY].ref(null);
 	            if (!unmountOnly) collectNode(node);
-	            if (node.childNodes && node.childNodes.length) removeOrphanedChildren(node.childNodes, unmountOnly);
+	            var c;
+	            while (c = node.lastChild) recollectNodeTree(c, unmountOnly);
 	        }
 	    }
 	    function diffAttributes(dom, attrs, old) {
@@ -1426,9 +1601,9 @@
 	                while (isFunctionalComponent(rendered)) rendered = buildFunctionalComponent(rendered, context);
 	                var toUnmount, base, childComponent = rendered && rendered.nodeName;
 	                if (isFunction(childComponent)) {
-	                    inst = initialChildComponent;
 	                    var childProps = getNodeProps(rendered);
-	                    if (inst && inst.constructor === childComponent) setComponentProps(inst, childProps, 1, context); else {
+	                    inst = initialChildComponent;
+	                    if (inst && inst.constructor === childComponent && childProps.key == inst.__key) setComponentProps(inst, childProps, 1, context); else {
 	                        toUnmount = inst;
 	                        inst = createComponent(childComponent, childProps, context);
 	                        inst.nextBase = inst.nextBase || nextBase;
@@ -1514,7 +1689,8 @@
 	                removeNode(base);
 	                collectComponent(component);
 	            }
-	            removeOrphanedChildren(base.childNodes, !remove);
+	            var c;
+	            while (c = base.lastChild) recollectNodeTree(c, !remove);
 	        }
 	        if (component.__ref) component.__ref(null);
 	        if (component.componentDidUnmount) component.componentDidUnmount();
@@ -1574,6 +1750,7 @@
 	    var mounts = [];
 	    var diffLevel = 0;
 	    var isSvgMode = !1;
+	    var hydrating = !1;
 	    var components = {};
 	    extend(Component.prototype, {
 	        linkState: function(key, eventPath) {
@@ -1602,7 +1779,7 @@
 	//# sourceMappingURL=preact.js.map
 
 /***/ },
-/* 12 */
+/* 13 */
 /*!********************************!*\
   !*** ./client/scss/index.scss ***!
   \********************************/
@@ -1611,7 +1788,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 13 */
+/* 14 */
 /*!***********************************!*\
   !*** ./client/components/app.tsx ***!
   \***********************************/
@@ -1623,18 +1800,17 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var layout_1 = __webpack_require__(/*! ./layout */ 14);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var layout_1 = __webpack_require__(/*! ./layout */ 15);
 	var React = { createElement: preact_1.h };
 	var App = (function (_super) {
 	    __extends(App, _super);
 	    function App() {
-	        _super.apply(this, arguments);
+	        return _super.apply(this, arguments) || this;
 	    }
 	    App.prototype.render = function () {
-	        return (React.createElement("div", {id: "app"}, 
-	            React.createElement(layout_1.default, null)
-	        ));
+	        return (React.createElement("div", { id: "app" },
+	            React.createElement(layout_1.default, null)));
 	    };
 	    return App;
 	}(preact_1.Component));
@@ -1643,7 +1819,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /*!********************************************!*\
   !*** ./client/components/layout/index.tsx ***!
   \********************************************/
@@ -1655,39 +1831,44 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	var preact_router_1 = __webpack_require__(/*! preact-router */ 16);
-	var event_details_1 = __webpack_require__(/*! ../event-details */ 17);
-	var events_1 = __webpack_require__(/*! ../events */ 21);
-	var header_1 = __webpack_require__(/*! ../header */ 23);
-	var posts_1 = __webpack_require__(/*! ../posts */ 25);
-	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 31);
-	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 32);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
+	var preact_router_1 = __webpack_require__(/*! preact-router */ 17);
+	var event_details_1 = __webpack_require__(/*! ../event-details */ 18);
+	var events_1 = __webpack_require__(/*! ../events */ 22);
+	var header_1 = __webpack_require__(/*! ../header */ 24);
+	var posts_1 = __webpack_require__(/*! ../posts */ 26);
+	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 32);
+	var static_1 = __webpack_require__(/*! ../static */ 33);
+	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 35);
 	var React = { createElement: preact_1.h };
 	var SiteLayout = (function (_super) {
 	    __extends(SiteLayout, _super);
 	    function SiteLayout() {
-	        var _this = this;
-	        _super.apply(this, arguments);
-	        this.toggleDrawer = function () {
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.toggleDrawer = function () {
 	            var layout = new material_layout_helper_1.default(_this);
 	            if (layout.hasFixedDrawer && !layout.isSmallScreen) {
 	                return;
 	            }
 	            layout.toggleDrawer();
 	        };
+	        return _this;
 	    }
-	    SiteLayout.prototype.render = function () {
-	        return (React.createElement(preact_mdl_1.Layout, {"fixed-header": true}, 
-	            React.createElement(header_1.default, null), 
-	            React.createElement(sidebar_1.default, {onClick: this.toggleDrawer}), 
-	            React.createElement(preact_mdl_1.Layout.Content, null, 
-	                React.createElement(preact_router_1.Router, null, 
-	                    React.createElement(posts_1.default, {path: "/"}), 
-	                    React.createElement(events_1.default, {path: "/events"}), 
-	                    React.createElement(event_details_1.default, {path: "/events/:eventId"}))
-	            )));
+	    SiteLayout.prototype.shouldComponentUpdate = function () {
+	        return false;
+	    };
+	    SiteLayout.prototype.render = function (_a, _b) {
+	        var _c = _b.pages, pages = _c === void 0 ? [] : _c;
+	        return (React.createElement(preact_mdl_1.Layout, { "fixed-header": true, "fixed-drawer": true },
+	            React.createElement(header_1.default, null),
+	            React.createElement(sidebar_1.default, { onClick: this.toggleDrawer }),
+	            React.createElement(preact_mdl_1.Layout.Content, null,
+	                React.createElement(preact_router_1.Router, null,
+	                    React.createElement(posts_1.default, { path: "/" }),
+	                    React.createElement(events_1.default, { path: "/events" }),
+	                    React.createElement(event_details_1.default, { path: "/events/:eventId" }),
+	                    React.createElement(static_1.default, { path: "/static/:url" })))));
 	    };
 	    return SiteLayout;
 	}(preact_1.Component));
@@ -1696,14 +1877,14 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /*!*****************************************!*\
   !*** ./~/preact-mdl/dist/preact-mdl.js ***!
   \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(/*! preact */ 11)) :
+	   true ? factory(exports, __webpack_require__(/*! preact */ 12)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'preact'], factory) :
 	  (factory((global.preactMdl = global.preactMdl || {}),global.preact));
 	}(this, function (exports,preact) { 'use strict';
@@ -3402,14 +3583,14 @@
 	//# sourceMappingURL=preact-mdl.js.map
 
 /***/ },
-/* 16 */
+/* 17 */
 /*!***********************************************!*\
   !*** ./~/preact-router/dist/preact-router.js ***!
   \***********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (global, factory) {
-		 true ? module.exports = factory(__webpack_require__(/*! preact */ 11)) :
+		 true ? module.exports = factory(__webpack_require__(/*! preact */ 12)) :
 		typeof define === 'function' && define.amd ? define(['preact'], factory) :
 		(global.preactRouter = factory(global.preact));
 	}(this, (function (preact) { 'use strict';
@@ -3750,7 +3931,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /*!***************************************************!*\
   !*** ./client/components/event-details/index.tsx ***!
   \***************************************************/
@@ -3762,16 +3943,17 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
 	var React = { createElement: preact_1.h };
-	var event_date_1 = __webpack_require__(/*! ../event-date */ 18);
-	var location_1 = __webpack_require__(/*! ../location */ 20);
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 19);
+	var location_1 = __webpack_require__(/*! ../location */ 21);
 	var EventDetails = (function (_super) {
 	    __extends(EventDetails, _super);
 	    function EventDetails() {
-	        _super.apply(this, arguments);
-	        this.url = '//nfliwa.herokuapp.com';
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.url = '//nfliwa.herokuapp.com';
+	        return _this;
 	    }
 	    EventDetails.prototype.componentDidMount = function () {
 	        this.fetchNextEvents(this.props.eventId);
@@ -3779,30 +3961,27 @@
 	    EventDetails.prototype.render = function (_a, _b) {
 	        var eventId = _a.eventId, path = _a.path;
 	        var _c = _b.event, event = _c === void 0 ? null : _c;
-	        return (React.createElement("section", {class: "nf-container"}, 
-	            React.createElement(preact_mdl_1.Grid, null, 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, event ?
-	                    React.createElement("div", {class: "nf-event"}, 
-	                        React.createElement("h3", {class: "nf-event__title"}, event.title), 
-	                        React.createElement("h4", {class: "nf-event__date"}, 
-	                            React.createElement(preact_mdl_1.Icon, {icon: "event"}), 
-	                            " ", 
-	                            React.createElement(event_date_1.default, {date: new Date(event.eventDate)})), 
-	                        React.createElement("h4", {class: "nf-event__location"}, 
-	                            React.createElement(preact_mdl_1.Icon, {icon: "location on"}), 
-	                            " ", 
-	                            event.location), 
-	                        React.createElement(location_1.default, {lat: event.lat, long: event.long}), 
-	                        React.createElement("h5", null, "Beschreibung"), 
-	                        React.createElement("p", {class: "nf-event__text"}, event.body)) : '')
-	            ), 
-	            React.createElement(preact_mdl_1.Grid, null, 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--2-col"}, 
-	                    React.createElement("a", {class: "mdl-button mdl-button--colored", href: "/events"}, 
-	                        React.createElement(preact_mdl_1.Icon, {icon: "arrow back"}), 
-	                        " Zurück zur Übersicht")
-	                )
-	            )));
+	        return (React.createElement("section", { class: "nf-container" },
+	            React.createElement(preact_mdl_1.Grid, null,
+	                React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--12-col" }, event ?
+	                    React.createElement("div", { class: "nf-event" },
+	                        React.createElement("h3", { class: "nf-event__title" }, event.title),
+	                        React.createElement("h4", { class: "nf-event__date" },
+	                            React.createElement(preact_mdl_1.Icon, { icon: "event" }),
+	                            " ",
+	                            React.createElement(event_date_1.default, { date: new Date(event.eventDate) })),
+	                        React.createElement("h4", { class: "nf-event__location" },
+	                            React.createElement(preact_mdl_1.Icon, { icon: "location on" }),
+	                            " ",
+	                            event.location),
+	                        React.createElement(location_1.default, { lat: event.lat, long: event.long }),
+	                        React.createElement("h5", null, "Beschreibung"),
+	                        React.createElement("p", { class: "nf-event__text" }, event.body)) : null)),
+	            React.createElement(preact_mdl_1.Grid, null,
+	                React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--2-col" },
+	                    React.createElement("a", { class: "mdl-button mdl-button--colored", href: "/events" },
+	                        React.createElement(preact_mdl_1.Icon, { icon: "arrow back" }),
+	                        " Zur\u00FCck zur \u00DCbersicht")))));
 	    };
 	    EventDetails.prototype.fetchNextEvents = function (eventId) {
 	        var _this = this;
@@ -3820,7 +3999,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /*!************************************************!*\
   !*** ./client/components/event-date/index.tsx ***!
   \************************************************/
@@ -3832,13 +4011,13 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 19);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	__webpack_require__(/*! ./style.scss */ 20);
 	var React = { createElement: preact_1.h };
 	var EventDate = (function (_super) {
 	    __extends(EventDate, _super);
 	    function EventDate() {
-	        _super.apply(this, arguments);
+	        return _super.apply(this, arguments) || this;
 	    }
 	    EventDate.prototype.componentDidMount = function () {
 	        this.createEventDate(new Date(this.props.date));
@@ -3846,9 +4025,9 @@
 	    EventDate.prototype.render = function (_a, _b) {
 	        var date = _a.date;
 	        var _c = _b.eventDate, eventDate = _c === void 0 ? '' : _c, _d = _b.eventTime, eventTime = _d === void 0 ? '' : _d;
-	        return (React.createElement("span", null, 
-	            React.createElement("span", {class: "event-date"}, eventDate), 
-	            React.createElement("span", {class: "event-time"}, eventTime)));
+	        return (React.createElement("span", null,
+	            React.createElement("span", { class: "event-date" }, eventDate),
+	            React.createElement("span", { class: "event-time" }, eventTime)));
 	    };
 	    EventDate.prototype.createEventDate = function (date) {
 	        var eventDate = date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
@@ -3896,7 +4075,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /*!*************************************************!*\
   !*** ./client/components/event-date/style.scss ***!
   \*************************************************/
@@ -3905,7 +4084,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 20 */
+/* 21 */
 /*!**********************************************!*\
   !*** ./client/components/location/index.tsx ***!
   \**********************************************/
@@ -3917,14 +4096,15 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
 	var React = { createElement: preact_1.h };
 	var Location = (function (_super) {
 	    __extends(Location, _super);
 	    function Location() {
-	        _super.apply(this, arguments);
-	        this.url = '//nfliwa.herokuapp.com';
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.url = '//nfliwa.herokuapp.com';
+	        return _this;
 	    }
 	    Location.prototype.componentDidMount = function () {
 	        this.update();
@@ -3932,13 +4112,12 @@
 	    Location.prototype.render = function (_a, _b) {
 	        var lat = _a.lat, long = _a.long;
 	        var _c = _b.imgSource, imgSource = _c === void 0 ? '' : _c;
-	        return (React.createElement("div", null, 
-	            React.createElement("div", null, 
-	                React.createElement("img", {src: imgSource, style: "margin-bottom: 10px; max-width: 100%; height: auto;"})
-	            ), 
-	            React.createElement("a", {class: "mdl-button mdl-js-button mdl-button--raised", href: 'https://maps.google.com/?q=' + lat + ',' + long}, 
-	                React.createElement(preact_mdl_1.Icon, {icon: "directions"}), 
-	                " In Google Maps öffnen")));
+	        return (React.createElement("div", null,
+	            React.createElement("div", null,
+	                React.createElement("img", { src: imgSource, style: "margin-bottom: 10px; max-width: 100%; height: auto;" })),
+	            React.createElement("a", { class: "mdl-button mdl-js-button mdl-button--raised", href: 'https://maps.google.com/?q=' + lat + ',' + long },
+	                React.createElement(preact_mdl_1.Icon, { icon: "directions" }),
+	                " In Google Maps \u00F6ffnen")));
 	    };
 	    Location.prototype.update = function () {
 	        var _this = this;
@@ -3957,7 +4136,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /*!********************************************!*\
   !*** ./client/components/events/index.tsx ***!
   \********************************************/
@@ -3969,16 +4148,17 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 22);
-	var event_date_1 = __webpack_require__(/*! ../event-date */ 18);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
+	__webpack_require__(/*! ./style.scss */ 23);
+	var event_date_1 = __webpack_require__(/*! ../event-date */ 19);
 	var React = { createElement: preact_1.h };
 	var Events = (function (_super) {
 	    __extends(Events, _super);
 	    function Events() {
-	        _super.apply(this, arguments);
-	        this.url = '//nfliwa.herokuapp.com';
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.url = '//nfliwa.herokuapp.com';
+	        return _this;
 	    }
 	    Events.prototype.componentDidMount = function () {
 	        this.fetchNextEvents();
@@ -3986,17 +4166,16 @@
 	    };
 	    Events.prototype.render = function (_a, _b) {
 	        var _c = _b.nextEvents, nextEvents = _c === void 0 ? [] : _c, _d = _b.pastEvents, pastEvents = _d === void 0 ? [] : _d;
-	        return (React.createElement("section", {class: "nf-container"}, 
-	            React.createElement(preact_mdl_1.Grid, null, 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--8-col"}, 
-	                    React.createElement("h3", null, "Kommende Termine"), 
-	                    nextEvents.length ? '' : React.createElement("h4", null, "Keine Termine geplant."), 
-	                    React.createElement(preact_mdl_1.Grid, null, nextEvents.map(function (event) { return (React.createElement(NextEvent, {event: event})); }))), 
-	                React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--4-col"}, 
-	                    React.createElement("h3", null, "Vergangene Termine"), 
-	                    pastEvents.length ? '' : React.createElement("h4", null, "Keine vergangene Termine."), 
-	                    React.createElement("ul", {class: "mdl-list"}, pastEvents.map(function (event) { return (React.createElement(PastEvent, {event: event})); }))))
-	        ));
+	        return (React.createElement("section", { class: "nf-container" },
+	            React.createElement(preact_mdl_1.Grid, { class: "nf-event" },
+	                React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--8-col" },
+	                    React.createElement("h3", { class: "nf-event__title" }, "Kommende Termine"),
+	                    nextEvents.length ? null : React.createElement("h6", null, "Keine Termine geplant."),
+	                    React.createElement(preact_mdl_1.Grid, null, nextEvents.map(function (event) { return (React.createElement(NextEvent, { event: event })); }))),
+	                React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--4-col" },
+	                    React.createElement("h3", { class: "nf-event__title" }, "Vergangene Termine"),
+	                    pastEvents.length ? null : React.createElement("h6", null, "Keine vergangene Termine."),
+	                    React.createElement("ul", { class: "mdl-list" }, pastEvents.map(function (event) { return (React.createElement(PastEvent, { event: event })); }))))));
 	    };
 	    Events.prototype.fetchNextEvents = function () {
 	        var _this = this;
@@ -4022,47 +4201,39 @@
 	exports.default = Events;
 	var NextEvent = function (_a) {
 	    var event = _a.event;
-	    return (React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
-	        React.createElement("div", {class: "event-card mdl-card mdl-shadow--2dp"}, 
-	            React.createElement("div", {class: "mdl-card__title mdl-card--expand"}, 
-	                React.createElement("h4", null, event.title)
-	            ), 
-	            React.createElement("div", {class: "mdl-card__supporting-text"}, 
-	                React.createElement("p", null, 
-	                    React.createElement("span", {class: "card-location"}, event.location), 
-	                    React.createElement("br", null), 
-	                    React.createElement("div", {class: "card-date"}, 
-	                        React.createElement(event_date_1.default, {date: new Date(event.eventDate)})
-	                    ))
-	            ), 
-	            React.createElement("div", {class: "mdl-card__actions mdl-card--border"}, 
-	                React.createElement("a", {class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", href: '/events/' + event._id}, 
-	                    React.createElement(preact_mdl_1.Icon, {icon: "event"}), 
-	                    " Details")
-	            ))
-	    ));
+	    return (React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--6-col" },
+	        React.createElement("div", { class: "event-card mdl-card mdl-shadow--2dp" },
+	            React.createElement("div", { class: "mdl-card__title mdl-card--expand" },
+	                React.createElement("h4", null, event.title)),
+	            React.createElement("div", { class: "mdl-card__supporting-text" },
+	                React.createElement("p", null,
+	                    React.createElement("span", { class: "card-location" }, event.location),
+	                    React.createElement("br", null),
+	                    React.createElement("div", { class: "card-date" },
+	                        React.createElement(event_date_1.default, { date: new Date(event.eventDate) })))),
+	            React.createElement("div", { class: "mdl-card__actions mdl-card--border" },
+	                React.createElement("a", { class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", href: '/events/' + event._id },
+	                    React.createElement(preact_mdl_1.Icon, { icon: "event" }),
+	                    " Details")))));
 	};
 	var PastEvent = function (_a) {
 	    var event = _a.event;
-	    return (React.createElement("li", {class: "mdl-list__item mdl-list__item--three-line"}, 
-	        React.createElement("span", {class: "mdl-list__item-primary-content"}, 
-	            React.createElement(preact_mdl_1.Icon, {icon: "event", class: "mdl-list__item-avatar"}), 
-	            React.createElement("span", null, event.title), 
-	            React.createElement("div", {class: "mdl-list__item-text-body"}, 
-	                React.createElement("div", null, event.location), 
-	                React.createElement("div", null, 
-	                    React.createElement(event_date_1.default, {date: event.eventDate})
-	                ))), 
-	        React.createElement("span", {class: "mdl-list__item-secondary-content"}, 
-	            React.createElement("a", {class: "mdl-list__item-secondary-action", href: '/events/' + event._id}, 
-	                React.createElement(preact_mdl_1.Icon, {class: "mdl-list__item-avatar", icon: "arrow forward"})
-	            )
-	        )));
+	    return (React.createElement("li", { class: "mdl-list__item mdl-list__item--three-line" },
+	        React.createElement("span", { class: "mdl-list__item-primary-content" },
+	            React.createElement(preact_mdl_1.Icon, { icon: "event", class: "mdl-list__item-avatar" }),
+	            React.createElement("span", null, event.title),
+	            React.createElement("div", { class: "mdl-list__item-text-body" },
+	                React.createElement("div", null, event.location),
+	                React.createElement("div", null,
+	                    React.createElement(event_date_1.default, { date: event.eventDate })))),
+	        React.createElement("span", { class: "mdl-list__item-secondary-content" },
+	            React.createElement("a", { class: "mdl-list__item-secondary-action", href: '/events/' + event._id },
+	                React.createElement(preact_mdl_1.Icon, { class: "mdl-list__item-avatar", icon: "arrow forward" })))));
 	};
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /*!*********************************************!*\
   !*** ./client/components/events/style.scss ***!
   \*********************************************/
@@ -4071,7 +4242,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 23 */
+/* 24 */
 /*!********************************************!*\
   !*** ./client/components/header/index.tsx ***!
   \********************************************/
@@ -4083,21 +4254,20 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 24);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
+	__webpack_require__(/*! ./style.scss */ 25);
 	var React = { createElement: preact_1.h };
 	var Header = (function (_super) {
 	    __extends(Header, _super);
 	    function Header() {
-	        _super.apply(this, arguments);
+	        return _super.apply(this, arguments) || this;
 	    }
 	    Header.prototype.render = function () {
-	        return (React.createElement(preact_mdl_1.Layout.Header, null, 
-	            React.createElement(preact_mdl_1.Layout.HeaderRow, null, 
-	                React.createElement(preact_mdl_1.Layout.Title, null, "Naturfreunde Lichtenwald"), 
-	                React.createElement(preact_mdl_1.Layout.Spacer, null))
-	        ));
+	        return (React.createElement(preact_mdl_1.Layout.Header, null,
+	            React.createElement(preact_mdl_1.Layout.HeaderRow, null,
+	                React.createElement(preact_mdl_1.Layout.Title, null, "Naturfreunde Lichtenwald"),
+	                React.createElement(preact_mdl_1.Layout.Spacer, null))));
 	    };
 	    return Header;
 	}(preact_1.Component));
@@ -4106,7 +4276,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /*!*********************************************!*\
   !*** ./client/components/header/style.scss ***!
   \*********************************************/
@@ -4115,7 +4285,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 25 */
+/* 26 */
 /*!*******************************************!*\
   !*** ./client/components/posts/index.tsx ***!
   \*******************************************/
@@ -4127,39 +4297,36 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
-	__webpack_require__(/*! ./style.scss */ 26);
-	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 27);
-	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 30);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
+	__webpack_require__(/*! ./style.scss */ 27);
+	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 28);
+	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 31);
 	var React = { createElement: preact_1.h };
 	var Posts = (function (_super) {
 	    __extends(Posts, _super);
 	    function Posts() {
-	        var _this = this;
-	        _super.apply(this, arguments);
-	        this.url = '//nfliwa.herokuapp.com';
-	        this.loadMore = function () {
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.url = '//nfliwa.herokuapp.com';
+	        _this.loadMore = function () {
 	            _this.fetchPosts(_this.state.next);
 	        };
+	        return _this;
 	    }
 	    Posts.prototype.componentDidMount = function () {
 	        this.fetchPosts('/api/posts?a=6&p=0');
 	    };
 	    Posts.prototype.render = function (_a, _b) {
 	        var _c = _b.posts, posts = _c === void 0 ? [] : _c;
-	        return (React.createElement("section", {class: "nf-container"}, 
-	            posts.map(function (post, i) { return (React.createElement(Post, {data: post, last: i === (posts.length - 1)})); }), 
+	        return (React.createElement("section", { class: "nf-container" },
+	            posts.map(function (post, i) { return (React.createElement(Post, { data: post, last: i === (posts.length - 1) })); }),
 	            this.state.next ?
-	                React.createElement(preact_mdl_1.Grid, null, 
-	                    React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--12-col"}, 
-	                        React.createElement("div", {class: "nf-post"}, 
-	                            React.createElement(preact_mdl_1.Button, {class: "nf-load-more", raised: true, accent: true, onClick: this.loadMore}, 
-	                                "Weitere laden", 
-	                                React.createElement(preact_mdl_1.Icon, {icon: "expand more"}))
-	                        )
-	                    )
-	                ) : null));
+	                React.createElement(preact_mdl_1.Grid, null,
+	                    React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--12-col" },
+	                        React.createElement("div", { class: "nf-post" },
+	                            React.createElement(preact_mdl_1.Button, { class: "nf-load-more", raised: true, accent: true, onClick: this.loadMore },
+	                                "Weitere laden",
+	                                React.createElement(preact_mdl_1.Icon, { icon: "expand more" }))))) : null));
 	    };
 	    Posts.prototype.fetchPosts = function (apiUrl) {
 	        var _this = this;
@@ -4177,25 +4344,23 @@
 	exports.default = Posts;
 	var Post = function (_a) {
 	    var data = _a.data, last = _a.last;
-	    return (React.createElement(preact_mdl_1.Grid, null, 
-	        React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
-	            React.createElement("div", {class: "nf-post"}, 
-	                React.createElement("h3", {class: "nf-post__title"}, data.title), 
-	                React.createElement("div", {class: "nf-post__body"}, 
-	                    React.createElement("span", {class: "nf-post__date"}, 
-	                        React.createElement(pretty_date_1.default, {date: data.date})
-	                    ), 
-	                    React.createElement("span", {class: "nf-post__text"}, data.body)))
-	        ), 
-	        React.createElement(preact_mdl_1.Grid.Cell, {class: "mdl-cell--6-col"}, 
-	            React.createElement("div", {class: "nf-post__images"}, data.images.map(function (image) { return (React.createElement(lazy_image_1.default, {image: image})); }))
-	        ), 
-	        last ? null : React.createElement(preact_mdl_1.Grid.Cell, {class: "nf-post__footer mdl-cell--12-col"})));
+	    return (React.createElement(preact_mdl_1.Grid, null,
+	        React.createElement(preact_mdl_1.Grid.Cell, { class: data.images.length > 0 ? 'mdl-cell--6-col' : 'mdl-cell--12-col' },
+	            React.createElement("div", { class: "nf-post" },
+	                React.createElement("h3", { class: "nf-post__title" }, data.title),
+	                React.createElement("div", { class: "nf-post__body" },
+	                    React.createElement("span", { class: "nf-post__date" },
+	                        React.createElement(pretty_date_1.default, { date: data.date })),
+	                    React.createElement("span", { class: "nf-post__text" }, data.body)))),
+	        data.images.length > 0 ?
+	            React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--6-col" },
+	                React.createElement("div", { class: "nf-post__images" }, data.images.map(function (image) { return (React.createElement(lazy_image_1.default, { image: image })); }))) : null,
+	        last ? null : React.createElement(preact_mdl_1.Grid.Cell, { class: "nf-post__footer mdl-cell--12-col" })));
 	};
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /*!********************************************!*\
   !*** ./client/components/posts/style.scss ***!
   \********************************************/
@@ -4204,7 +4369,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 27 */
+/* 28 */
 /*!************************************************!*\
   !*** ./client/components/lazy-image/index.tsx ***!
   \************************************************/
@@ -4216,21 +4381,20 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	__webpack_require__(/*! ./style.scss */ 28);
-	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 29);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	__webpack_require__(/*! ./style.scss */ 29);
+	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 30);
 	var React = { createElement: preact_1.h };
 	var LazyImage = (function (_super) {
 	    __extends(LazyImage, _super);
 	    function LazyImage() {
-	        _super.apply(this, arguments);
+	        return _super.apply(this, arguments) || this;
 	    }
 	    LazyImage.prototype.render = function (_a) {
 	        var image = _a.image;
 	        var style = { backgroundImage: 'url(' + image.base64 + ')' };
-	        return (React.createElement("div", {class: "lazy-image", style: style}, 
-	            React.createElement(inner_image_1.default, {imageUrl: image.imageUrl})
-	        ));
+	        return (React.createElement("div", { class: "lazy-image", style: style },
+	            React.createElement(inner_image_1.default, { imageUrl: image.imageUrl })));
 	    };
 	    return LazyImage;
 	}(preact_1.Component));
@@ -4239,7 +4403,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /*!*************************************************!*\
   !*** ./client/components/lazy-image/style.scss ***!
   \*************************************************/
@@ -4248,7 +4412,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 29 */
+/* 30 */
 /*!************************************************************!*\
   !*** ./client/components/lazy-image/inner-image/index.tsx ***!
   \************************************************************/
@@ -4260,12 +4424,12 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
 	var React = { createElement: preact_1.h };
 	var InnerImage = (function (_super) {
 	    __extends(InnerImage, _super);
 	    function InnerImage() {
-	        _super.apply(this, arguments);
+	        return _super.apply(this, arguments) || this;
 	    }
 	    InnerImage.prototype.componentDidMount = function () {
 	        this.update(this.props.imageUrl);
@@ -4278,7 +4442,7 @@
 	    InnerImage.prototype.render = function (_a, _b) {
 	        var imageUrl = _a.imageUrl;
 	        var _c = _b.imgSource, imgSource = _c === void 0 ? '' : _c, _d = _b.opacity, opacity = _d === void 0 ? 0 : _d;
-	        return (React.createElement("img", {class: "fade-in", src: imgSource, style: { opacity: opacity }}));
+	        return (React.createElement("img", { class: "fade-in", src: imgSource, style: { opacity: opacity } }));
 	    };
 	    InnerImage.prototype.setOpacity = function () {
 	        var _this = this;
@@ -4303,7 +4467,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /*!*************************************************!*\
   !*** ./client/components/pretty-date/index.tsx ***!
   \*************************************************/
@@ -4315,16 +4479,17 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
 	var React = { createElement: preact_1.h };
 	var PrettyDate = (function (_super) {
 	    __extends(PrettyDate, _super);
 	    function PrettyDate() {
-	        _super.apply(this, arguments);
-	        this.minute = 60;
-	        this.hour = this.minute * 60;
-	        this.day = this.hour * 24;
-	        this.week = this.day * 7;
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.minute = 60;
+	        _this.hour = _this.minute * 60;
+	        _this.day = _this.hour * 24;
+	        _this.week = _this.day * 7;
+	        return _this;
 	    }
 	    PrettyDate.prototype.componentDidMount = function () {
 	        this.prettifyDate(new Date(this.props.date));
@@ -4401,7 +4566,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /*!*********************************************!*\
   !*** ./client/components/sidebar/index.tsx ***!
   \*********************************************/
@@ -4413,24 +4578,34 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var preact_1 = __webpack_require__(/*! preact */ 11);
-	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 15);
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
 	var React = { createElement: preact_1.h };
 	var Sidebar = (function (_super) {
 	    __extends(Sidebar, _super);
 	    function Sidebar() {
-	        _super.apply(this, arguments);
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.url = '//nfliwa.herokuapp.com';
+	        return _this;
 	    }
-	    Sidebar.prototype.shouldComponentUpdate = function () {
-	        return false;
+	    Sidebar.prototype.componentDidMount = function () {
+	        this.fetchStaticPages();
 	    };
-	    Sidebar.prototype.render = function (_a) {
+	    Sidebar.prototype.render = function (_a, _b) {
 	        var onClick = _a.onClick;
-	        return (React.createElement(preact_mdl_1.Layout.Drawer, {onClick: onClick, "aria-hidden": "true"}, 
-	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"), 
-	            React.createElement(preact_mdl_1.Navigation, null, 
-	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/"}, "Neuigkeiten"), 
-	                React.createElement(preact_mdl_1.Navigation.Link, {href: "/events"}, "Termine"))));
+	        var _c = _b.pages, pages = _c === void 0 ? [] : _c;
+	        return (React.createElement(preact_mdl_1.Layout.Drawer, { onClick: onClick, "aria-hidden": "true" },
+	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"),
+	            React.createElement(preact_mdl_1.Navigation, null,
+	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/" }, "Neuigkeiten"),
+	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/events" }, "Termine"),
+	                pages.map(function (p) { return (React.createElement(preact_mdl_1.Navigation.Link, { href: '/static/' + p.url }, p.title)); }))));
+	    };
+	    Sidebar.prototype.fetchStaticPages = function () {
+	        var _this = this;
+	        fetch(this.url + '/api/static')
+	            .then(function (res) { return res.json(); })
+	            .then(function (json) { return _this.setState({ pages: json.data }); });
 	    };
 	    return Sidebar;
 	}(preact_1.Component));
@@ -4439,7 +4614,76 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
+/*!********************************************!*\
+  !*** ./client/components/static/index.tsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var preact_1 = __webpack_require__(/*! preact */ 12);
+	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 16);
+	__webpack_require__(/*! ./style.scss */ 34);
+	var React = { createElement: preact_1.h };
+	var StaticPage = (function (_super) {
+	    __extends(StaticPage, _super);
+	    function StaticPage() {
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.url = '//nfliwa.herokuapp.com';
+	        return _this;
+	    }
+	    StaticPage.prototype.componentDidMount = function () {
+	        this.fetchStaticPageContent(this.props.url);
+	    };
+	    StaticPage.prototype.componentWillReceiveProps = function (props) {
+	        if (this.props.url !== props.url) {
+	            this.fetchStaticPageContent(props.url);
+	        }
+	    };
+	    StaticPage.prototype.shouldComponentUpdate = function (props) {
+	        return true;
+	    };
+	    StaticPage.prototype.render = function (_a, _b) {
+	        var url = _a.url, path = _a.path;
+	        var page = _b.page;
+	        return (React.createElement("section", { class: "nf-container" }, page ?
+	            React.createElement(preact_mdl_1.Grid, null,
+	                React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--12-col" },
+	                    React.createElement("div", { class: "nf-page" },
+	                        React.createElement("h3", { class: "nf-page__title" }, page.title),
+	                        React.createElement("div", { class: "nf-page__body" },
+	                            React.createElement("span", { class: "nf-page__text" }, page.body))))) : null));
+	    };
+	    StaticPage.prototype.fetchStaticPageContent = function (url) {
+	        var _this = this;
+	        fetch(this.url + '/api/static/' + url)
+	            .then(function (res) { return res.json(); })
+	            .then(function (json) {
+	            _this.setState({ page: json.data });
+	        });
+	    };
+	    return StaticPage;
+	}(preact_1.Component));
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = StaticPage;
+
+
+/***/ },
+/* 34 */
+/*!*********************************************!*\
+  !*** ./client/components/static/style.scss ***!
+  \*********************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 35 */
 /*!*************************************************************!*\
   !*** ./client/components/layout/material-layout-helper.tsx ***!
   \*************************************************************/
