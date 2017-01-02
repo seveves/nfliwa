@@ -4,6 +4,8 @@ import { Button, Card, Cell, Grid, Icon } from 'preact-mdl';
 const React = { createElement: h };
 declare const fetch: any;
 
+import Markdown from '../../lib/markdown';
+
 import EventDate from '../event-date';
 import Location from '../location';
 
@@ -27,7 +29,9 @@ export default class EventDetails extends Component<{eventId?, path}, {event}> {
               <h4 class="nf-event__location"><Icon icon="location on"/> {event.location}</h4>
               <Location lat={event.lat} long={event.long}/>
               <h5>Beschreibung</h5>
-              <p class="nf-event__text">{event.body}</p>
+              <div class="nf-event__text">
+                <Markdown markdown={event.body} />
+              </div>
             </div> : null }
           </Grid.Cell>
         </Grid>

@@ -2,6 +2,8 @@ import { Component, h } from 'preact';
 import { Button, Card, Cell, Grid, Icon } from 'preact-mdl';
 import './style.scss';
 
+import Markdown from '../../lib/markdown';
+
 const React = { createElement: h };
 declare const fetch: any;
 
@@ -32,7 +34,9 @@ export default class StaticPage extends Component<{url?, path}, {page}> {
             <div class="nf-page">
               <h3 class="nf-page__title">{page.title}</h3>
               <div class="nf-page__body">
-                <span class="nf-page__text">{page.body}</span>
+                <div class="nf-page__text">
+                  <Markdown markdown={page.body} />
+                </div>
               </div>
             </div>
           </Grid.Cell>

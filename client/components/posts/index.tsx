@@ -2,6 +2,8 @@ import { Component, h } from 'preact';
 import { Button, Card, Cell, Grid, Icon } from 'preact-mdl';
 import './style.scss';
 
+import Markdown from '../../lib/markdown';
+
 import LazyImage from '../lazy-image';
 import PrettyDate from '../pretty-date';
 
@@ -56,7 +58,9 @@ const Post = ({ data, last }) => (
           <h3 class="nf-post__title">{data.title}</h3>
           <div class="nf-post__body">
             <span class="nf-post__date"><PrettyDate date={data.date} /></span>
-            <span class="nf-post__text">{data.body}</span>
+            <div class="nf-post__text">
+              <Markdown markdown={data.body} />
+            </div>
           </div>
         </div>
       </Grid.Cell>
