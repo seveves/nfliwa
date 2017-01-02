@@ -37,12 +37,6 @@
   text-transform: uppercase;
 }
 
-.nf-post__body > .nf-post__date::after {
-  content: "—";
-  margin-left: 2px;
-  margin-right: 2px;
-}
-
 .nf-post__body > .nf-post__date::before {
   content: "|";
   margin-right: 2px;
