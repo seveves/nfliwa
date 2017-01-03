@@ -1,5 +1,5 @@
 import { Component, h, render } from 'preact';
-import { Layout, Navigation } from 'preact-mdl';
+import { Icon, Layout, Navigation } from 'preact-mdl';
 import { Link } from 'preact-router';
 
 const React = { createElement: h };
@@ -18,10 +18,11 @@ export default class Sidebar extends Component<{onClick}, {}> {
       <Layout.Drawer onClick={onClick} aria-hidden="true">
         <Layout.Title>Navigation</Layout.Title>
         <Navigation>
-          <Navigation.Link href="/">Neuigkeiten</Navigation.Link>
-          <Navigation.Link href="/events">Termine</Navigation.Link>
-          { pages.map((p) => ( <Navigation.Link href={'/static/' + p.url}>{p.title}</Navigation.Link> )) }
+          <Navigation.Link href="/"><Icon icon="navigate next"/> Neuigkeiten</Navigation.Link>
+          <Navigation.Link href="/events"><Icon icon="navigate next"/> Termine</Navigation.Link>
+          { pages.map((p) => ( <Navigation.Link href={'/static/' + p.url}><Icon icon="navigate next"/> {p.title}</Navigation.Link> )) }
         </Navigation>
+        <img style="margin: auto; width: 50%; height: auto; opacity: 0.7" src="/img/nf-logo.png" />
       </Layout.Drawer>
     );
   }
