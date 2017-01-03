@@ -17,6 +17,7 @@ interface IImage {
 class Img extends Component<{src: string}, {}> {
 
   public componentWillUnmount() {
+    // this line fixes an issue with preact recycling the img element
     (this.base as HTMLImageElement).src = this.base[Symbol.for('preactattr')].src = '';
   }
 

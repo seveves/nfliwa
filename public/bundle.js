@@ -6052,19 +6052,14 @@
 	var Img = (function (_super) {
 	    __extends(Img, _super);
 	    function Img() {
-	        var _this = _super.call(this) || this;
-	        _this.onImgLoadStart = function () { return _this.setState({ loaded: true }); };
-	        _this.state.loaded = false;
-	        return _this;
+	        return _super.apply(this, arguments) || this;
 	    }
-	    Img.prototype.componentWillReceiveProps = function (src) {
-	        if (src !== this.props.src) {
-	            this.setState({ loaded: false });
-	        }
+	    Img.prototype.componentWillUnmount = function () {
+	        // this line fixes an issue with preact recycling the img element
+	        this.base.src = this.base[Symbol.for('preactattr')].src = '';
 	    };
-	    Img.prototype.render = function (props, _a) {
-	        var loaded = _a.loaded;
-	        return React.createElement("img", __assign({}, props, { onLoadStart: this.onImgLoadStart, style: { visibility: loaded ? '' : 'hidden' } }));
+	    Img.prototype.render = function (props) {
+	        return React.createElement("img", __assign({}, props));
 	    };
 	    return Img;
 	}(preact_1.Component));
