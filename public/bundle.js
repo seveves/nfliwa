@@ -3135,9 +3135,9 @@
 	var events_1 = __webpack_require__(/*! ../events */ 25);
 	var header_1 = __webpack_require__(/*! ../header */ 27);
 	var posts_1 = __webpack_require__(/*! ../posts */ 29);
-	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 35);
-	var static_1 = __webpack_require__(/*! ../static */ 36);
-	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 38);
+	var sidebar_1 = __webpack_require__(/*! ../sidebar */ 36);
+	var static_1 = __webpack_require__(/*! ../static */ 37);
+	var material_layout_helper_1 = __webpack_require__(/*! ./material-layout-helper */ 39);
 	var React = { createElement: preact_1.h };
 	var SiteLayout = (function (_super) {
 	    __extends(SiteLayout, _super);
@@ -3165,7 +3165,8 @@
 	                    React.createElement(posts_1.default, { path: "/" }),
 	                    React.createElement(events_1.default, { path: "/events" }),
 	                    React.createElement(event_details_1.default, { path: "/events/:eventId" }),
-	                    React.createElement(static_1.default, { path: "/static/:url" })))));
+	                    React.createElement(static_1.default, { path: "/static/:url" })),
+	                React.createElement("div", { id: "#modal" }))));
 	    };
 	    return SiteLayout;
 	}(preact_1.Component));
@@ -5953,7 +5954,7 @@
 	__webpack_require__(/*! ./style.scss */ 30);
 	var markdown_1 = __webpack_require__(/*! ../../lib/markdown */ 20);
 	var lazy_image_1 = __webpack_require__(/*! ../lazy-image */ 31);
-	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 34);
+	var pretty_date_1 = __webpack_require__(/*! ../pretty-date */ 35);
 	var React = { createElement: preact_1.h };
 	var Posts = (function (_super) {
 	    __extends(Posts, _super);
@@ -6035,19 +6036,28 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 13);
-	__webpack_require__(/*! ./style.scss */ 32);
-	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 33);
+	var preact_portal_1 = __webpack_require__(/*! preact-portal */ 32);
+	__webpack_require__(/*! ./style.scss */ 33);
+	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 34);
 	var React = { createElement: preact_1.h };
 	var LazyImage = (function (_super) {
 	    __extends(LazyImage, _super);
 	    function LazyImage() {
-	        return _super.apply(this, arguments) || this;
+	        var _this = _super.apply(this, arguments) || this;
+	        _this.open = function () { return _this.setState({ open: true }); };
+	        _this.close = function () { return _this.setState({ open: false }); };
+	        return _this;
 	    }
-	    LazyImage.prototype.render = function (_a) {
+	    LazyImage.prototype.render = function (_a, _b) {
 	        var image = _a.image;
+	        var _c = _b.open, open = _c === void 0 ? false : _c;
 	        var style = { backgroundImage: 'url(' + image.base64 + ')' };
-	        return (React.createElement("div", { class: "lazy-image", style: style },
-	            React.createElement(inner_image_1.default, { imageUrl: image.imageUrl })));
+	        return (React.createElement("div", null,
+	            React.createElement("div", { class: "lazy-image", style: style, onClick: this.open },
+	                React.createElement(inner_image_1.default, { imageUrl: image.imageUrl })),
+	            open ? (React.createElement(preact_portal_1.default, { into: "#modal" },
+	                React.createElement("div", { class: "popup", onClick: this.close },
+	                    React.createElement("img", { src: image.imageUrl })))) : null));
 	    };
 	    return LazyImage;
 	}(preact_1.Component));
@@ -6057,6 +6067,130 @@
 
 /***/ },
 /* 32 */
+/*!***********************************************!*\
+  !*** ./~/preact-portal/dist/preact-portal.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	(function (global, factory) {
+	   true ? module.exports = factory(__webpack_require__(/*! preact */ 13)) :
+	  typeof define === 'function' && define.amd ? define(['preact'], factory) :
+	  (global.preactPortal = factory(global.preact));
+	}(this, (function (preact) { 'use strict';
+	
+	var classCallCheck = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+	
+	var inherits = function (subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	  }
+	
+	  subClass.prototype = Object.create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      enumerable: false,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	};
+	
+	var possibleConstructorReturn = function (self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }
+	
+	  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+	};
+	
+	var Portal = function (_Component) {
+		inherits(Portal, _Component);
+	
+		function Portal() {
+			classCallCheck(this, Portal);
+			return possibleConstructorReturn(this, _Component.apply(this, arguments));
+		}
+	
+		Portal.prototype.componentDidUpdate = function componentDidUpdate(props) {
+			for (var i in props) {
+				if (props[i] !== this.props[i]) {
+					return this.renderLayer();
+				}
+			}
+		};
+	
+		Portal.prototype.componentDidMount = function componentDidMount() {
+			this.renderLayer();
+		};
+	
+		Portal.prototype.componentWillUnmount = function componentWillUnmount() {
+			this.renderLayer(false);
+			if (this.remote) this.remote.parentNode.removeChild(this.remote);
+		};
+	
+		Portal.prototype.findNode = function findNode(node) {
+			return typeof node === 'string' ? document.querySelector(node) : node;
+		};
+	
+		Portal.prototype.renderLayer = function renderLayer() {
+			var show = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	
+			if (this.props.into !== this.intoPointer) {
+				this.intoPointer = this.props.into;
+				if (this.into && this.remote) {
+					this.remote = preact.render(preact.h(PortalProxy, null), this.into, this.remote);
+				}
+				this.into = this.findNode(this.props.into);
+			}
+	
+			this.remote = preact.render(preact.h(
+				PortalProxy,
+				{ context: this.context },
+				show && this.props.children || null
+			), this.into, this.remote);
+		};
+	
+		Portal.prototype.render = function render() {
+			return null;
+		};
+	
+		return Portal;
+	}(preact.Component);
+	
+	var PortalProxy = function (_Component2) {
+		inherits(PortalProxy, _Component2);
+	
+		function PortalProxy() {
+			classCallCheck(this, PortalProxy);
+			return possibleConstructorReturn(this, _Component2.apply(this, arguments));
+		}
+	
+		PortalProxy.prototype.getChildContext = function getChildContext() {
+			return this.props.context;
+		};
+	
+		PortalProxy.prototype.render = function render(_ref) {
+			var children = _ref.children;
+	
+			return children && children[0] || null;
+		};
+	
+		return PortalProxy;
+	}(preact.Component);
+	
+	return Portal;
+	
+	})));
+	//# sourceMappingURL=preact-portal.js.map
+
+
+/***/ },
+/* 33 */
 /*!*************************************************!*\
   !*** ./client/components/lazy-image/style.scss ***!
   \*************************************************/
@@ -6065,7 +6199,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 33 */
+/* 34 */
 /*!************************************************************!*\
   !*** ./client/components/lazy-image/inner-image/index.tsx ***!
   \************************************************************/
@@ -6120,7 +6254,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /*!*************************************************!*\
   !*** ./client/components/pretty-date/index.tsx ***!
   \*************************************************/
@@ -6219,7 +6353,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /*!*********************************************!*\
   !*** ./client/components/sidebar/index.tsx ***!
   \*********************************************/
@@ -6267,7 +6401,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /*!********************************************!*\
   !*** ./client/components/static/index.tsx ***!
   \********************************************/
@@ -6281,7 +6415,7 @@
 	};
 	var preact_1 = __webpack_require__(/*! preact */ 13);
 	var preact_mdl_1 = __webpack_require__(/*! preact-mdl */ 17);
-	__webpack_require__(/*! ./style.scss */ 37);
+	__webpack_require__(/*! ./style.scss */ 38);
 	var markdown_1 = __webpack_require__(/*! ../../lib/markdown */ 20);
 	var React = { createElement: preact_1.h };
 	var StaticPage = (function (_super) {
@@ -6329,7 +6463,7 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /*!*********************************************!*\
   !*** ./client/components/static/style.scss ***!
   \*********************************************/
@@ -6338,7 +6472,7 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 38 */
+/* 39 */
 /*!*************************************************************!*\
   !*** ./client/components/layout/material-layout-helper.tsx ***!
   \*************************************************************/
