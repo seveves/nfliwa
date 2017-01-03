@@ -6046,7 +6046,7 @@ iframe.heightSet {
   margin-top: 0; }
 
 .popup {
-  position: absolute;
+  position: fixed;
   z-index: 10;
   padding-top: 100px;
   left: 0;
@@ -6059,9 +6059,12 @@ iframe.heightSet {
 
 .popup img {
   margin: auto;
+  padding-left: 240px;
+  /* width of the navigation sidebar */
   display: block;
   width: 80%;
-  max-width: 1000px;
+  max-width: 750px;
+  height: auto;
   -webkit-animation: zoom .6s;
           animation: zoom .6s; }
 
@@ -6081,8 +6084,9 @@ iframe.heightSet {
     -webkit-transform: scale(1);
             transform: scale(1); } }
 
-@media only screen and (max-width: 1000px) {
+@media (max-width: 1023px) {
   .popup img {
+    padding-left: 0;
     width: 100%; } }
 
 #app {
@@ -6145,6 +6149,9 @@ iframe.heightSet {
   font-size: 16px;
   line-height: 28px;
   white-space: normal; }
+
+.nf-post__link {
+  text-decoration: none; }
 
 .nf-post__body > .nf-post__date {
   color: #263238;
