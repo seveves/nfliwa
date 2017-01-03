@@ -33,6 +33,7 @@ export default class SiteLayout extends Component<{}, { pages }> {
               <EventDetails path="/events/:eventId" />
               <StaticPage path="/static/:url" />
             </Router>
+            <div id="#modal"></div>
           </Layout.Content>
         </Layout>
     );
