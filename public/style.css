@@ -6018,7 +6018,7 @@ iframe.heightSet {
 .demo-wrapper iframe {
   border: 1px solid rgba(0, 0, 0, 0.5); }
 .markup {
-  text-align: justify; }
+  text-align: left; }
 
 .markup ul {
   margin-top: 1rem;
@@ -6089,6 +6089,12 @@ iframe.heightSet {
     padding-left: 0;
     width: 100%; } }
 
+@media (max-width: 1023px) and (orientation: landscape) {
+  .popup img {
+    padding-left: 0;
+    width: auto;
+    height: 70%; } }
+
 #app {
   position: static;
   overflow: visible; }
@@ -6111,6 +6117,10 @@ iframe.heightSet {
   font-weight: 700;
   line-height: 30px;
   margin-bottom: 5px; }
+
+.event-card h4 {
+  overflow: hidden;
+  text-overflow: ellipsis; }
 
 .nf-event__sub-title {
   color: #263238;
@@ -6175,7 +6185,8 @@ iframe.heightSet {
   float: left;
   margin-left: 5px;
   margin-bottom: 5px;
-  cursor: pointer; }
+  cursor: pointer;
+  border-radius: 10px; }
 
 .lazy-image:hover {
   opacity: 0.7; }
@@ -6183,7 +6194,8 @@ iframe.heightSet {
 .lazy-image img {
   opacity: 0;
   width: 150px;
-  min-height: 112px; }
+  min-height: 112px;
+  border-radius: 10px; }
 
 .fade-in {
   -webkit-transition: opacity 1500ms;

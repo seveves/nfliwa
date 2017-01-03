@@ -6385,9 +6385,17 @@
 	        return (React.createElement(preact_mdl_1.Layout.Drawer, { onClick: onClick, "aria-hidden": "true" },
 	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"),
 	            React.createElement(preact_mdl_1.Navigation, null,
-	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/" }, "Neuigkeiten"),
-	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/events" }, "Termine"),
-	                pages.map(function (p) { return (React.createElement(preact_mdl_1.Navigation.Link, { href: '/static/' + p.url }, p.title)); }))));
+	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/" },
+	                    React.createElement(preact_mdl_1.Icon, { icon: "navigate next" }),
+	                    " Neuigkeiten"),
+	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/events" },
+	                    React.createElement(preact_mdl_1.Icon, { icon: "navigate next" }),
+	                    " Termine"),
+	                pages.map(function (p) { return (React.createElement(preact_mdl_1.Navigation.Link, { href: '/static/' + p.url },
+	                    React.createElement(preact_mdl_1.Icon, { icon: "navigate next" }),
+	                    " ",
+	                    p.title)); })),
+	            React.createElement("img", { style: "margin: auto; width: 50%; height: auto; opacity: 0.7", src: "/img/nf-logo.png" })));
 	    };
 	    Sidebar.prototype.fetchStaticPages = function () {
 	        var _this = this;

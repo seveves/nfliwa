@@ -34,3 +34,11 @@
     width: 100%;
   }
 }
+
+@media (max-width: 1023px) and (orientation: landscape) {
+  .popup img {
+    padding-left: 0;
+    width: auto;
+    height: 70%;
+  }
+}

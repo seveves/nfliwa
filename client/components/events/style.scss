@@ -9,6 +9,11 @@
   margin-bottom: 5px;
 }
 
+.event-card h4 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .nf-event__sub-title {
   color: #263238;
   font-family: Lora,Helvetica,Arial,sans-serif;
