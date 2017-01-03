@@ -14,6 +14,11 @@ interface IImage {
   base64: string;
 }
 
+class Img extends Component<{src: string}, {}> {
+  public componentWillUnmount() { (this.base as HTMLImageElement).src = ''; };
+  public render(props) { return <img {...props} />; }
+}
+
 export default class LazyImage extends Component<{ image: IImage }, { open: boolean }> {
 
   public open = () => this.setState({ open: true });
@@ -29,7 +34,7 @@ export default class LazyImage extends Component<{ image: IImage }, { open: bool
         { open ? (
           <Portal into="#modal">
             <div class="popup" onClick={this.close}>
-              <img src={image.imageUrl} />
+              <Img src={image.imageUrl} />
             </div>
           </Portal>
           ) : null }
