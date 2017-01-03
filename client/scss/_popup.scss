@@ -1,5 +1,7 @@
+@import 'helpers';
+
 .popup {
-  position: absolute;
+  position: fixed;
   z-index: 10;
   padding-top: 100px;
   left: 0;
@@ -13,9 +15,11 @@
 
 .popup img {
   margin: auto;
+  padding-left: 240px; /* width of the navigation sidebar */
   display: block;
   width: 80%;
-  max-width: 1000px;
+  max-width: $screen-sm;
+  height: auto;
   animation: zoom .6s;
 }
 
@@ -24,8 +28,9 @@
   to { transform: scale(1) }
 }
 
-@media only screen and (max-width: 1000px) {
+@media (max-width: 1023px) {
   .popup img {
-      width: 100%;
+    padding-left: 0;
+    width: 100%;
   }
 }

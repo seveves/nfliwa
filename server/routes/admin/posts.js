@@ -134,7 +134,7 @@ function postsRouter(socketio) {
         task.uploadImages(req.files, uploadOptions).then(results => {
           let images = results.map(result => {
             return {
-              imageUrl: result.imageUrl,
+              imageUrl: result.imageUrl.slice(5), // remove the http:
               imageId: result.imageId, 
               base64: result.base64 };
           });
