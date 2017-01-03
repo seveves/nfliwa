@@ -15,7 +15,9 @@ interface IImage {
 }
 
 class Img extends Component<{src: string}, {}> {
-  public componentWillUnmount() { (this.base as HTMLImageElement).src = ''; };
+  public componentWillUnmount() {
+    (this.base as HTMLImageElement).src = this.base[Symbol.for('preactattr')].src = '';
+  };
   public render(props) { return <img {...props} />; }
 }
 
