@@ -6052,11 +6052,20 @@
 	var Img = (function (_super) {
 	    __extends(Img, _super);
 	    function Img() {
-	        return _super.apply(this, arguments) || this;
+	        var _this = _super.call(this) || this;
+	        _this.onImgLoadStart = function () { return _this.setState({ loaded: true }); };
+	        _this.state.loaded = false;
+	        return _this;
 	    }
-	    Img.prototype.componentWillUnmount = function () { this.base.src = ''; };
-	    ;
-	    Img.prototype.render = function (props) { return React.createElement("img", __assign({}, props)); };
+	    Img.prototype.componentWillReceiveProps = function (src) {
+	        if (src !== this.props.src) {
+	            this.setState({ loaded: false });
+	        }
+	    };
+	    Img.prototype.render = function (props, _a) {
+	        var loaded = _a.loaded;
+	        return React.createElement("img", __assign({}, props, { onLoadStart: this.onImgLoadStart, style: { visibility: loaded ? '' : 'hidden' } }));
+	    };
 	    return Img;
 	}(preact_1.Component));
 	var LazyImage = (function (_super) {
