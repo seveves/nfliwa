@@ -14,22 +14,14 @@ interface IImage {
   base64: string;
 }
 
-class Img extends Component<{src: string}, { loaded: boolean }> {
-  constructor() {
-    super();
-    this.state.loaded = false;
+class Img extends Component<{src: string}, {}> {
+
+  public componentWillUnmount() {
+    (this.base as HTMLImageElement).src = this.base[Symbol.for('preactattr')].src = '';
   }
 
-  public componentWillReceiveProps(src: string) {
-    if (src !== this.props.src) {
-      this.setState({ loaded: false });
-    }
-  }
-
-  public onImgLoadStart = () => this.setState({ loaded: true });
-
-  public render(props, { loaded }) {
-    return <img {...props} onLoadStart={this.onImgLoadStart} style={{ visibility: loaded ? '' : 'hidden' }}/>;
+  public render(props) {
+    return <img {...props} />;
   }
 }
 
