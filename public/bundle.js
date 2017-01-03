@@ -3166,7 +3166,7 @@
 	                    React.createElement(events_1.default, { path: "/events" }),
 	                    React.createElement(event_details_1.default, { path: "/events/:eventId" }),
 	                    React.createElement(static_1.default, { path: "/static/:url" })),
-	                React.createElement("div", { id: "#modal" }))));
+	                React.createElement("div", { id: "modal" }))));
 	    };
 	    return SiteLayout;
 	}(preact_1.Component));
@@ -6036,11 +6036,29 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
+	var __assign = (this && this.__assign) || Object.assign || function(t) {
+	    for (var s, i = 1, n = arguments.length; i < n; i++) {
+	        s = arguments[i];
+	        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+	            t[p] = s[p];
+	    }
+	    return t;
+	};
 	var preact_1 = __webpack_require__(/*! preact */ 13);
 	var preact_portal_1 = __webpack_require__(/*! preact-portal */ 32);
 	__webpack_require__(/*! ./style.scss */ 33);
 	var inner_image_1 = __webpack_require__(/*! ./inner-image */ 34);
 	var React = { createElement: preact_1.h };
+	var Img = (function (_super) {
+	    __extends(Img, _super);
+	    function Img() {
+	        return _super.apply(this, arguments) || this;
+	    }
+	    Img.prototype.componentWillUnmount = function () { this.base.src = ''; };
+	    ;
+	    Img.prototype.render = function (props) { return React.createElement("img", __assign({}, props)); };
+	    return Img;
+	}(preact_1.Component));
 	var LazyImage = (function (_super) {
 	    __extends(LazyImage, _super);
 	    function LazyImage() {
@@ -6058,7 +6076,7 @@
 	                React.createElement(inner_image_1.default, { imageUrl: image.imageUrl })),
 	            open ? (React.createElement(preact_portal_1.default, { into: "#modal" },
 	                React.createElement("div", { class: "popup", onClick: this.close },
-	                    React.createElement("img", { src: image.imageUrl })))) : null));
+	                    React.createElement(Img, { src: image.imageUrl })))) : null));
 	    };
 	    return LazyImage;
 	}(preact_1.Component));

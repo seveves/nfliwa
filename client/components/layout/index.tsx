@@ -23,19 +23,19 @@ export default class SiteLayout extends Component<{}, { pages }> {
 
   public render({}, { pages = [] }) {
     return (
-        <Layout fixed-header fixed-drawer>
-          <Header />
-          <Sidebar onClick={this.toggleDrawer} />
-          <Layout.Content>
-            <Router>
-              <Posts path="/" />
-              <Events path="/events" />
-              <EventDetails path="/events/:eventId" />
-              <StaticPage path="/static/:url" />
-            </Router>
-            <div id="#modal"></div>
-          </Layout.Content>
-        </Layout>
+      <Layout fixed-header fixed-drawer>
+        <Header />
+        <Sidebar onClick={this.toggleDrawer} />
+        <Layout.Content>
+          <Router>
+            <Posts path="/" />
+            <Events path="/events" />
+            <EventDetails path="/events/:eventId" />
+            <StaticPage path="/static/:url" />
+          </Router>
+          <div id="modal"></div>
+        </Layout.Content>
+      </Layout>
     );
   }
 
