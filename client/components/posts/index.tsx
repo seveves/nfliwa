@@ -55,7 +55,9 @@ const Post = ({ data, last }) => (
     <Grid>
       <Grid.Cell class={ data.images.length > 0 ? 'mdl-cell--6-col' : 'mdl-cell--12-col'}>
         <div class="nf-post">
-          <h3 class="nf-post__title">{data.title}</h3>
+          <a class="nf-post__link" href={'#' + encodeURI(data.title).toLowerCase()}>
+            <h3 class="nf-post__title" id={encodeURI(data.title).toLowerCase()}>{data.title}</h3>
+          </a>
           <div class="nf-post__body">
             <span class="nf-post__date"><PrettyDate date={data.date} /></span>
             <div class="nf-post__text">
