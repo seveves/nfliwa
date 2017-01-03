@@ -5,6 +5,11 @@
   float: left;
   margin-left: 5px;
   margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.lazy-image:hover {
+  opacity: 0.7;
 }
 
 .lazy-image img {

@@ -1,4 +1,6 @@
 import { Component, h } from 'preact';
+import Portal from 'preact-portal';
+
 import './style.scss';
 
 import InnerImage from './inner-image';
@@ -12,13 +14,25 @@ interface IImage {
   base64: string;
 }
 
-export default class LazyImage extends Component<{ image: IImage }, {}> {
+export default class LazyImage extends Component<{ image: IImage }, { open: boolean }> {
 
-  public render({ image }) {
+  public open = () => this.setState({ open: true });
+  public close = () => this.setState({ open: false });
+
+  public render({ image }, { open = false }) {
     let style = { backgroundImage: 'url(' + image.base64 + ')' };
     return (
-      <div class="lazy-image" style={style}>
-        <InnerImage imageUrl={image.imageUrl} />
+      <div>
+        <div class="lazy-image" style={style} onClick={this.open}>
+          <InnerImage imageUrl={image.imageUrl} />
+        </div>
+        { open ? (
+          <Portal into="#modal">
+            <div class="popup" onClick={this.close}>
+              <img src={image.imageUrl} />
+            </div>
+          </Portal>
+          ) : null }
       </div>
     );
   }
