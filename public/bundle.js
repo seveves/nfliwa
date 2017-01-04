@@ -60,6 +60,13 @@
 	if (!window.Promise) {
 	    window.Promise = promise_polyfill_1.default;
 	}
+	if (navigator && navigator.serviceWorker) {
+	    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+	        .catch(function (error) { return console.warn('service worker registration failed with ' + error); });
+	}
+	else {
+	    console.warn('service worker API not available. poor you.');
+	}
 	var preact_1 = __webpack_require__(/*! preact */ 13);
 	__webpack_require__(/*! ./scss/index.scss */ 14);
 	var React = { createElement: preact_1.h };

@@ -12,6 +12,13 @@ if (!window.Promise) {
   window.Promise = Promise;
 }
 
+if (navigator && navigator.serviceWorker) {
+  navigator.serviceWorker.register('/sw.js', { scope: '/' })
+    .catch((error) => console.warn('service worker registration failed with ' + error));
+} else {
+  console.warn('service worker API not available. poor you.');
+}
+
 import { h, render } from 'preact';
 import './scss/index.scss';
 
