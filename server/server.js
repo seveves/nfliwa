@@ -57,8 +57,8 @@ app.use(errorHandler);
 // client routes (SPA) and 404
 app.use(function(req, res) {
 
-  if (req.url.startsWith('/events') || req.url.startsWith('/static')) {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+  if (req.url.startsWith('/client')) {
+    res.sendFile(path.join(__dirname, '../public/client/index.html'));
     return;
   }
 

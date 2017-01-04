@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/client";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -61,7 +61,7 @@
 	    window.Promise = promise_polyfill_1.default;
 	}
 	if (navigator && navigator.serviceWorker) {
-	    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+	    navigator.serviceWorker.register('/sw.js', { scope: '/client' })
 	        .catch(function (error) { return console.warn('service worker registration failed with ' + error); });
 	}
 	else {
@@ -3169,10 +3169,10 @@
 	            React.createElement(sidebar_1.default, { onClick: this.toggleDrawer }),
 	            React.createElement(preact_mdl_1.Layout.Content, null,
 	                React.createElement(preact_router_1.Router, null,
-	                    React.createElement(posts_1.default, { path: "/" }),
-	                    React.createElement(events_1.default, { path: "/events" }),
-	                    React.createElement(event_details_1.default, { path: "/events/:eventId" }),
-	                    React.createElement(static_1.default, { path: "/static/:url" })),
+	                    React.createElement(posts_1.default, { path: "/client" }),
+	                    React.createElement(events_1.default, { path: "/client/events" }),
+	                    React.createElement(event_details_1.default, { path: "/client/events/:eventId" }),
+	                    React.createElement(static_1.default, { path: "/client/static/:url" })),
 	                React.createElement("div", { id: "modal" }))));
 	    };
 	    return SiteLayout;
@@ -5286,7 +5286,7 @@
 	                            React.createElement(markdown_1.default, { markdown: event.body }))) : null)),
 	            React.createElement(preact_mdl_1.Grid, null,
 	                React.createElement(preact_mdl_1.Grid.Cell, { class: "mdl-cell--2-col" },
-	                    React.createElement("a", { class: "mdl-button mdl-button--colored", href: "/events" },
+	                    React.createElement("a", { class: "mdl-button mdl-button--colored", href: "/client/events" },
 	                        React.createElement(preact_mdl_1.Icon, { icon: "arrow back" }),
 	                        " Zur\u00FCck zur \u00DCbersicht")))));
 	    };
@@ -5871,7 +5871,7 @@
 	                    React.createElement("div", { class: "card-date" },
 	                        React.createElement(event_date_1.default, { date: new Date(event.eventDate) })))),
 	            React.createElement("div", { class: "mdl-card__actions mdl-card--border" },
-	                React.createElement("a", { class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", href: '/events/' + event._id },
+	                React.createElement("a", { class: "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect", href: '/client/events/' + event._id },
 	                    React.createElement(preact_mdl_1.Icon, { icon: "event" }),
 	                    " Details")))));
 	};
@@ -5886,7 +5886,7 @@
 	                React.createElement("div", null,
 	                    React.createElement(event_date_1.default, { date: event.eventDate })))),
 	        React.createElement("span", { class: "mdl-list__item-secondary-content" },
-	            React.createElement("a", { class: "mdl-list__item-secondary-action", href: '/events/' + event._id },
+	            React.createElement("a", { class: "mdl-list__item-secondary-action", href: '/client/events/' + event._id },
 	                React.createElement(preact_mdl_1.Icon, { class: "mdl-list__item-avatar", icon: "arrow forward" })))));
 	};
 
@@ -6414,13 +6414,13 @@
 	        return (React.createElement(preact_mdl_1.Layout.Drawer, { onClick: onClick, "aria-hidden": "true" },
 	            React.createElement(preact_mdl_1.Layout.Title, null, "Navigation"),
 	            React.createElement(preact_mdl_1.Navigation, null,
-	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/" },
+	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/client" },
 	                    React.createElement(preact_mdl_1.Icon, { icon: "navigate next" }),
 	                    " Neuigkeiten"),
-	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/events" },
+	                React.createElement(preact_mdl_1.Navigation.Link, { href: "/client/events" },
 	                    React.createElement(preact_mdl_1.Icon, { icon: "navigate next" }),
 	                    " Termine"),
-	                pages.map(function (p) { return (React.createElement(preact_mdl_1.Navigation.Link, { href: '/static/' + p.url },
+	                pages.map(function (p) { return (React.createElement(preact_mdl_1.Navigation.Link, { href: '/client/static/' + p.url },
 	                    React.createElement(preact_mdl_1.Icon, { icon: "navigate next" }),
 	                    " ",
 	                    p.title)); })),

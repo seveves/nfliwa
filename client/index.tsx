@@ -13,7 +13,7 @@ if (!window.Promise) {
 }
 
 if (navigator && navigator.serviceWorker) {
-  navigator.serviceWorker.register('/sw.js', { scope: '/' })
+  navigator.serviceWorker.register('/sw.js', { scope: '/client' })
     .catch((error) => console.warn('service worker registration failed with ' + error));
 } else {
   console.warn('service worker API not available. poor you.');
