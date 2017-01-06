@@ -32,7 +32,7 @@ export default class LazyImage extends Component<{ image: IImage }, { open: bool
   public close = () => this.setState({ open: false });
 
   public render({ image }, { open = false }) {
-    let style = { backgroundImage: 'url(' + image.base64 + ')' };
+    const style = { backgroundImage: 'url(' + image.base64 + ')' };
     return (
       <div>
         <div class="lazy-image" style={style} onClick={this.open}>

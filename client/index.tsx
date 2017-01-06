@@ -24,5 +24,5 @@ import './scss/index.scss';
 
 const React = { createElement: h };
 
-import App  from './components/app';
+import App from './components/app';
 render(<App />, document.body);

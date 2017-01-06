@@ -27,7 +27,7 @@ export default class Location
   }
 
   private update() {
-    let imageUrl = this.url + '/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
+    const imageUrl = this.url + '/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
 
     fetch(imageUrl)
       .then((response) => response.blob())

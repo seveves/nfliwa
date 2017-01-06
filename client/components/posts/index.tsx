@@ -41,7 +41,7 @@ export default class Posts extends Component<{path}, {posts, next}> {
       .then((res) => res.json())
       .then((json) => json || [])
       .then((result) => {
-        let posts = this.state.posts || [];
+        const posts = this.state.posts || [];
         this.setState({ posts: posts.concat(result.posts), next: result.next });
       });
   }

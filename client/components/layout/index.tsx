@@ -40,7 +40,7 @@ export default class SiteLayout extends Component<{}, { pages }> {
   }
 
   private toggleDrawer = () => {
-    let layout = new MaterialLayoutHelper(this);
+    const layout = new MaterialLayoutHelper(this);
     if (layout.hasFixedDrawer && !layout.isSmallScreen) {
         return;
     }

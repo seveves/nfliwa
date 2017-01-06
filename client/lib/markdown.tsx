@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 
-import * as marked  from 'marked';
+import * as marked from 'marked';
 import * as Markup from 'preact-markup';
 
 const React = { createElement: h };
