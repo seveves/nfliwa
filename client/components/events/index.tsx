@@ -71,7 +71,8 @@ const NextEvent = ({ event }) => (
         </p>
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href={'/client/events/' + event._id}>
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+           href={'/client/events/' + event._id}>
           <Icon icon="event" /> Details
         </a>
       </div>
