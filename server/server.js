@@ -57,6 +57,11 @@ app.use(errorHandler);
 // client routes (SPA) and 404
 app.use(function(req, res) {
 
+  if (req.url === '/') {
+    res.redirect('/client');
+    return;
+  }
+
   if (req.url.startsWith('/client')) {
     res.sendFile(path.join(__dirname, '../public/client/index.html'));
     return;
