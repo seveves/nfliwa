@@ -12,7 +12,7 @@ if (!newBrowser) {
 }
 
 scripts.forEach((src) => {
-  let scriptEl = document.createElement('script');
+  const scriptEl = document.createElement('script');
   scriptEl.src = src;
   scriptEl.async = false;
   document.head.appendChild(scriptEl);
