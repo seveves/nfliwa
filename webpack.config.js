@@ -14,7 +14,7 @@ module.exports = {
 	output: {
 		path: './public/client',
 		filename: '[name].js',
-		publicPath: '/client'
+		publicPath: '/client/'
 	},
 
 	resolve: {
