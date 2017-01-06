@@ -1,13 +1,19 @@
 var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
 	context: __dirname,
-	entry: './client/index.tsx',
+	entry: {
+	  init: [ './client/init.tsx' ],
+	  bundle: ['./client/index.tsx'],
+	  polyfills: [ './client/polyfills.tsx' ]
+	},
+		
 	output: {
 		path: './public/client',
-		filename: 'bundle.js',
+		filename: '[name].js',
 		publicPath: '/client'
 	},
 
@@ -29,8 +35,10 @@ module.exports = {
 	],
 
 	plugins: ([
+		new webpack.optimize.DedupePlugin(),
+		new CopyWebpackPlugin([{ from: './client/index.html', to: 'index.html' }]),
 		new ExtractTextPlugin('style.css', { allChunks: true, }),
-		new HtmlWebpackPlugin({ template: './client/index.html', title: 'Naturfreunde Lichtenwald e.V.'})
+		new CompressionPlugin()
 	]),
 
 	devtool: 'source-map'

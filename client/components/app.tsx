@@ -1,6 +1,4 @@
 import { Component, h } from 'preact';
-import { Layout } from 'preact-mdl';
-import { Router } from 'preact-router';
 
 import SiteLayout from './layout';
 
