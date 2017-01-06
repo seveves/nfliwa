@@ -2,9 +2,9 @@
 var SERVICE_WORKER_VERSION = 'v1';
 var CACHE_RESOURCES = [
         '/img/nf-logo.png',
-        '/index.html',
-        '/bundle.js',
-        '/style.css',
+        '/client/index.html',
+        '/client/bundle.js',
+        '/client/style.css',
         '/api/static',
         '/api/posts',
         '/api/events/next',
@@ -42,11 +42,9 @@ function fromCache(request) {
     .then(matching => matching || Promise.reject('no-match'));
 }
 
-function fromNetwork(request, timeout) {
+function fromNetwork(request) {
   return new Promise(function (fulfill, reject) {
-    let timeoutId = setTimeout(reject, timeout);
     fetch(request).then(function (response) {
-      clearTimeout(timeoutId);
       fulfill(response);
     }, reject);
   });

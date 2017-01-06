@@ -51,7 +51,7 @@ function getBase64(args) {
 
   return new Promise((resolve, reject) => {
     jimp.read(args.resizedImage).then(image => {
-      image.scale(0.01).getBase64(jimp.MIME_PNG, (err, base64) => {
+      image.scale(0.01).getBase64(jimp.MIME_JPEG, (err, base64) => {
         if (err) {
           reject({ task: 'getBase64', error: err, args: args});
         } else {
@@ -71,9 +71,9 @@ function resizeImage(args) {
   return new Promise((resolve, reject) => {
     jimp.read(args.originalImage)
       .then(image => {
-        args.resizedImage = args.originalImage + "-resized.png";
+        args.resizedImage = args.originalImage + "-resized.jpg";
         image.resize(800, jimp.AUTO)
-            .quality(90)
+            .quality(60)
             .write(args.resizedImage, err => {
               if (err) {
                 reject({ task: 'resizeImage', error: err, args: args });

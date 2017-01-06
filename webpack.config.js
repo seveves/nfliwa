@@ -6,8 +6,9 @@ module.exports = {
 	context: __dirname,
 	entry: './client/index.tsx',
 	output: {
-		path: './public',
-		filename: 'bundle.js'
+		path: './public/client',
+		filename: 'bundle.js',
+		publicPath: '/client'
 	},
 
 	resolve: {

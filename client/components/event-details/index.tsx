@@ -37,7 +37,7 @@ export default class EventDetails extends Component<{eventId?, path}, {event}> {
         </Grid>
         <Grid>
           <Grid.Cell class="mdl-cell--2-col">
-            <a class="mdl-button mdl-button--colored" href="/events">
+            <a class="mdl-button mdl-button--colored" href="/client/events">
               <Icon icon="arrow back"/> Zurück zur Übersicht
             </a>
           </Grid.Cell>

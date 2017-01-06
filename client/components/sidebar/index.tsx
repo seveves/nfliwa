@@ -18,10 +18,12 @@ export default class Sidebar extends Component<{onClick}, {}> {
       <Layout.Drawer onClick={onClick} aria-hidden="true">
         <Layout.Title>Navigation</Layout.Title>
         <Navigation>
-          <Navigation.Link href="/"><Icon icon="navigate next"/> Neuigkeiten</Navigation.Link>
-          <Navigation.Link href="/events"><Icon icon="navigate next"/> Termine</Navigation.Link>
+          <Navigation.Link href="/client"><Icon icon="navigate next"/> Neuigkeiten</Navigation.Link>
+          <Navigation.Link href="/client/events"><Icon icon="navigate next"/> Termine</Navigation.Link>
           { pages.map((p) => (
-            <Navigation.Link href={'/static/' + p.url}><Icon icon="navigate next"/> {p.title}</Navigation.Link> ))
+            <Navigation.Link href={'/client/static/' + p.url}>
+              <Icon icon="navigate next"/> {p.title}
+            </Navigation.Link> ))
           }
         </Navigation>
         <img style="margin: auto; width: 50%; height: auto; opacity: 0.7" src="/img/nf-logo.png" />

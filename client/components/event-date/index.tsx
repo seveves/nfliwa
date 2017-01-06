@@ -20,12 +20,12 @@ export default class EventDate extends Component<{date: Date}, {eventDate: strin
   }
 
   private createEventDate(date: Date) {
-    let eventDate = date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
-    let hours = date.getUTCHours();
-    let minutes = date.getUTCMinutes();
-    let leadingHourZero = hours < 10 ? '0' : '';
-    let leadingMinutesZero = minutes < 10 ? '0' : '';
-    let eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
+    const eventDate = date.getUTCDate() + '. ' + this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const leadingHourZero = hours < 10 ? '0' : '';
+    const leadingMinutesZero = minutes < 10 ? '0' : '';
+    const eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
 
     this.setState({ eventDate, eventTime });
   }

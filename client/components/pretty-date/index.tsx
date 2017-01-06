@@ -21,7 +21,7 @@ export default class PrettyDate extends Component<{date: Date}, {prettyDate: str
   }
 
   private prettifyDate(date: Date) {
-    let delta = Math.round((Date.now() - +date) / 1000);
+    const delta = Math.round((Date.now() - +date) / 1000);
     let prettyDate = '';
 
     if (delta < 30) {

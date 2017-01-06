@@ -28,10 +28,10 @@ export default class SiteLayout extends Component<{}, { pages }> {
         <Sidebar onClick={this.toggleDrawer} />
         <Layout.Content>
           <Router>
-            <Posts path="/" />
-            <Events path="/events" />
-            <EventDetails path="/events/:eventId" />
-            <StaticPage path="/static/:url" />
+            <Posts path="/client" />
+            <Events path="/client/events" />
+            <EventDetails path="/client/events/:eventId" />
+            <StaticPage path="/client/static/:url" />
           </Router>
           <div id="modal"></div>
         </Layout.Content>
@@ -40,7 +40,7 @@ export default class SiteLayout extends Component<{}, { pages }> {
   }
 
   private toggleDrawer = () => {
-    let layout = new MaterialLayoutHelper(this);
+    const layout = new MaterialLayoutHelper(this);
     if (layout.hasFixedDrawer && !layout.isSmallScreen) {
         return;
     }
