@@ -21,7 +21,7 @@
     "lint:ts": "gulp lint:ts",
     "lint": "npm run lint:js && npm run lint:ts",
     "test": "npm run lint",
-    "watch:nodemon": "nodemon server/server.js --config nodemon.json",
+    "watch:nodemon": "nodemon server/server.js --config nodemon.json --color=always",
     "watch:sass": "gulp sass:watch",
     "serve": "concurrently \"npm run watch:sass\" \"npm run watch:nodemon\""
   },
@@ -29,6 +29,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "cloudinary": "^1.5.0",
+    "compression": "^1.6.2",
     "concurrently": "^3.1.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
@@ -56,7 +57,8 @@
     "proptypes": "^0.14.3",
     "pug": "^2.0.0-beta6",
     "socket.io": "^1.7.2",
-    "whatwg-fetch": "^2.0.1"
+    "whatwg-fetch": "^2.0.1",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",

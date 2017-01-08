@@ -1,6 +1,7 @@
 var fs = require('fs');
 var del = require('del');
 var path = require('path');
+var winston = require('winston');
 var express = require('express');
 var passport = require('passport');
 var Account = require('../../models/account');
@@ -26,11 +27,11 @@ router.delete('/tempfiles', ensureAuthenticated, (req, res) => {
       del(files).then((paths) => {
         res.json({ data: paths });
       }, (reason) => {
-        console.error('Cannot delete temp files', reason);
+        winston.error('Cannot delete temp files', reason);
         res.json(500, { data: null, message: 'Cannot delete temp files.' });
       });
     } else {
-      console.error('Cannot delete temp files', err);
+      winston.error('Cannot delete temp files', err);
       res.json(500, { data: null, message: err.message });
     }
   });
