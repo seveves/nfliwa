@@ -1,6 +1,7 @@
 var del = require('del');
 var jimp = require('jimp');
 var path = require('path');
+var winston = require('winston');
 var cloudinary = require('cloudinary');
 var appConfig = require('../config/app.config');
 
@@ -148,13 +149,13 @@ function rollback(reason) {
 
   switch(reason.task) {
     case 'removeTempFiles':
-      console.log('Error while removing temp files', reason.error);
+      winston.error('Error while removing temp files', reason.error);
       break;
     case 'uploadImage':
-      console.log('Error while uploading image', reason.error);
+      winston.error('Error while uploading image', reason.error);
       break;      
     case 'resizeImage':
-      console.log('Error while resizing image', reason.error);
+      winston.error('Error while resizing image', reason.error);
       break;
   }
 }

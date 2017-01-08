@@ -2,6 +2,7 @@ function postsRouter(socketio) {
   let io = socketio;
   let multer  = require('multer');
   let path = require('path');
+  let winston = require('winston');
   let router = require('express').Router();
   let upload = multer({
     dest: 'uploads/',
@@ -23,7 +24,7 @@ function postsRouter(socketio) {
 
   io.of('/posts').on('connection', socket => {
     this.socket = socket;
-    socket.on('disconnect', () => console.log('socket disconnected'));
+    socket.on('disconnect', () => winston.debug('socket disconnected'));
   });
 
   // get all posts
@@ -87,7 +88,7 @@ function postsRouter(socketio) {
         let task = new ImageTask(this.socket);
         task.deleteImagesById(post.images.map(image => image.imageId))
           .catch(reason => {
-            console.log("Error while deleting images", reason);
+            winston.error("Error while deleting images", reason);
           });
       }
 
@@ -115,7 +116,7 @@ function postsRouter(socketio) {
         let task = new ImageTask(this.socket);
         task.deleteImagesById(imageIds)
           .catch(reason => {
-            console.log("Error while deleting images", reason);
+            winston.error("Error while deleting images", reason);
           });
         let postImages = [].concat(post.images);
         let imagesLength = post.images.length;

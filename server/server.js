@@ -1,4 +1,5 @@
 var express = require('express');
+var winston = require('winston');
 var compression = require('compression'); 
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -80,13 +81,13 @@ var db = require('./database/db');
 db.on('open', function() {
   let port = process.env.PORT || 3000;
   server.listen(port, function () {
-    console.log('server - listening on port ' + port);
+    winston.info('server - listening on port ' + port);
   });
 });
 
 // error logging
 function logErrors (err, req, res, next) {
-  console.error(err.stack);
+  winston.error(err.stack);
   next(err);
 }
 
