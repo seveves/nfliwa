@@ -1,4 +1,5 @@
 var express = require('express');
+var compression = require('compression'); 
 var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -14,6 +15,8 @@ var appConfig = require('./config/app.config.js');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+
+app.use(compression());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
