@@ -29,11 +29,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(methodOverride());
-app.use(require('express-session')({
-    secret: appConfig.secret,
-    resave: false,
-    saveUninitialized: false
+
+// session setup
+var db = require('./database/db');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+app.use(session({
+  secret: appConfig.secret,
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: db })
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -75,9 +82,7 @@ app.use(function(req, res) {
   res.render('error', { user: req.user, error: new Error('Cannot find ' + req.url), pageTitle: '404' });
 });
 
-// database
-var db = require('./database/db');
-
+// start server when databse is connected
 db.on('open', function() {
   let port = process.env.PORT || 3000;
   server.listen(port, function () {

@@ -9,5 +9,6 @@ process.on('SIGINT', function() {
   }); 
 });
 
+mongoose.Promise = global.Promise;
 var db = mongoose.createConnection(appConfig.mongodb);
 module.exports = db;
