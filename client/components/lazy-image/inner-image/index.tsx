@@ -1,8 +1,5 @@
 import { Component, h } from 'preact';
 
-const React = { createElement: h };
-declare const fetch: any;
-
 export default class InnerImage
   extends Component<{ imageUrl: string }, { imgSource?: string, opacity?: number }> {
 

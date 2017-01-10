@@ -1,9 +1,6 @@
 import { Component, h, render } from 'preact';
 import { Button, Card, Cell, Grid, Icon } from 'preact-mdl';
 
-const React = { createElement: h };
-declare const fetch: any;
-
 import Markdown from '../../lib/markdown';
 
 import EventDate from '../event-date';

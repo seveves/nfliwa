@@ -14,4 +14,8 @@ export default class MaterialLayoutHelper {
     public get hasFixedDrawer(): boolean {
         return this.layout.base.classList.contains('mdl-layout--fixed-drawer');
     }
+
+    public get isVisible(): boolean {
+        return this.layout.base.MaterialLayout.drawer_.classList.contains('is-visible');
+    }
 }

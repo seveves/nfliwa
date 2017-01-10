@@ -1,14 +1,11 @@
 import { Component, h } from 'preact';
-import { Button, Card, Cell, Grid, Icon } from 'preact-mdl';
+import { Button, Grid, Icon } from 'preact-mdl';
 import './style.scss';
 
 import Markdown from '../../lib/markdown';
 
 import LazyImage from '../lazy-image';
 import PrettyDate from '../pretty-date';
-
-const React = { createElement: h };
-declare const fetch: any;
 
 export default class Posts extends Component<{path}, {posts, next}> {
 
@@ -40,7 +37,7 @@ export default class Posts extends Component<{path}, {posts, next}> {
     fetch(this.url + apiUrl)
       .then((res) => res.json())
       .then((json) => json || [])
-      .then((result) => {
+      .then((result: any) => {
         const posts = this.state.posts || [];
         this.setState({ posts: posts.concat(result.posts), next: result.next });
       });

@@ -5,9 +5,6 @@ import './style.scss';
 
 import InnerImage from './inner-image';
 
-const React = { createElement: h };
-declare const fetch: any;
-
 interface IImage {
   imageId: string;
   imageUrl: String;

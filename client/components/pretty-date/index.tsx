@@ -1,7 +1,6 @@
 import { Component, h } from 'preact';
 
-const React = { createElement: h };
-declare const fetch: any;
+import { months } from '../../lib/months';
 
 export default class PrettyDate extends Component<{date: Date}, {prettyDate: string}> {
 
@@ -40,40 +39,9 @@ export default class PrettyDate extends Component<{date: Date}, {prettyDate: str
       prettyDate = 'Gestern';
     } else {
       prettyDate = 'Am ' + date.getUTCDate() + '. ' +
-        this.getMonthName(date.getUTCMonth()) + ' ' + date.getUTCFullYear();
+        months[date.getUTCMonth()] + ' ' + date.getUTCFullYear();
     }
 
     this.setState({ prettyDate });
-  }
-
-  private getMonthName(month: number) {
-    switch (month) {
-      case 0:
-        return 'Januar';
-      case 1:
-        return 'Februar';
-      case 2:
-        return 'März';
-      case 3:
-        return 'April';
-      case 4:
-        return 'Mai';
-      case 5:
-        return 'Juni';
-      case 6:
-        return 'Juli';
-      case 7:
-        return 'August';
-      case 8:
-        return 'September';
-      case 9:
-        return 'Oktober';
-      case 10:
-        return 'November';
-      case 11:
-        return 'Dezember';
-      default:
-        return 'Unbekannter Monat';
-    }
   }
 }

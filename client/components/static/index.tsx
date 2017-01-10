@@ -4,9 +4,6 @@ import './style.scss';
 
 import Markdown from '../../lib/markdown';
 
-const React = { createElement: h };
-declare const fetch: any;
-
 export default class StaticPage extends Component<{url?, path}, {page}> {
 
   private url: string = '//nfliwa.herokuapp.com';
@@ -49,7 +46,7 @@ export default class StaticPage extends Component<{url?, path}, {page}> {
     fetch(this.url + '/api/static/' + url)
       .then((res) => res.json())
       .then((json) => {
-        this.setState({ page: json.data });
+        this.setState({ page: (json as any).data });
       });
   }
 }
