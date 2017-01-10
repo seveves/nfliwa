@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "jsx": "react",
+    "jsxFactory": "h",
     "target": "es5",
     "sourceMap": true,
     "lib": [
-      "dom", "es6"
+      "dom", "es6", "es2015"
     ]
   },
   "exclude": [

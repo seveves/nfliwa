@@ -2,6 +2,6 @@ import 'whatwg-fetch';
 
 import Promise from 'promise-polyfill';
 
-if (!window.Promise) {
-  window.Promise = Promise;
+if (!(`Promise` in window)) {
+  (window as any).Promise = Promise;
 }

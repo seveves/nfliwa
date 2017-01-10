@@ -2,9 +2,6 @@ import { Component, h, render } from 'preact';
 import { Icon, Layout, Navigation } from 'preact-mdl';
 import { Link } from 'preact-router';
 
-const React = { createElement: h };
-declare const fetch: any;
-
 export default class Sidebar extends Component<{onClick}, {}> {
 
   private url: string = '//nfliwa.herokuapp.com';

@@ -4,9 +4,6 @@ import './style.scss';
 
 import EventDate from '../event-date';
 
-const React = { createElement: h };
-declare const fetch: any;
-
 export default class Events extends Component<{path}, {nextEvents?, pastEvents?}> {
 
   private url: string = '//nfliwa.herokuapp.com';

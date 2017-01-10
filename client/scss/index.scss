@@ -1,4 +1,3 @@
-@import 'helpers';
 @import 'markup';
 @import 'popup';
 
@@ -12,7 +11,7 @@
 	padding-right: 20px;
 }
 
-@media (max-width: $screen-sm) {
+@media (max-width: 750px) {
   .nf-container {
     padding: 0;
   }

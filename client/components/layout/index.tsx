@@ -11,11 +11,7 @@ import StaticPage from '../static';
 
 import MaterialLayoutHelper from './material-layout-helper';
 
-const React = { createElement: h };
-
 export default class SiteLayout extends Component<{}, { pages }> {
-
-  private currentUrl: string;
 
   public shouldComponentUpdate() {
     return false;
