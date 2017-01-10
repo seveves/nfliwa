@@ -31,6 +31,6 @@ export default class Sidebar extends Component<{onClick}, {}> {
   private fetchStaticPages() {
     fetch(this.url + '/api/static')
       .then((res) => res.json())
-      .then((json) => this.setState({ pages: json.data }));
+      .then((json) => this.setState({ pages: (json as any).data }));
   }
 }

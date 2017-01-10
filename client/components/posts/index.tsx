@@ -37,7 +37,7 @@ export default class Posts extends Component<{path}, {posts, next}> {
     fetch(this.url + apiUrl)
       .then((res) => res.json())
       .then((json) => json || [])
-      .then((result) => {
+      .then((result: any) => {
         const posts = this.state.posts || [];
         this.setState({ posts: posts.concat(result.posts), next: result.next });
       });
