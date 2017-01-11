@@ -3,6 +3,7 @@ var SERVICE_WORKER_VERSION = 'v3';
 var CACHE_RESOURCES = [
         '/',
         '/client/index.html',
+        '/client/manifest.json',
         '/client/bundle.js',
         '/client/init.js',
         '/client/style.css',
@@ -14,7 +15,11 @@ var CACHE_RESOURCES = [
         '/client/api/events/last',
         '/client/api/events/location',
         '/client/api/static/ueber-uns',
-        '/client/api/static/gruppen'
+        '/client/api/static/gruppen',
+        '/client/012cf6a10129e2275d79d6adac7f3b02.woff',
+        '/client/570eb83859dc23dd0eec423a49e147fe.woff2',
+        '/client/a37b0c01c0baf1888ca812cc0508f6e2.ttf',
+        '/client/e79bfd88537def476913f3ed52f4f4b3.eot'
       ];
 
 // service worker installation
