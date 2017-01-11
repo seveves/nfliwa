@@ -1,6 +1,6 @@
 .nf-event__title {
   color: #263238;
-  font-family: Lora,Helvetica,Arial,sans-serif;
+  font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
   font-size: 22px;
   font-weight: 700;
   line-height: 30px;
@@ -10,15 +10,6 @@
 .event-card h4 {
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.nf-event__sub-title {
-  color: #263238;
-  font-family: Lora,Helvetica,Arial,sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 30px;
-  margin-bottom: 5px;
 }
 
 @media (max-width: 750px) {

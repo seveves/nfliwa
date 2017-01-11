@@ -6,8 +6,6 @@ import Markdown from '../../lib/markdown';
 
 export default class StaticPage extends Component<{url?, path}, {page}> {
 
-  private url: string = '//nfliwa.herokuapp.com';
-
   public componentDidMount(): void {
     this.fetchStaticPageContent(this.props.url);
   }
@@ -43,7 +41,7 @@ export default class StaticPage extends Component<{url?, path}, {page}> {
   }
 
   private fetchStaticPageContent(url) {
-    fetch(this.url + '/api/static/' + url)
+    fetch('/client/api/static/' + url)
       .then((res) => res.json())
       .then((json) => {
         this.setState({ page: (json as any).data });

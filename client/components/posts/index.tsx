@@ -9,10 +9,8 @@ import PrettyDate from '../pretty-date';
 
 export default class Posts extends Component<{path}, {posts, next}> {
 
-  private url: string = '//nfliwa.herokuapp.com';
-
   public componentDidMount() {
-    this.fetchPosts('/api/posts?a=6&p=0');
+    this.fetchPosts('/client/api/posts?a=6&p=0');
   }
 
   public render({ }, { posts = [] }) {
@@ -34,7 +32,7 @@ export default class Posts extends Component<{path}, {posts, next}> {
   }
 
   private fetchPosts(apiUrl) {
-    fetch(this.url + apiUrl)
+    fetch(apiUrl)
       .then((res) => res.json())
       .then((json) => json || [])
       .then((result: any) => {

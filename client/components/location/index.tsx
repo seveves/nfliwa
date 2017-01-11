@@ -4,8 +4,6 @@ import { Icon } from 'preact-mdl';
 export default class Location
   extends Component<{ lat, long }, { imgSource?: string }> {
 
-  private url: string = '//nfliwa.herokuapp.com';
-
   public componentDidMount() {
     this.update();
   }
@@ -24,7 +22,7 @@ export default class Location
   }
 
   private update() {
-    const imageUrl = this.url + '/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
+    const imageUrl = '/client/api/events/location?lat=' + this.props.lat + '&long=' + this.props.long;
 
     fetch(imageUrl)
       .then((response) => response.blob())

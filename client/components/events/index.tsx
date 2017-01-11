@@ -6,8 +6,6 @@ import EventDate from '../event-date';
 
 export default class Events extends Component<{path}, {nextEvents?, pastEvents?}> {
 
-  private url: string = '//nfliwa.herokuapp.com';
-
   public componentDidMount() {
     this.fetchNextEvents();
     this.fetchPastEvents();
@@ -37,7 +35,7 @@ export default class Events extends Component<{path}, {nextEvents?, pastEvents?}
   }
 
   private fetchNextEvents() {
-    fetch(this.url + '/api/events/next')
+    fetch('/client/api/events/next')
       .then((res) => res.json())
       .then((json) => json || [])
       .then((result) => {
@@ -46,7 +44,7 @@ export default class Events extends Component<{path}, {nextEvents?, pastEvents?}
   }
 
   private fetchPastEvents() {
-    fetch(this.url + '/api/events/last')
+    fetch('/client/api/events/last')
       .then((res) => res.json())
       .then((json) => json || [])
       .then((result) => {
