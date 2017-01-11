@@ -54,5 +54,9 @@ export default class SiteLayout extends Component<{}, { pages }> {
     if (direction === 'right' && !layout.isVisible) {
       layout.toggleDrawer();
     }
+
+    if (direction === 'left' && layout.isVisible) {
+      layout.toggleDrawer();
+    }
   }
 }

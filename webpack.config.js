@@ -36,7 +36,10 @@ module.exports = {
 
 	plugins: ([
 		new webpack.optimize.DedupePlugin(),
-		new CopyWebpackPlugin([{ from: './client/index.html', to: 'index.html' }]),
+		new CopyWebpackPlugin([
+			{ from: './client/index.html', to: 'index.html' },
+			{ from: './client/manifest.json', to: 'manifest.json' }
+		]),
 		new ExtractTextPlugin('style.css', { allChunks: true, }),
 		new CompressionPlugin()
 	]),

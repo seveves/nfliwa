@@ -4,8 +4,6 @@ import { Link } from 'preact-router';
 
 export default class Sidebar extends Component<{onClick}, {}> {
 
-  private url: string = '//nfliwa.herokuapp.com';
-
   public componentDidMount() {
     this.fetchStaticPages();
   }
@@ -23,13 +21,13 @@ export default class Sidebar extends Component<{onClick}, {}> {
             </Navigation.Link> ))
           }
         </Navigation>
-        <img style="margin: auto; width: 50%; height: auto; opacity: 0.7" src="/img/nf-logo.png" />
+        <img style="margin: auto; width: 50%; height: auto; opacity: 0.7" src="/client/img/nf-logo.png" />
       </Layout.Drawer>
     );
   }
 
   private fetchStaticPages() {
-    fetch(this.url + '/api/static')
+    fetch('/client/api/static')
       .then((res) => res.json())
       .then((json) => this.setState({ pages: (json as any).data }));
   }

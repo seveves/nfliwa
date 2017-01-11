@@ -8,8 +8,6 @@ import Location from '../location';
 
 export default class EventDetails extends Component<{eventId?, path}, {event}> {
 
-  private url: string = '//nfliwa.herokuapp.com';
-
   public componentDidMount() {
     this.fetchNextEvents(this.props.eventId);
   }
@@ -44,7 +42,7 @@ export default class EventDetails extends Component<{eventId?, path}, {event}> {
   }
 
    private fetchNextEvents(eventId) {
-    fetch(this.url + '/api/events/' + eventId)
+    fetch('/client/api/events/' + eventId)
       .then((res) => res.json())
       .then((json) => json || {})
       .then((result) => {
