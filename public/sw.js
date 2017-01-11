@@ -1,7 +1,7 @@
 // service worker globals
-var SERVICE_WORKER_VERSION = 'v2';
+var SERVICE_WORKER_VERSION = 'v3';
 var CACHE_RESOURCES = [
-        '/client',
+        '/',
         '/client/index.html',
         '/client/bundle.js',
         '/client/init.js',
