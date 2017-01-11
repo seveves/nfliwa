@@ -19,7 +19,7 @@ scripts.forEach((src) => {
 });
 
 if (`serviceWorker` in navigator) {
-  (navigator as any).serviceWorker.register('/sw.js', { scope: '/client' })
+  (navigator as any).serviceWorker.register('/sw.js', { scope: '/' })
     .catch((error) => console.warn('service worker registration failed with ' + error));
 } else {
   console.warn('service worker API not available. poor you.');
