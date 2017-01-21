@@ -9,6 +9,7 @@ var cors = require('cors');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 
 var appConfig = require('./config/app.config.js');
@@ -25,6 +26,7 @@ app.set('view engine', 'pug');
 
 app.use(morgan('dev'));
 app.use(cors());
+app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

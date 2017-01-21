@@ -14,7 +14,7 @@ export default class EventDate extends Component<{date: Date}, {eventDate: strin
     return (
       <span>
         <span class="event-date">{eventDate}</span>
-        <span class="event-time">{eventTime}</span>
+        ( eventTime !== '' ? <span class="event-time">{eventTime}</span> : null )
       </span>
     );
   }
@@ -25,7 +25,11 @@ export default class EventDate extends Component<{date: Date}, {eventDate: strin
     const minutes = date.getUTCMinutes();
     const leadingHourZero = hours < 10 ? '0' : '';
     const leadingMinutesZero = minutes < 10 ? '0' : '';
-    const eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
+    let eventTime = leadingHourZero + hours + ':' + leadingMinutesZero + minutes + ' Uhr';
+
+    if (hours === 0 && minutes === 0) {
+      eventTime = '';
+    }
 
     this.setState({ eventDate, eventTime });
   }
