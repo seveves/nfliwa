@@ -1,7 +1,7 @@
-import 'whatwg-fetch';
-
-import Promise from 'promise-polyfill';
+import * as Promise from 'promise-polyfill';
 
 if (!(`Promise` in window)) {
   (window as any).Promise = Promise;
 }
+
+import 'whatwg-fetch';
