@@ -14,7 +14,7 @@ export default class EventDate extends Component<{date: Date}, {eventDate: strin
     return (
       <span>
         <span class="event-date">{eventDate}</span>
-        ( eventTime !== '' ? <span class="event-time">{eventTime}</span> : null )
+        { eventTime !== '' ? <span class="event-time">{eventTime}</span> : null }
       </span>
     );
   }
