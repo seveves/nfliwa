@@ -1,5 +1,5 @@
 import { Component, h, render } from 'preact';
-import { Grid, Icon, Layout, Navigation } from 'preact-mdl';
+import { Icon, Layout, Navigation } from 'preact-mdl';
 import { Link } from 'preact-router';
 
 import './style.scss';
