@@ -1,6 +1,8 @@
 import { Component, h, render } from 'preact';
-import { Icon, Layout, Navigation } from 'preact-mdl';
+import { Grid, Icon, Layout, Navigation } from 'preact-mdl';
 import { Link } from 'preact-router';
+
+import './style.scss';
 
 export default class Sidebar extends Component<{onClick}, {}> {
 
@@ -22,6 +24,14 @@ export default class Sidebar extends Component<{onClick}, {}> {
           }
         </Navigation>
         <img style="margin: auto; width: 50%; height: auto; opacity: 0.7" src="/client/img/nf-logo.png" />
+        <div style="margin: auto; width: 50%;">
+          <div style="float: left">
+            <a class="sm-logo" href="https://fb.me/naturfreundelichtenwald" alt="Facebook Page"><img src="/client/img/fb-logo.png" /></a>
+          </div>
+          <div>
+            <a class="sm-logo" href="https://instagram.com/naturfreundelichtenwald" alt="Instagram Page"><img src="/client/img/instagram-logo.png" /></a>        
+          </div>
+        </div>
       </Layout.Drawer>
     );
   }
