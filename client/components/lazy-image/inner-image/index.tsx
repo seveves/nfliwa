@@ -1,7 +1,7 @@
 import { Component, h } from 'preact';
 
 export default class InnerImage
-  extends Component<{ imageUrl: string }, { imgSource?: string, opacity?: number }> {
+  extends Component<{ imageUrl: string, alt: string }, { imgSource?: string, opacity?: number }> {
 
   public componentDidMount() {
     this.update(this.props.imageUrl);
@@ -13,9 +13,9 @@ export default class InnerImage
     }
   }
 
-  public render({ imageUrl }, { imgSource = '', opacity = 0 }) {
+  public render({ imageUrl, alt }, { imgSource = '', opacity = 0 }) {
     return (
-      <img class="fade-in" src={imgSource} style={{ opacity }} />
+      <img class="fade-in" src={imgSource} style={{ opacity }} alt={alt}/>
     );
   }
 

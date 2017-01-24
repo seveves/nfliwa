@@ -7,7 +7,7 @@ import Markdown from '../../lib/markdown';
 import LazyImage from '../lazy-image';
 import PrettyDate from '../pretty-date';
 
-export default class Posts extends Component<{path}, {posts, next}> {
+export default class Posts extends Component<{path, title}, {posts, next}> {
 
   public componentDidMount() {
     this.fetchPosts('/client/api/posts?a=6&p=0');

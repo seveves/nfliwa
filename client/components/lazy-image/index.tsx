@@ -11,7 +11,7 @@ interface IImage {
   base64: string;
 }
 
-class Img extends Component<{src: string}, {}> {
+class Img extends Component<{src: string} & JSX.HTMLAttributes, {}> {
 
   public componentWillUnmount() {
     // this line fixes an issue with preact recycling the img element
@@ -33,12 +33,12 @@ export default class LazyImage extends Component<{ image: IImage }, { open: bool
     return (
       <div>
         <div class="lazy-image" style={style} onClick={this.open}>
-          <InnerImage imageUrl={image.imageUrl} />
+          <InnerImage imageUrl={image.imageUrl} alt={'Bild mit ID ' + image.imageId} />
         </div>
         { open ? (
           <Portal into="#modal">
             <div class="popup" onClick={this.close}>
-              <Img src={image.imageUrl} />
+              <Img src={image.imageUrl} alt={'Bild mit Id ' + image.imageId} />
             </div>
           </Portal>
           ) : null }

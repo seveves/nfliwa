@@ -9,6 +9,21 @@ router.get('/static', (req, res) => {
     .exec((err, titles) => res.json({ data: titles }));
 });
 
+router.get('/static/title/:url', (req, res, next) => {
+  let url = req.params.url;
+  if (url) {
+    Static.findOne({ 'url': url }, (err, data) => {
+      if (!err) {
+        res.json({ data: data.title });
+      } else {
+        res.status(500).json({ data: null, error: err });
+      }
+    });
+  } else {
+    res.status(404).json({ data: null, error: 'Cannot find page with url ' + url });
+  }
+});
+
 router.get('/static/:url', (req, res, next) => {
   let url = req.params.url;
   if (url) {
@@ -16,11 +31,11 @@ router.get('/static/:url', (req, res, next) => {
       if (!err) {
         res.json({ data });
       } else {
-        res.json(500, { data: null, error: err });
+        res.status(500).json({ data: null, error: err });
       }
     });
   } else {
-    res.json(404, { data: null, error: 'Cannot find page with url ' + url });
+    res.status(404).json({ data: null, error: 'Cannot find page with url ' + url });
   }
 });
 

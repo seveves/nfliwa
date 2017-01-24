@@ -6,13 +6,13 @@ import Markdown from '../../lib/markdown';
 import EventDate from '../event-date';
 import Location from '../location';
 
-export default class EventDetails extends Component<{eventId?, path}, {event}> {
+export default class EventDetails extends Component<{eventId?, path, title}, {event}> {
 
   public componentDidMount() {
     this.fetchNextEvents(this.props.eventId);
   }
 
-  public render({ eventId, path }, { event = null }) {
+  public render({ eventId, path, title }, { event = null }) {
     return (
       <section class="nf-container">
         <Grid>
@@ -32,8 +32,8 @@ export default class EventDetails extends Component<{eventId?, path}, {event}> {
         </Grid>
         <Grid>
           <Grid.Cell class="mdl-cell--2-col">
-            <a class="mdl-button mdl-button--colored" href="/client/events">
-              <Icon icon="arrow back"/> Zurück zur Übersicht
+            <a class="mdl-button mdl-button--colored" href="/client/events" alt="Events">
+              <Icon icon="arrow back"/> Zurück
             </a>
           </Grid.Cell>
         </Grid>
