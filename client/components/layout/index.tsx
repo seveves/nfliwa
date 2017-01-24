@@ -45,9 +45,9 @@ export default class SiteLayout extends Component<{}, { pages }> {
     }
 
     if ((obj.url as string).startsWith('/client/static')) {
-      this.fetchStaticTitle(obj.current.attributes.url).then(json => {
+      this.fetchStaticTitle(obj.current.attributes.url).then((json) => {
         document.title = json.data + staticPart;
-      })
+      });
     }
   }
 
