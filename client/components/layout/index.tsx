@@ -25,16 +25,35 @@ export default class SiteLayout extends Component<{}, { pages }> {
           <Sidebar onClick={this.toggleDrawer} />
           <SwipeRecognizer onSwipe={this.swipeDrawer} />
           <Layout.Content>
-            <Router>
-              <Posts path="/client" />
-              <Events path="/client/events" />
-              <EventDetails path="/client/events/:eventId" />
+            <Router onChange={this.onRouteChange}>
+              <Posts path="/client" title="Neuigkeiten"/>
+              <Events path="/client/events" title="Termine"/>
+              <EventDetails path="/client/events/:eventId" title="Termindetails" />
               <StaticPage path="/client/static/:url" />
             </Router>
             <div id="modal"></div>
           </Layout.Content>
         </Layout>
     );
+  }
+
+  private onRouteChange = (obj) => {
+    const staticPart = ' | Naturfreunde Lichtenwald e.V.';
+    if (obj.current.attributes.title) {
+      document.title = obj.current.attributes.title + staticPart;
+      return;
+    }
+
+    if ((obj.url as string).startsWith('/client/static')) {
+      this.fetchStaticTitle(obj.current.attributes.url).then((json) => {
+        document.title = json.data + staticPart;
+      });
+    }
+  }
+
+  private fetchStaticTitle(url): Promise<any> {
+    return fetch('/client/api/static/title/' + url)
+      .then((res) => res.json());
   }
 
   private toggleDrawer = () => {
