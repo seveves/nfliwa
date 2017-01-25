@@ -1,5 +1,5 @@
 // service worker globals
-var SERVICE_WORKER_VERSION = 'v3';
+var SERVICE_WORKER_VERSION = 'v4';
 var CACHE_RESOURCES = [
         '/',
         '/client/index.html',
@@ -8,6 +8,9 @@ var CACHE_RESOURCES = [
         '/client/init.js',
         '/client/style.css',
         '/client/img/nf-logo.png',
+        '/client/img/app-icon-192.png',
+        '/client/img/fb-logo.png',
+        '/client/img/instagram-logo.png',
         '/client/api/static',
         '/client/api/posts',
         '/client/api/posts?a=6&p=0',
