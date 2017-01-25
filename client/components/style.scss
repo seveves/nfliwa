@@ -1,0 +1,12 @@
+.markup a:after {
+  content: ' ⤤ ';
+}
+
+.markup a:before {
+  content: ' ';
+}
+
+.markup a {
+  text-decoration: none;
+  color: #4caf50;
+}
