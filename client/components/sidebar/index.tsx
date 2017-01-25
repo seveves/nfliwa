@@ -4,20 +4,35 @@ import { Link } from 'preact-router';
 
 import './style.scss';
 
+interface IPageLink {
+  title: string;
+  url: string;
+  pageIndex: number;
+}
+
 export default class Sidebar extends Component<{onClick}, {}> {
 
   public componentDidMount() {
     this.fetchStaticPages();
   }
 
-  public render({ onClick }, { pages = [] }) {
+  public render({ onClick }, { pages = [] }: { pages: IPageLink[] }) {
     return (
       <Layout.Drawer onClick={onClick} aria-hidden="true">
         <Layout.Title>Navigation</Layout.Title>
         <Navigation>
-          <Navigation.Link href="/client" alt="Neuigkeiten"><Icon icon="navigate next"/> Neuigkeiten</Navigation.Link>
-          <Navigation.Link href="/client/events" alt="Termine"><Icon icon="navigate next"/> Termine</Navigation.Link>
-          { pages.map((p) => (
+          { pages.filter((p) => p.pageIndex > 0 && p.pageIndex < 10).map((p) => (
+            <Navigation.Link href={'/client/static/' + p.url} alt={p.title}>
+              <Icon icon="navigate next"/> {p.title}
+            </Navigation.Link> ))
+          }
+          <Navigation.Link href="/client/posts" alt="Neuigkeiten">
+            <Icon icon="navigate next"/> Neuigkeiten
+          </Navigation.Link>
+          <Navigation.Link href="/client/events" alt="Veranstaltungen">
+            <Icon icon="navigate next"/> Termine
+          </Navigation.Link>
+          { pages.filter((p) => p.pageIndex >= 10).map((p) => (
             <Navigation.Link href={'/client/static/' + p.url} alt={p.title}>
               <Icon icon="navigate next"/> {p.title}
             </Navigation.Link> ))

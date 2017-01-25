@@ -5,6 +5,7 @@ import { Router } from 'preact-router';
 import EventDetails from '../event-details';
 import Events from '../events';
 import Header from '../header';
+import Home from '../home';
 import Posts from '../posts';
 import Sidebar from '../sidebar';
 import StaticPage from '../static';
@@ -26,7 +27,8 @@ export default class SiteLayout extends Component<{}, { pages }> {
           <SwipeRecognizer onSwipe={this.swipeDrawer} />
           <Layout.Content>
             <Router onChange={this.onRouteChange}>
-              <Posts path="/client" title="Neuigkeiten"/>
+              <Home path="/client" title="Willkommen" />
+              <Posts path="/client/posts" title="Neuigkeiten"/>
               <Events path="/client/events" title="Termine"/>
               <EventDetails path="/client/events/:eventId" title="Termindetails" />
               <StaticPage path="/client/static/:url" />

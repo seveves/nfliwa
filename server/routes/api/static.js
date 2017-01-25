@@ -5,8 +5,14 @@ var Static = require('../../models/static');
 router.get('/static', (req, res) => {
   Static.find({})
     .sort('pageIndex')
-    .select({ 'title': 1, 'url': 1, '_id': 0 })
-    .exec((err, titles) => res.json({ data: titles }));
+    .select({ 'title': 1, 'url': 1, 'pageIndex': 1, '_id': 0 })
+    .exec((err, titles) => {
+      if (!err) {
+        res.json({ data: titles });
+      } else {
+        res.status(500).json({ data: null, error: err });
+      }
+    });
 });
 
 router.get('/static/title/:url', (req, res, next) => {
