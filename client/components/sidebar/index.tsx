@@ -30,7 +30,7 @@ export default class Sidebar extends Component<{onClick}, {}> {
             <Icon icon="navigate next"/> Neuigkeiten
           </Navigation.Link>
           <Navigation.Link href="/client/events" alt="Veranstaltungen">
-            <Icon icon="navigate next"/> Termine
+            <Icon icon="navigate next"/> Veranstaltungen
           </Navigation.Link>
           { pages.filter((p) => p.pageIndex >= 10).map((p) => (
             <Navigation.Link href={'/client/static/' + p.url} alt={p.title}>
