@@ -16,15 +16,15 @@ export default class Events extends Component<{path, title}, {nextEvents?, pastE
       <section class="nf-container">
         <Grid class="nf-event">
           <Grid.Cell class="mdl-cell--8-col">
-            <h3 class="nf-event__title">Kommende Termine</h3>
-            { nextEvents.length ? null : <h6>Keine Termine geplant.</h6> }
+            <h3 class="nf-event__title">Kommende Veranstaltungen</h3>
+            { nextEvents.length ? null : <h6>Keine Veranstaltungen geplant.</h6> }
             <Grid>
               { nextEvents.map((event) => ( <NextEvent event={event} />)) }
             </Grid>
           </Grid.Cell>
           <Grid.Cell class="mdl-cell--4-col">
-            <h3 class="nf-event__title">Vergangene Termine</h3>
-            { pastEvents.length ? null : <h6>Keine vergangene Termine.</h6> }
+            <h3 class="nf-event__title">Vergangene Veranstaltungen</h3>
+            { pastEvents.length ? null : <h6>Keine vergangene Veranstaltungen.</h6> }
             <ul class="mdl-list">
               { pastEvents.map((event) => ( <PastEvent event={event} />)) }
             </ul>
