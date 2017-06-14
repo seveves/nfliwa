@@ -1,3 +1,10 @@
+/// <reference path="../node_modules/offline-plugin/offline-plugin.d.ts" />
+
+import * as OfflinePluginRuntime from 'offline-plugin/runtime';
+OfflinePluginRuntime.install({
+  onInstalled: () => OfflinePluginRuntime.applyUpdate()
+});
+
 let scripts = [ '/client/bundle.js' ];
 
 let newBrowser = (
