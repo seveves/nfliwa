@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+var OfflinePlugin = require('offline-plugin');
 
 module.exports = {
 	context: __dirname,
@@ -18,7 +19,7 @@ module.exports = {
 	},
 
 	resolve: {
-		extensions: ['', 'js', 'ts', '.tsx', '.scss']
+		extensions: ['', '.js', '.ts', '.tsx', '.scss']
 	},
 
 	module: {
@@ -41,7 +42,8 @@ module.exports = {
 			{ from: './client/manifest.json', to: 'manifest.json' }
 		]),
 		new ExtractTextPlugin('style.css', { allChunks: true, }),
-		new CompressionPlugin()
+		new CompressionPlugin(),
+		new OfflinePlugin()
 	]),
 
 	devtool: 'source-map'

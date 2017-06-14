@@ -3,6 +3,7 @@
     "jsx": "react",
     "jsxFactory": "h",
     "target": "es5",
+    "moduleResolution": "node",
     "sourceMap": true,
     "lib": [
       "dom", "es6", "es2015"
