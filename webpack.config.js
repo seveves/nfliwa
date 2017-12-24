@@ -64,6 +64,7 @@ module.exports = {
 	plugins: ([
 		new CopyWebpackPlugin([
 			{ from: './index.html', to: 'index.html' },
+			{ from: './assets/img/', to: '../img' },
 			{ from: './manifest.json', to: 'manifest.json' }
 		]),
 		new ExtractTextPlugin('style.css', { allChunks: true, }),

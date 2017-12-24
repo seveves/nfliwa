@@ -55,6 +55,7 @@
 
       ul {
         margin-top: 3rem;
+        padding-left: 0;
 
         a {
           text-decoration: underline;
@@ -165,9 +166,14 @@
 @media (max-width: 1024px) {
   .about {
     transform: none;
+    animation: none;    
+
+    &.right {
+      animation: none;
+    }
 
     .card {
-      width: 70%;
+      width: 75%;
     }
 
     &.right {
@@ -204,7 +210,7 @@
     transform: none;
 
     .card {
-      width: 80%;
+      width: 75%;
       margin-bottom: 1rem;
       margin-left: 1rem;
     }

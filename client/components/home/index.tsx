@@ -66,13 +66,13 @@ const SocialMedia = () => (
         <ul>
           <li>
             <a href="https://fb.me/naturfreundelichtenwald" alt="facebook">
-              <img src="http://nfliwa.herokuapp.com/client/img/fb-logo.png" alt="facebook logo"/>
+              <img src="img/fb-logo.png" alt="facebook logo"/>
               <span>@naturfreundelichtenwald auf Facebook</span>
             </a>
           </li>
           <li>
-            <a href="https://instagram.com/naturfreundelichtenwald" alt="facebook">
-              <img src="http://nfliwa.herokuapp.com/client/img/instagram-logo.png" alt="instagram logo"/>
+            <a href="https://instagram.com/naturfreundelichtenwald" alt="instagram">
+              <img src="img/instagram-logo.png" alt="instagram logo"/>
               <span>@naturfreundelichtenwald auf Instagram</span>
             </a>
           </li>

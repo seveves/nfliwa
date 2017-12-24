@@ -1,8 +1,8 @@
 {
 	"name": "Naturfreunde Lichtenwald",
 	"short_name": "NF LiWa",
-	"theme_color": "#4CAF50",
-	"background_color": "#388E3C",
+	"theme_color": "#007556",
+	"background_color": "#005f46",
 	"display": "standalone",
 	"start_url": "/client",
 	"icons": [
