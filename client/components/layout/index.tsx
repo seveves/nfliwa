@@ -1,5 +1,4 @@
 import { Component, h } from 'preact';
-import { Layout } from 'preact-mdl';
 import { Router } from 'preact-router';
 
 import EventDetails from '../event-details';
@@ -7,11 +6,7 @@ import Events from '../events';
 import Header from '../header';
 import Home from '../home';
 import Posts from '../posts';
-import Sidebar from '../sidebar';
 import StaticPage from '../static';
-import SwipeRecognizer from '../swipe';
-
-import MaterialLayoutHelper from './material-layout-helper';
 
 export default class SiteLayout extends Component<{}, { pages }> {
 
@@ -21,11 +16,9 @@ export default class SiteLayout extends Component<{}, { pages }> {
 
   public render({}, { pages = [] }) {
     return (
-        <Layout fixed-header fixed-drawer>
+        <div>
           <Header />
-          <Sidebar onClick={this.toggleDrawer} />
-          <SwipeRecognizer onSwipe={this.swipeDrawer} />
-          <Layout.Content>
+          <div class="container">
             <Router onChange={this.onRouteChange}>
               <Home path="/client" title="Willkommen" />
               <Posts path="/client/posts" title="Neuigkeiten"/>
@@ -34,8 +27,8 @@ export default class SiteLayout extends Component<{}, { pages }> {
               <StaticPage path="/client/static/:url" />
             </Router>
             <div id="modal"></div>
-          </Layout.Content>
-        </Layout>
+          </div>
+        </div>
     );
   }
 
@@ -56,28 +49,5 @@ export default class SiteLayout extends Component<{}, { pages }> {
   private fetchStaticTitle(url): Promise<any> {
     return fetch('/client/api/static/title/' + url)
       .then((res) => res.json());
-  }
-
-  private toggleDrawer = () => {
-    const layout = new MaterialLayoutHelper(this);
-    if (layout.hasFixedDrawer && !layout.isSmallScreen) {
-        return;
-    }
-    layout.toggleDrawer();
-  }
-
-  private swipeDrawer = (direction: string) => {
-    const layout = new MaterialLayoutHelper(this);
-    if (layout.hasFixedDrawer && !layout.isSmallScreen) {
-        return;
-    }
-
-    if (direction === 'right' && !layout.isVisible) {
-      layout.toggleDrawer();
-    }
-
-    if (direction === 'left' && layout.isVisible) {
-      layout.toggleDrawer();
-    }
   }
 }

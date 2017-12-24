@@ -5,14 +5,3 @@
 	position: static;
 	overflow: visible;
 }
-
-.nf-container {
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
-@media (max-width: 750px) {
-  .nf-container {
-    padding: 0;
-  }
-}

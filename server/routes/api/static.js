@@ -19,7 +19,7 @@ router.get('/static/title/:url', (req, res, next) => {
   let url = req.params.url;
   if (url) {
     Static.findOne({ 'url': url }, (err, data) => {
-      if (!err) {
+      if (!err && data !== null) {
         res.json({ data: data.title });
       } else {
         res.status(500).json({ data: null, error: err });

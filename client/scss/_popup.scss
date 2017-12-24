@@ -1,7 +1,7 @@
 .popup {
   position: fixed;
-  z-index: 10;
-  padding-top: 100px;
+  z-index: 999;
+  padding-top: 55px;
   left: 0;
   top: 0;
   width: 100%;
@@ -12,7 +12,6 @@
 
   img {
     margin: auto;
-    padding-left: 240px; /* width of the navigation sidebar */
     display: block;
     width: 80%;
     max-width: 750px;
@@ -26,16 +25,14 @@
   to { transform: scale(1) }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   .popup img {
-    padding-left: 0;
     width: 100%;
   }
 }
 
-@media (max-width: 1023px) and (orientation: landscape) {
+@media (max-width: 1024px) and (orientation: landscape) {
   .popup img {
-    padding-left: 0;
     width: auto;
     height: 70%;
   }

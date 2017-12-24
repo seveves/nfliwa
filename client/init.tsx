@@ -1,10 +1,3 @@
-/// <reference path="../node_modules/offline-plugin/offline-plugin.d.ts" />
-
-import * as OfflinePluginRuntime from 'offline-plugin/runtime';
-OfflinePluginRuntime.install({
-  onInstalled: () => OfflinePluginRuntime.applyUpdate()
-});
-
 let scripts = [ '/client/bundle.js' ];
 
 let newBrowser = (
@@ -24,10 +17,3 @@ scripts.forEach((src) => {
   scriptEl.async = false;
   document.head.appendChild(scriptEl);
 });
-
-if (`serviceWorker` in navigator) {
-  (navigator as any).serviceWorker.register('/sw.js', { scope: '/' })
-    .catch((error) => console.warn('service worker registration failed with ' + error));
-} else {
-  console.warn('service worker API not available. poor you.');
-}

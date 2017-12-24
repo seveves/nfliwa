@@ -1,57 +1,65 @@
-.nf-load-more {
+.posts {
+  padding: 3rem;
+  padding-top: 1rem;
+}
+
+.load-more {
   margin: auto;
 }
 
-.nf-post__footer {
+.post-footer {
   margin-left: 20px;
   margin-right: 20px;
   border-bottom: 1px solid #CCCCCC;
 }
 
-.nf-post__images {
+.post-images {
   padding: 20px;
   margin-top: 24px;
 }
 
-.nf-post__title {
+.post-title {
   color: #263238;
-  font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
   font-size: 22px;
   font-weight: 700;
   line-height: 30px;
   margin-bottom: 5px;
 }
 
-.nf-post__body {
+.post-body {
   color: #263238;
   padding-bottom: 20px;
   font-size: 16px;
   line-height: 28px;
   white-space: normal;
 
-  .nf-post__date {
+  .post-date {
     color: #263238;
     text-transform: uppercase;
   }
 
-  .nf-post__date::before {
+  .post-date::before {
     content: "|";
     margin-right: 2px;
   }
 }
 
-.nf-post__link {
+.post-link {
   text-decoration: none;
 }
 
-@media (max-width: 750px) {
-  .nf-post__images {
+@media (max-width: 1024px) {
+  .post-images {
     padding: 0;
     margin-top: 0;
   }
 
-  .nf-post__footer {
+  .post-footer {
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .posts {
+    padding: 1rem;
   }
 }

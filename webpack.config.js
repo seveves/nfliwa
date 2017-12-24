@@ -1,50 +1,81 @@
+var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-var CompressionPlugin = require('compression-webpack-plugin');
-var OfflinePlugin = require('offline-plugin');
 
 module.exports = {
-	context: __dirname,
+	context: path.resolve(__dirname, 'client'),
 	entry: {
-	  init: [ './client/init.tsx' ],
-	  bundle: ['./client/index.tsx'],
-	  polyfills: [ './client/polyfills.tsx' ]
+	  init: [ './init.tsx' ],
+	  bundle: ['./index.tsx'],
+	  polyfills: [ './polyfills.tsx' ]
+	},
+
+	resolve: {
+		extensions: [ '.js', '.ts', '.tsx', '.scss', '.css', ]
 	},
 		
 	output: {
-		path: './public/client',
+		path: path.join(__dirname, 'public/client'),
 		filename: '[name].js',
 		publicPath: '/client/'
 	},
 
-	resolve: {
-		extensions: ['', '.js', '.ts', '.tsx', '.scss']
-	},
-
 	module: {
-		loaders: [
-			{ test: /\.(tsx|ts)?$/, loader: 'ts-loader' },
-			{ test: /\.(scss|css)$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader') },
-			{ test: /\.(xml|html|txt|md)$/, loader: 'raw'},
-			{ test: /\.(svg|woff2?|ttf|eot|jpe?g|png|gif)(\?.*)?$/i, loader: 'url-loader?limit=10000' }
+		rules: [
+			{
+				test: /\.(tsx|ts)?$/,
+				use: [
+					{ loader: 'ts-loader' }
+				]
+			},
+			{
+				test: /\.(scss|css)$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: [
+						{ loader: 'css-loader', options: { importLoaders: 1 } },
+						{
+							loader: 'postcss-loader',
+							options: {
+								ident: 'postcss',
+								plugins: (loader) => [require('autoprefixer')({ browsers: ['Last 2 versions']})]
+							}
+						},
+						'sass-loader',
+					]
+				})
+			},
+			{
+				test: /\.(xml|html|txt|md)$/,
+				use: [
+					{ loader: 'raw-loader' }
+				]
+			},
+			{
+				test: /\.(svg|woff2?|ttf|eot|jpe?g|png|gif)(\?.*)?$/i,
+				use: [
+					{ loader: 'url-loader?limit=10000' }
+				]
+			}
 		]
 	},
 
-	postcss: () => [
-		require('autoprefixer')
-	],
-
 	plugins: ([
-		new webpack.optimize.DedupePlugin(),
 		new CopyWebpackPlugin([
-			{ from: './client/index.html', to: 'index.html' },
-			{ from: './client/manifest.json', to: 'manifest.json' }
+			{ from: './index.html', to: 'index.html' },
+			{ from: './manifest.json', to: 'manifest.json' }
 		]),
 		new ExtractTextPlugin('style.css', { allChunks: true, }),
-		new CompressionPlugin(),
-		new OfflinePlugin()
 	]),
 
-	devtool: 'source-map'
+	devtool: 'source-map',
+
+	devServer: {
+		proxy: {
+			"/client/api": {
+				target: "http://localhost:3000"
+			}
+		}
+	}
 };

@@ -3,7 +3,7 @@ import Portal from 'preact-portal';
 
 import './style.scss';
 
-import InnerImage from './inner-image';
+import InnerImage from './inner-image/index';
 
 interface IImage {
   imageId: string;
@@ -15,7 +15,9 @@ class Img extends Component<{src: string} & JSX.HTMLAttributes, {}> {
 
   public componentWillUnmount() {
     // this line fixes an issue with preact recycling the img element
-    (this.base as HTMLImageElement).src = this.base[Symbol.for('preactattr')].src = '';
+    if (this.base !== undefined) {
+      (this.base as HTMLImageElement).src = this.base[Symbol.for('preactattr')].src = '';
+    }
   }
 
   public render(props) {

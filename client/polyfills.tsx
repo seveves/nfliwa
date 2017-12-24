@@ -23,4 +23,4 @@ if (!String.prototype.endsWith) {
   };
 }
 
-import 'whatwg-fetch';
+import 'unfetch/polyfill';

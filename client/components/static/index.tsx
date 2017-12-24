@@ -1,5 +1,5 @@
 import { Component, h } from 'preact';
-import { Grid } from 'preact-mdl';
+
 import './style.scss';
 
 import Markdown from '../../lib/markdown';
@@ -22,20 +22,16 @@ export default class StaticPage extends Component<{url?, path}, {page}> {
 
   public render({ url, path }, { page }) {
     return (
-      <section class="nf-container">
+      <section class="static">
       { page ?
-        <Grid>
-          <Grid.Cell class="mdl-cell--12-col">
-            <div class="nf-page">
-              <h3 class="nf-page__title">{page.title}</h3>
-              <div class="nf-page__body">
-                <div class="nf-page__text">
-                  <Markdown markdown={page.body} />
-                </div>
-              </div>
+        <div class="page">
+          <h3 class="page-title">{page.title}</h3>
+          <div class="page-body">
+            <div class="page-text">
+              <Markdown markdown={page.body} />
             </div>
-          </Grid.Cell>
-      </Grid> : null }
+          </div>
+        </div> : null }
       </section>
     );
   }

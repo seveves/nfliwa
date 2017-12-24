@@ -1,4 +1,4 @@
-.events {
+.event-details {
   padding: 3rem;
   padding-top: 1rem;
 }
@@ -11,26 +11,16 @@
   margin-bottom: 5px;
 }
 
-.event-list {
-  list-style-type: none;
-  padding-left: 1rem;
-
-  li {
-    margin-bottom: 1rem;
-
-    a {
-      font-size: 1.2rem;
-      color: #282828;
-    }
-  }
+.margin-sm-auto {
+  margin: 0;
 }
 
 @media (max-width: 1024px) {
-  .events {
+  .event-details {
     padding: 1rem;
   }
 
-  .event-card {
-    width: 275px;
+  .margin-sm-auto {
+    margin: auto;
   }
 }
