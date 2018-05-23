@@ -1,14 +1,29 @@
 import { Component, h } from 'preact';
+import Portal from 'preact-portal';
 
 import './style.scss';
 
 import Markdown from '../../lib/markdown';
 
-export default class Home extends Component<{path, title}, {page}> {
+export default class Home extends Component<{path, title}, {dpShown}> {
 
-  public render({ }, { page }) {
+  state = {
+    dpShown: true
+  }
+
+  hideAlert = () => { this.setState({ dpShown: false }); }
+
+  public render({ }, { dpShown }) {
     return (
       <div>
+        { dpShown && <Portal into="#modal">
+            <div class="cookies-alert">
+              <div class="title">Datenschutz & Cookies</div>
+              <p>Die Webseite der NaturFreunde Lichtenwald e.V. verwendet keine Cookies.<br/>
+              Alle Informationen zum Datenschutz finden sie <a href="/client/static/datenschutz" alt="data privacy">hier.</a></p>
+              <button onClick={this.hideAlert}>Schließen</button>
+            </div>
+          </Portal> }
         <About />
         <Info />
         <SocialMedia />
@@ -104,6 +119,7 @@ const Footer = () => (
   <div class="footer">
     <div>
       <a href="/client/static/impressum" alt="imprint">Impressum</a>
+      <a href="/client/static/datenschutz" alt="data privacy">Datenschutz</a>
     </div>
   </div>
 )
