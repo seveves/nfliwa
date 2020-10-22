@@ -75,7 +75,7 @@
     "gulp-tslint": "8.1.2",
     "jshint": "2.9.5",
     "jshint-stylish": "2.2.1",
-    "node-sass": "4.7.2",
+    "node-sass": "4.13.1",
     "nodemon": "1.13.3",
     "postcss-loader": "2.0.9",
     "raw-loader": "0.5.1",
