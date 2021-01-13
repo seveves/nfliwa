@@ -24,7 +24,7 @@ export default class Header extends Component<{}, { active }> {
         <ul class="toggle-vis hidden-sm">
           <li><Link activeClassName="active" href="/client/posts" alt="news">Neuigkeiten</Link></li>
           <li><Link activeClassName="active" href="/client/static/gruppen" alt="groups">Gruppen</Link></li>
-          <li><Link activeClassName="active" href="/client/static/wanderwege" alt="groups">Wanderwege</Link></li>
+          <li><Link activeClassName="active" href="/client/static/wanderwege" alt="hiking trails">Wanderwege</Link></li>
           <li><Link activeClassName="active" href="/client/events" alt="events">Veranstaltungen</Link></li>
           <li><Link activeClassName="active" href="/client/static/termine" alt="events">Termine</Link></li>
           <li><Link activeClassName="active" href="/client/static/mitgliedschaft" alt="membership">Mitgliedschaft</Link></li>
