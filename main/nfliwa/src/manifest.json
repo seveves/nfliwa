@@ -1,0 +1,16 @@
+{
+  "name": "NaturFreunde Lichtenwald",
+  "short_name": "NF LiWa",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#005f46",
+  "theme_color": "#007556",
+  "icons": [
+    {
+      "src": "/assets/icons/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}

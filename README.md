@@ -1,4 +1,4 @@
 # nfliwa
-A homepage build on [expressjs](https://github.com/expressjs/express) in the backend and [preactjs](https://github.com/developit/preact) in the frontend.
+A homepage for the Naturfreunde Deutschlands Ortsgruppe Plochingen-Reichenbach-Lichtenwald e.V.
 
-See [here](https://nfliwa.herokuapp.com/)
+Deployed via [vercel.com](https://vercel.com) to [naturfreunde-lichtenwald.de](https://naturfreunde-lichtenwald.de)

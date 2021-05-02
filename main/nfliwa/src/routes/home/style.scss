@@ -1,0 +1,251 @@
+@keyframes bgslide {
+  from { background-position: left 75%; }
+  to { background-position: right 75%; }
+}
+
+@keyframes bgslide2 {
+  from { background-position: right 75%; }
+  to { background-position: left 75%; }
+}
+
+.about {
+  background-image: url('../../assets/img/nfliwa-bg.jpeg');
+  background-repeat: repeat-x;
+  min-height: 500px;
+  background-position: right 75%;
+  transform: rotate(-1deg) scale(1.02);
+  animation: 1s bgslide;
+
+  .card {
+    margin-left: 5rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    width: 50%;
+    min-height: 500px;
+    background-color: #9ACDBF;
+    color: #282828;
+    border-radius: 5px;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
+  
+    h1, h3 {
+      margin: 0;
+      padding: 0;
+    }
+
+    p {
+      margin-top: 3rem;
+    }
+  }
+
+  &.right {
+    background-position: left 75%;
+    transform: rotate(1deg) scale(1.02);
+    margin-bottom: 3rem;
+    padding-top: 20px;
+    animation: 1s bgslide2;
+    
+    .card {
+      margin-left: 43%;
+      background-color: #214762;
+      color: #E5F1EE;
+
+      li {
+        padding: .5rem;
+      }
+
+      ul {
+        margin-top: 3rem;
+        padding-left: 0;
+
+        a {
+          text-decoration: underline;
+          color: #E5F1EE;
+
+          &:after {
+            content: ' 🔗';
+          }
+        }
+      }
+    }
+  }
+}
+
+.info {
+  text-align: right;
+  margin-top: 7rem;
+
+  a.btn-link {
+    padding: 1rem;
+    width: 200px;
+    text-align: center;
+    color: #282828;
+    background-color: #9ACDBF;
+    text-decoration: none;
+    transition: .5s background-color;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: rgba(154, 205, 191, 0.5);
+    }
+  }
+}
+
+.social {
+  .info {
+    margin-top: 4rem;
+  }
+  .row {
+    display: flex;
+    margin-left: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    .col {
+      min-height: 330px;
+      flex: 1;
+      margin: 1rem;
+      background-color: rgb(245, 116, 47);
+      border-radius: 5px;
+      box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+
+      h2 {
+        margin-top: 0;
+      }
+
+      a {
+        color: #282828;
+      }
+
+      li {
+        list-style: none;
+        margin-bottom: 1rem;
+        
+        a {
+          position: relative;
+          color: #282828;
+
+          span {
+            position: absolute;
+            padding-left: 1rem;
+            padding-top: 3px;
+            text-decoration: underline;
+          }
+        }
+      }
+    
+      &:first-child {
+        transform: rotate(-3deg);
+        transform-origin: bottom right;
+      }
+
+      &:last-child {
+        transform: rotate(3deg);
+        transform-origin: bottom left;
+      }
+    }
+  }
+}
+
+.footer {
+  width: 100%;
+  background-image: url('../../assets/img/naturfreunde_logo.gif');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 300px;
+  text-align: center;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  justify-content: center;
+  a {
+    color: #282828;
+    margin-left: 15px;
+  }
+}
+
+.cookies-alert {
+  position: fixed;
+  z-index: 999;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(255,255,255);
+  background-color: rgba(255,255,255,0.9);
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-weight: bold;
+  }
+
+  button {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .about {
+    transform: none;
+    animation: none;    
+
+    &.right {
+      animation: none;
+    }
+
+    .card {
+      width: 75%;
+    }
+
+    &.right {
+      transform: none;
+      margin-bottom: 2rem;
+
+      .card {
+        margin-left: 20%;
+      }
+    }
+  }
+
+  .social {
+    .row {
+      margin-left: 0;
+      flex-direction: column;
+      .col {
+        margin: 0;
+        margin-bottom: 1rem;
+        
+        &:first-child {
+          transform: none;
+        }
+        &:last-child {
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 730px) {
+  .about {
+    transform: none;
+
+    .card {
+      width: 75%;
+      margin-bottom: 1rem;
+      margin-left: 1rem;
+    }
+
+    &.right {
+      transform: none;
+      
+      .card {
+        margin-top: 1rem;
+        margin-left: 1rem;
+      }
+    }
+  }
+}
