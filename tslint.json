@@ -1,7 +1,0 @@
-{
-  "extends": "tslint:latest",
-  "rules": {
-    "quotemark": false,
-    "max-classes-per-file": [true, 3]
-  }
-}
