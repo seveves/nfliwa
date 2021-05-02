@@ -1,7 +1,7 @@
 import { Component, h } from 'preact';
 import Portal from 'preact-portal';
 
-import './style.scss';
+import './style.css';
 
 export default class Home extends Component {
   state = {

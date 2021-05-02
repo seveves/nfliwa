@@ -3,7 +3,7 @@ import * as Markup from 'preact-markup';
 import * as StructuredTextUtils from 'datocms-structured-text-to-html-string';
 import { request } from '../../lib/datocms';
 
-import './style.scss';
+import './style.css';
 
 import { STATICS_QUERY } from '../../queries/statics';
 

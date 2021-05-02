@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
 
-import './style.scss';
+import './style.css';
 
 import SiteLayout from './layout';
 

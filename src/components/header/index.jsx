@@ -1,7 +1,7 @@
 import { Component, h } from 'preact';
 import { Link } from 'preact-router/match';
 
-import './style.scss';
+import './style.css';
 
 export default class Header extends Component {
   burgerMenuRef = createRef();
