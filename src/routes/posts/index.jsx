@@ -5,8 +5,8 @@ import { request } from '../../lib/datocms';
 
 import './style.css';
 
-import PrettyDate from '../pretty-date';
-import LazyImage from '../lazy-image';
+import PrettyDate from '../../components/pretty-date';
+import LazyImage from '../../components/lazy-image';
 
 import { POSTS_QUERY } from '../../queries/posts';
 

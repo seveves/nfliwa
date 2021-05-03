@@ -1,4 +1,4 @@
-import { Component, h } from 'preact';
+import { Component, h, createRef } from 'preact';
 import { Link } from 'preact-router/match';
 
 import './style.css';
@@ -16,7 +16,7 @@ export default class Header extends Component {
     return (
       <nav>
         <h2>
-          <a href="/client">NaturFreunde Lichtenwald</a>
+          <a href="/">NaturFreunde Lichtenwald</a>
         </h2>
         <div class="burger-menu" ref={this.burgerMenuRef} onClick={this.toggleMenu}>
           <div class="bar1"></div>

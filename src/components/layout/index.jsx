@@ -3,7 +3,7 @@ import { Router } from 'preact-router';
 
 import Header from '../header';
 import Home from '../../routes/home';
-import Posts from '../routes/posts';
+import Posts from '../../routes/posts';
 import StaticPage from '../../routes/static';
 
 export default class SiteLayout extends Component {
@@ -18,7 +18,7 @@ export default class SiteLayout extends Component {
   onRouteChange = (obj) => {
     const { documentLoaded } = this.state;
     if (documentLoaded) {
-      const title = obj.current.attributes.title;
+      const title = obj.current.props.title;
       if (title) {
         const staticPart = 'NaturFreunde Plochingen-Reichenbach-Lichtenwald';
         document.title = `${title} | ${staticPart}`;
@@ -40,7 +40,7 @@ export default class SiteLayout extends Component {
             <StaticPage path="/datenschutz" title="Datenschutz" pageId="dataprivacy" />
             <StaticPage path="/impressum" title="Impressum" pageId="imprint" />
             <StaticPage path="/mitgliedschaft" title="Mitgliedschaft" pageId="membership" />
-            <Home default />
+            <Home default title="Willkommen" />
           </Router>
           <div id="modal"></div>
         </div>

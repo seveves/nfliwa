@@ -6,7 +6,6 @@
     background-position: right 75%;
   }
 }
-
 @keyframes bgslide2 {
   from {
     background-position: right 75%;
@@ -15,9 +14,8 @@
     background-position: left 75%;
   }
 }
-
 .about {
-  background-image: url('../../assets/img/nfliwa-bg.jpeg');
+  background-image: url('../../assets/nfliwa-bg.jpeg');
   background-repeat: repeat-x;
   min-height: 500px;
   background-position: right 75%;
@@ -30,21 +28,18 @@
   padding: 2rem;
   width: 50%;
   min-height: 500px;
-  background-color: #9acdbf;
+  background-color: #9ACDBF;
   color: #282828;
   border-radius: 5px;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
 }
-.about .card h1,
-.about .card h3 {
+.about .card h1, .about .card h3 {
   margin: 0;
   padding: 0;
 }
-
 .about .card p {
   margin-top: 3rem;
 }
-
 .about.right {
   background-position: left 75%;
   transform: rotate(1deg) scale(1.02);
@@ -55,43 +50,39 @@
 .about.right .card {
   margin-left: 43%;
   background-color: #214762;
-  color: #e5f1ee;
+  color: #E5F1EE;
 }
-.about.right .card ul li {
+.about.right .card li {
   padding: 0.5rem;
 }
-
 .about.right .card ul {
   margin-top: 3rem;
   padding-left: 0;
 }
-
-.about.right .card ul li a {
+.about.right .card ul a {
   text-decoration: underline;
-  color: #e5f1ee;
+  color: #E5F1EE;
 }
-.about.right .card ul li a:after {
+.about.right .card ul a:after {
   content: ' 🔗';
 }
-
 .info {
   text-align: right;
   margin-top: 7rem;
 }
-.info a.btn-link {
+.info a.btnLink {
   padding: 1rem;
   width: 200px;
   text-align: center;
   color: #282828;
-  background-color: #9acdbf;
+  background-color: #9ACDBF;
   text-decoration: none;
   transition: 0.5s background-color;
   border-radius: 5px;
 }
-.info a.btn-link:hover {
+.info a.btnLink:hover {
   background-color: rgba(154, 205, 191, 0.5);
 }
-
 .social .info {
   margin-top: 4rem;
 }
@@ -105,7 +96,7 @@
   min-height: 330px;
   flex: 1;
   margin: 1rem;
-  background-color: rgb(245, 116, 47);
+  background-color: #f5742f;
   border-radius: 5px;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
   padding: 2rem;
@@ -113,39 +104,34 @@
 .social .row .col h2 {
   margin-top: 0;
 }
-
 .social .row .col a {
   color: #282828;
 }
-
-.social .row .col ul li {
+.social .row .col li {
   list-style: none;
   margin-bottom: 1rem;
 }
-.social .row .col ul li a {
+.social .row .col li a {
   position: relative;
   color: #282828;
 }
-.social .row .col ul li a span {
+.social .row .col li a span {
   position: absolute;
   padding-left: 1rem;
   padding-top: 3px;
   text-decoration: underline;
 }
-
-.social:first-child {
+.social .row .col:first-child {
   transform: rotate(-3deg);
   transform-origin: bottom right;
 }
-
-.social:last-child {
+.social .row .col:last-child {
   transform: rotate(3deg);
   transform-origin: bottom left;
 }
-
 .footer {
   width: 100%;
-  background-image: url('../../assets/img/naturfreunde_logo.gif');
+  background-image: url('../../assets/naturfreunde_logo.gif');
   background-repeat: no-repeat;
   background-position: 50%;
   height: 300px;
@@ -155,19 +141,17 @@
   margin-bottom: 3rem;
   justify-content: center;
 }
-
 .footer a {
   color: #282828;
   margin-left: 15px;
 }
-
-.cookies-alert {
+.cookiesAlert {
   position: fixed;
   z-index: 999;
   top: 70px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3);
   padding: 15px;
@@ -175,33 +159,30 @@
   display: flex;
   flex-direction: column;
 }
-
-.cookies-alert.title {
+.cookiesAlert .title {
   font-weight: bold;
 }
-
-.cookies-alert button {
+.cookiesAlert button {
   margin-left: auto;
 }
-
 @media (max-width: 1024px) {
   .about {
     transform: none;
     animation: none;
   }
+  .about.right {
+    animation: none;
+  }
   .about .card {
     width: 75%;
   }
-
   .about.right {
     transform: none;
     margin-bottom: 2rem;
-    animation: none;
   }
   .about.right .card {
     margin-left: 20%;
   }
-
   .social .row {
     margin-left: 0;
     flex-direction: column;
@@ -217,7 +198,6 @@
     transform: none;
   }
 }
-
 @media (max-width: 730px) {
   .about {
     transform: none;
@@ -227,7 +207,6 @@
     margin-bottom: 1rem;
     margin-left: 1rem;
   }
-
   .about.right {
     transform: none;
   }

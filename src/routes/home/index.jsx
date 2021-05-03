@@ -1,36 +1,11 @@
 import { Component, h } from 'preact';
-import Portal from 'preact-portal';
 
-import './style.css';
+import styles from './style.css';
 
 export default class Home extends Component {
-  state = {
-    dpShown: true,
-  };
-
-  hideAlert = () => {
-    this.setState({ dpShown: false });
-  };
-
-  render({}, { dpShown }) {
+  render() {
     return (
       <div>
-        {dpShown && (
-          <Portal into="#modal">
-            <div class="cookies-alert">
-              <div class="title">Datenschutz & Cookies</div>
-              <p>
-                Die Webseite der NaturFreunde Lichtenwald e.V. verwendet keine Cookies.
-                <br />
-                Alle Informationen zum Datenschutz finden sie{' '}
-                <a href="/datenschutz" alt="data privacy">
-                  hier.
-                </a>
-              </p>
-              <button onClick={this.hideAlert}>Schließen</button>
-            </div>
-          </Portal>
-        )}
         <About />
         <Info />
         <SocialMedia />
@@ -41,8 +16,8 @@ export default class Home extends Component {
 }
 
 const About = () => (
-  <section class="about">
-    <div class="card">
+  <section className={styles.about}>
+    <div className={styles.card}>
       <h1>Willkommen!</h1>
       <h3>Ortsgruppe Plochingen-Reichenbach-Lichtenwald</h3>
       <p>
@@ -69,8 +44,8 @@ const About = () => (
 );
 
 const Info = () => (
-  <section class="about right">
-    <div class="card">
+  <section className={styles.about + ' ' + styles.right}>
+    <div className={styles.card}>
       <h1>Wir engagieren uns ...</h1>
       <ul>
         <li>
@@ -87,8 +62,8 @@ const Info = () => (
           auch einer in unserer Umgebung entstehen soll)
         </li>
       </ul>
-      <div class="info">
-        <a class="btn-link" href="/mitgliedschaft" alt="more info about membership">
+      <div className={styles.info}>
+        <a className={styles.btnLink} href="/mitgliedschaft" alt="more info about membership">
           Infos zur Mitgliedschaft
         </a>
       </div>
@@ -97,9 +72,9 @@ const Info = () => (
 );
 
 const SocialMedia = () => (
-  <section class="social">
-    <div class="row">
-      <div class="col">
+  <section className={styles.social}>
+    <div className={styles.row}>
+      <div className={styles.col}>
         <h2>Social Media</h2>
         <p>
           Egal ob auf Facebook oder Instagram.
@@ -114,19 +89,19 @@ const SocialMedia = () => (
         <ul>
           <li>
             <a href="https://fb.me/naturfreundelichtenwald" alt="facebook">
-              <img src="img/fb-logo.png" alt="facebook logo" />
+              <img src="assets/fb-logo.png" alt="facebook logo" />
               <span>@naturfreundelichtenwald auf Facebook</span>
             </a>
           </li>
           <li>
             <a href="https://instagram.com/naturfreundelichtenwald" alt="instagram">
-              <img src="img/instagram-logo.png" alt="instagram logo" />
+              <img src="assets/instagram-logo.png" alt="instagram logo" />
               <span>@naturfreundelichtenwald auf Instagram</span>
             </a>
           </li>
         </ul>
       </div>
-      <div class="col">
+      <div className={styles.col}>
         <h2>Vereinsleben</h2>
         <p>
           Egal ob bei unseren Vereinsabenden, in der Seniorengruppe oder der Frauengymnastik.
@@ -142,13 +117,13 @@ const SocialMedia = () => (
           Neben den ganz kleinen Umweltentdeckern bieten wir desweiteren mit der <b>Naturforscherwerkstatt</b> ein Angebot für Kinder der 4.
           bis 7. Klasse an.
         </p>
-        <div class="info">
-          <a class="btn-link" href="/gruppen" alt="more info about our groups">
+        <div className={styles.info}>
+          <a className={styles.btnLink} href="/gruppen" alt="more info about our groups">
             Zu unseren Gruppen
           </a>
         </div>
       </div>
-      <div class="col">
+      <div className={styles.col}>
         <h2>Unser Haus</h2>
         <p>
           Unser Schurwaldhaus ist ein besonders beliebtes Ausflugsziel für Wanderer, Radfahrer und Familien.
@@ -170,7 +145,7 @@ const SocialMedia = () => (
 );
 
 const Footer = () => (
-  <div class="footer">
+  <div className={styles.footer}>
     <div>
       <a href="/impressum" alt="imprint">
         Impressum
