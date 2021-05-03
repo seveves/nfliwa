@@ -3,22 +3,18 @@
   padding-top: 1rem;
 }
 
-.load-more {
-  margin: auto;
-}
-
-.post-footer {
+.postFooter {
   margin-left: 20px;
   margin-right: 20px;
   border-bottom: 1px solid #cccccc;
 }
 
-.post-images {
+.postImages {
   padding: 20px;
   margin-top: 24px;
 }
 
-.post-title {
+.postTitle {
   color: #263238;
   font-size: 22px;
   font-weight: 700;
@@ -26,34 +22,34 @@
   margin-bottom: 5px;
 }
 
-.post-body {
+.postBody {
   color: #263238;
   padding-bottom: 20px;
   font-size: 16px;
   line-height: 28px;
   white-space: normal;
 }
-.post-body .post-date {
+.postBody .postDate {
   color: #263238;
   text-transform: uppercase;
 }
 
-.post-body .post-date::before {
+.postBody .postDate::before {
   content: '|';
   margin-right: 2px;
 }
 
-.post-link {
+.postLink {
   text-decoration: none;
 }
 
 @media (max-width: 1024px) {
-  .post-images {
+  .postImages {
     padding: 0;
     margin-top: 0;
   }
 
-  .post-footer {
+  .postFooter {
     margin-left: 10px;
     margin-right: 10px;
   }

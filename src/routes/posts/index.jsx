@@ -1,14 +1,43 @@
 import { Component, h } from 'preact';
-import * as Markup from 'preact-markup';
-import * as StructuredTextUtils from 'datocms-structured-text-to-html-string';
+import Markup from 'preact-markup';
+import { render as strender} from 'datocms-structured-text-to-html-string';
 import { request } from '../../lib/datocms';
 
-import './style.css';
+import styles from './style.css';
 
 import PrettyDate from '../../components/pretty-date';
 import LazyImage from '../../components/lazy-image';
 
 import { POSTS_QUERY } from '../../queries/posts';
+
+const Post = ({ data }) => (
+  <div class="row">
+    <div class="col">
+      <div className={styles.post}>
+        <h3 className={styles.postTitle} id={encodeURI(data.title).toLowerCase()}>
+          {data.title}
+        </h3>
+        <div className={styles.postBody}>
+          <span className={styles.postDate}>
+            <PrettyDate date={data.createdAt} />
+          </span>
+          <div class="post-text">
+            <Markup markup={strender(data.data.value.document)} type="html" />
+          </div>
+        </div>
+      </div>
+    </div>
+    {data.images.length > 0 ? (
+      <div class="col">
+        <div className={styles.postImages}>
+          {data.images.map((image, i) => (
+            <LazyImage image={image.responsiveImage} key={i} />
+          ))}
+        </div>
+      </div>
+    ) : null}
+  </div>
+);
 
 export default class Posts extends Component {
   componentDidMount() {
@@ -21,7 +50,7 @@ export default class Posts extends Component {
 
   render({}, { posts = [] }) {
     return (
-      <section class="posts">
+      <section className={styles.posts}>
         {posts.map((post, i) => (
           <Post data={post} key={i} />
         ))}
@@ -29,32 +58,3 @@ export default class Posts extends Component {
     );
   }
 }
-
-const Post = ({ data }) => (
-  <div class="row">
-    <div class="col">
-      <div class="post">
-        <h3 class="post-title" id={encodeURI(data.title).toLowerCase()}>
-          {data.title}
-        </h3>
-        <div class="post-body">
-          <span class="post-date">
-            <PrettyDate date={data.createdAt} />
-          </span>
-          <div class="post-text">
-            <Markup markup={StructuredTextUtils.render(data.data.value.document)} type="html" />
-          </div>
-        </div>
-      </div>
-    </div>
-    {data.images.length > 0 ? (
-      <div class="col">
-        <div class="post-images">
-          {data.images.map((image, i) => (
-            <LazyImage image={image.responsiveImage} key={i} />
-          ))}
-        </div>
-      </div>
-    ) : null}
-  </div>
-);
