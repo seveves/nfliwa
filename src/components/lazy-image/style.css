@@ -1,19 +1,18 @@
 .lazy-image {
   background-repeat: no-repeat;
   background-size: 150px 112px;
-  width: 150px; 
+  width: 150px;
   float: left;
   margin-left: 5px;
   margin-bottom: 5px;
   cursor: pointer;
   border-radius: 5px;
-
-  img {
-    opacity: 0;
-    width: 150px;
-    min-height: 112px;
-    border-radius: 5px;  
-  }
+}
+.lazy-image img {
+  opacity: 0;
+  width: 150px;
+  min-height: 112px;
+  border-radius: 5px;
 }
 
 .lazy-image:hover {

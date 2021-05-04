@@ -20,7 +20,7 @@
   min-height: 500px;
   background-position: right 75%;
   transform: rotate(-1deg) scale(1.02);
-  animation: 1s bgslide;
+  animation: bgslide 1s;
 }
 .about .card {
   margin-left: 5rem;
@@ -28,12 +28,13 @@
   padding: 2rem;
   width: 50%;
   min-height: 500px;
-  background-color: #9ACDBF;
+  background-color: #9acdbf;
   color: #282828;
   border-radius: 5px;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
 }
-.about .card h1, .about .card h3 {
+.about .card h1,
+.about .card h3 {
   margin: 0;
   padding: 0;
 }
@@ -45,12 +46,12 @@
   transform: rotate(1deg) scale(1.02);
   margin-bottom: 3rem;
   padding-top: 20px;
-  animation: 1s bgslide2;
+  animation: bgslide2 1s;
 }
 .about.right .card {
   margin-left: 43%;
   background-color: #214762;
-  color: #E5F1EE;
+  color: #e5f1ee;
 }
 .about.right .card li {
   padding: 0.5rem;
@@ -61,7 +62,7 @@
 }
 .about.right .card ul a {
   text-decoration: underline;
-  color: #E5F1EE;
+  color: #e5f1ee;
 }
 .about.right .card ul a:after {
   content: ' 🔗';
@@ -75,7 +76,7 @@
   width: 200px;
   text-align: center;
   color: #282828;
-  background-color: #9ACDBF;
+  background-color: #9acdbf;
   text-decoration: none;
   transition: 0.5s background-color;
   border-radius: 5px;

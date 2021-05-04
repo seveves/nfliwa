@@ -1,6 +1,6 @@
 import { Component, h } from 'preact';
-import * as Markup from 'preact-markup';
-import * as StructuredTextUtils from 'datocms-structured-text-to-html-string';
+import Markup from 'preact-markup';
+import * as StructuredText from 'datocms-structured-text-to-html-string';
 import { request } from '../../lib/datocms';
 
 import './style.css';
@@ -13,16 +13,18 @@ export default class StaticPage extends Component {
       query: STATICS_QUERY,
       variables: { pageid: pageId },
     }).then((data) => {
-      this.setState({ page: data.static.data.value.document });
+      const markup = StructuredText.render(data.static.data.value.document);
+      this.setState({ markup });
     });
   }
 
   componentDidMount() {
-    this.fetchStaticPageContent(this.props.url);
+    this.fetchStaticPageContent(this.props.pageId);
   }
 
   componentWillReceiveProps(props) {
     if (this.props.pageId !== props.pageId) {
+      this.setState({ markup: null });
       this.fetchStaticPageContent(props.pageId);
     }
   }
@@ -31,19 +33,15 @@ export default class StaticPage extends Component {
     return true;
   }
 
-  render({ pageId, title }, { page }) {
+  render({ pageId, title }, { markup }) {
     return (
       <section class="static">
-        {page ? (
-          <div class="page">
-            <h3 class="page-title">{title}</h3>
-            <div class="page-body">
-              <div class="page-text">
-                <Markup markup={StructuredTextUtils.render(page)} type="html" />
-              </div>
-            </div>
+        <div class="page">
+          <h3 class="page-title">{title}</h3>
+          <div class="page-body">
+            <div class="page-text">{markup && <Markup markup={markup} type="html" />}</div>
           </div>
-        ) : null}
+        </div>
       </section>
     );
   }

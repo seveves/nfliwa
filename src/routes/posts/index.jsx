@@ -10,62 +10,10 @@ import LazyImage from '../../components/lazy-image';
 
 import { POSTS_QUERY } from '../../queries/posts';
 
-const structuredText = {
-  "type": "root",
-  "children": [
-    { 
-      "type": "heading", 
-      "level": 1, 
-      "children": [
-        {
-          "type": "span",
-          "marks": [],
-          "value": "This is a title!"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "children": [
-        {
-          "type": "span",
-          "value": "This is a "
-        },
-        {
-          "type": "span",
-          "marks": ["strong"],
-          "value": "paragraph!"
-        }
-      ]
-    },
-    {
-      "type": "list",
-      "style": "bulleted",
-      "children": [
-        {
-          "type": "listItem",
-		 "children": [
-			 {
-            "type": "paragraph",
-            "children": [
-              {
-                "type": "span",
-                "value": "And this is a list!"
-              }
-            ]
-          },
-		 ]
-          
-        }
-      ]
-    }
-  ]
-};
-
 const Post = ({ data }) => (
   <div class="row">
     <div class="col">
-      <div className={styles.post}>
+      <div>
         <h3 className={styles.postTitle} id={encodeURI(data.title).toLowerCase()}>
           {data.title}
         </h3>
@@ -74,7 +22,7 @@ const Post = ({ data }) => (
             <PrettyDate date={data.createdAt} />
           </span>
           <div class="post-text">
-            <Markup markup={StructuredText.render(structuredText)} type="html" />
+            <Markup markup={StructuredText.render(data.data.value.document)} type="html" />
           </div>
         </div>
       </div>

@@ -49,19 +49,19 @@ nav ul li a:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.hidden-sm {
+.hiddenSm {
   display: block;
 }
 
-.burger-menu {
+.burgerMenu {
   display: none;
   cursor: pointer;
   margin-top: 10px;
   margin-right: 15px;
 }
-.burger-menu .bar1,
-.burger-menu .bar2,
-.burger-menu .bar3 {
+.burgerMenu .bar1,
+.burgerMenu .bar2,
+.burgerMenu .bar3 {
   width: 35px;
   height: 3px;
   background-color: #e5f1ee;
@@ -69,25 +69,25 @@ nav ul li a:hover {
   transition: 0.4s;
 }
 
-.burger-menu.change .bar1 {
+.burgerMenu.change .bar1 {
   transform: rotate(-45deg) translate(-10px, 6px);
 }
 
-.burger-menu.change .bar2 {
+.burgerMenu.change .bar2 {
   opacity: 0;
 }
 
-.burger-menu.change .bar3 {
+.burgerMenu.change .bar3 {
   transform: rotate(45deg) translate(-6px, -2px);
 }
 
 @media (max-width: 1024px) {
-  .burger-menu {
+  .burgerMenu {
     display: block;
     float: right;
   }
 
-  .hidden-sm {
+  .hiddenSm {
     display: none;
   }
 

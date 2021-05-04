@@ -11,13 +11,8 @@ export default class SiteLayout extends Component {
     return false;
   }
 
-  componentDidMount() {
-    this.setState({ documentLoaded: true });
-  }
-
   onRouteChange = (obj) => {
-    const { documentLoaded } = this.state;
-    if (documentLoaded) {
+    if (typeof window !== 'undefined') {
       const title = obj.current.props.title;
       if (title) {
         const staticPart = 'NaturFreunde Plochingen-Reichenbach-Lichtenwald';

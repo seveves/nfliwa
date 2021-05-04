@@ -29,12 +29,13 @@
   line-height: 28px;
   white-space: normal;
 }
-.postBody .postDate {
+
+.postDate {
   color: #263238;
   text-transform: uppercase;
 }
 
-.postBody .postDate::before {
+.postDate::before {
   content: '|';
   margin-right: 2px;
 }
