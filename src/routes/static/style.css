@@ -3,7 +3,7 @@
   padding-top: 1rem;
 }
 
-.page-title {
+.pageTitle {
   color: #263238;
   font-size: 22px;
   font-weight: 700;
@@ -11,7 +11,7 @@
   margin-bottom: 5px;
 }
 
-.page-body {
+.pageBody {
   color: #263238;
   padding-bottom: 20px;
   font-size: 16px;

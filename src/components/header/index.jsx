@@ -45,7 +45,7 @@ export default class Header extends Component {
             </Link>
           </li>
           <li>
-            <Link activeClassName="active" href="/mitgliedschaft" alt="membership">
+            <Link activeClassName={styles.active} href="/mitgliedschaft" alt="membership">
               Mitgliedschaft
             </Link>
           </li>
