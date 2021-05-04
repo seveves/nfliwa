@@ -1,5 +1,7 @@
 import { Component, h } from 'preact';
 
+import styles from '../style.css';
+
 export default class InnerImage extends Component {
   setOpacity() {
     setTimeout(() => {
@@ -28,6 +30,6 @@ export default class InnerImage extends Component {
   }
 
   render({ alt, title }, { src = '', opacity = 0 }) {
-    return <img class="fade-in" src={src} style={{ opacity }} alt={alt} title={title} />;
+    return <img className={styles.fadeIn} src={src} style={{ opacity }} alt={alt} title={title} />;
   }
 }

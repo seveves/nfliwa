@@ -6,6 +6,14 @@ export const STATICS_QUERY = `
       data {
         value
       }
+      image {
+        responsiveImage {
+          src
+          alt
+          title
+          base64
+        }
+      }
     }
   }
 `;

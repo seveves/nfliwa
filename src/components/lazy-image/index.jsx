@@ -1,20 +1,17 @@
 import { Component, h } from 'preact';
-import Portal from 'preact-portal';
+import { createPortal } from 'preact/compat';
 
-import './style.css';
+import styles from './style.css';
 
 import InnerImage from './inner-image/index';
 
-class Img extends Component {
-  componentWillUnmount() {
-    // this line fixes an issue with preact recycling the img element
-    if (this.base !== undefined) {
-      this.base.src = this.base[Symbol.for('preactattr')].src = '';
-    }
-  }
-
-  render(props) {
-    return <img {...props} />;
+class Popup extends Component {
+  render({ image, close }) {
+    return (
+      <div className="popup" onClick={close}>
+        <img src={image.src} alt={image.alt} title={image.title} />
+      </div>
+    );
   }
 }
 
@@ -24,18 +21,13 @@ export default class LazyImage extends Component {
 
   render({ image }, { open = false }) {
     const style = { backgroundImage: `url(${image.base64})` };
+    const container = typeof window !== undefined ? document.getElementById('modal') : null;
     return (
       <div>
-        <div class="lazy-image" style={style} onClick={this.open}>
+        <div className={styles.lazyImage} style={style} onClick={this.open}>
           <InnerImage src={image.src} alt={image.alt} title={image.title} />
         </div>
-        {open ? (
-          <Portal into="#modal">
-            <div class="popup" onClick={this.close}>
-              <Img src={image.src} alt={image.alt} title={image.title} />
-            </div>
-          </Portal>
-        ) : null}
+        {open ? createPortal(<Popup image={image} close={this.close} />, container) : null}
       </div>
     );
   }
