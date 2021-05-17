@@ -40,6 +40,11 @@
   margin-top: 0;
 }
 
+.markup strong {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
 .popup {
   position: fixed;
   z-index: 999;

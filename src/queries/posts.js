@@ -1,6 +1,6 @@
 export const POSTS_QUERY = `
   query PostsPage {
-    allPosts {
+    allPosts(orderBy: createdAt_DESC) {
       id
       title
       data {
