@@ -35,6 +35,7 @@ export default class SiteLayout extends Component {
             <StaticPage path="/datenschutz" title="Datenschutz" pageId="dataprivacy" />
             <StaticPage path="/impressum" title="Impressum" pageId="imprint" />
             <StaticPage path="/mitgliedschaft" title="Mitgliedschaft" pageId="membership" />
+            <StaticPage path="/asl" title="Außerschulische Lernorte" pageId="asl" />
             <Home default title="Willkommen" />
           </Router>
           <div id="modal"></div>

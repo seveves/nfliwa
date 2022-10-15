@@ -50,6 +50,11 @@ export default class Header extends Component {
             </Link>
           </li>
           <li>
+            <Link activeClassName={styles.active} href="/asl" alt="ausserschulische lernorte" text="Außerschulische Lernorte">
+              ASL
+            </Link>
+          </li>
+          <li>
             <a href="https://trails.naturfreunde-lichtenwald.de" alt="NaturFreunde Trails">
               MTB-Trails
             </a>
