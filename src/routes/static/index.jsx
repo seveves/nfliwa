@@ -3,8 +3,6 @@ import Markup from 'preact-markup';
 import * as StructuredText from 'datocms-structured-text-to-html-string';
 import { request } from '../../lib/datocms';
 
-import LazyImage from '../../components/lazy-image';
-
 import styles from './style.css';
 
 import { STATICS_QUERY } from '../../queries/statics';
@@ -16,7 +14,7 @@ export default class StaticPage extends Component {
       variables: { pageid: pageId },
     }).then((data) => {
       const markup = StructuredText.render(data.static.data.value.document);
-      this.setState({ markup, image: data.static.image.responsiveImage });
+      this.setState({ markup, title: data.static.title, image: data.static.image.responsiveImage });
     });
   }
 
@@ -26,7 +24,7 @@ export default class StaticPage extends Component {
 
   componentWillReceiveProps(props) {
     if (this.props.pageId !== props.pageId) {
-      this.setState({ markup: null });
+      this.setState({ markup: null, title: null, image: null });
       this.fetchStaticPageContent(props.pageId);
     }
   }
@@ -35,11 +33,11 @@ export default class StaticPage extends Component {
     return true;
   }
 
-  render({ pageId, title }, { markup, image }) {
+  render({ pageId, title }, { markup, image, pageTitle }) {
     return (
       <section>
         <div className={styles.page}>
-          <h3 className={styles.pageTitle}>{title}</h3>
+          <h3 className={styles.pageTitle}>{pageTitle || title}</h3>
           {image && <img className={styles.pageImage} src={image.src} alt={image.alt} title={image.title} />}
           <div className={styles.pageBody}>{markup && <Markup markup={markup} type="html" />}</div>
         </div>
