@@ -40,7 +40,7 @@ export default class StaticPage extends Component {
       <section>
         <div className={styles.page}>
           <h3 className={styles.pageTitle}>{title}</h3>
-          {image && <LazyImage image={image.responsiveImage} />}
+          {image && <img className={styles.pageImage} src={image.src} alt={image.alt} title={image.title} />}
           <div className={styles.pageBody}>{markup && <Markup markup={markup} type="html" />}</div>
         </div>
       </section>
