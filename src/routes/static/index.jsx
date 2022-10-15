@@ -16,7 +16,7 @@ export default class StaticPage extends Component {
       variables: { pageid: pageId },
     }).then((data) => {
       const markup = StructuredText.render(data.static.data.value.document);
-      this.setState({ markup, image: data.static.image });
+      this.setState({ markup, image: data.static.image.responsiveImage });
     });
   }
 
