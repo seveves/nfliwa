@@ -50,7 +50,7 @@ export default class Header extends Component {
             </Link>
           </li>
           <li>
-            <Link activeClassName={styles.active} href="/asl" alt="ausserschulische lernorte" text="Außerschulische Lernorte">
+            <Link activeClassName={styles.active} href="/asl" alt="ausserschulische lernorte">
               ASL
             </Link>
           </li>
