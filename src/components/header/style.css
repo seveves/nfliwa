@@ -81,7 +81,7 @@ nav ul li a:hover {
   transform: rotate(45deg) translate(-6px, -2px);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1080px) {
   .burgerMenu {
     display: block;
     float: right;
