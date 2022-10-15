@@ -3,8 +3,6 @@ import Swiper, { Thumbs, Navigation } from 'swiper';
 
 export default class ImageGallery extends Component {
   componentWillUnmount() {
-    this.swiper.removeAllSlides();
-    this.thumbsSwiper.removeAllSlides();
     this.swiper.destroy(true, true);
     this.thumbsSwiper.destroy(true, true);
     this.swiper = null;
