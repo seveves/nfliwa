@@ -15,6 +15,14 @@ export const STATICS_QUERY = `
           base64
         }
       }
+      enbw {
+        responsiveImage {
+          src
+          alt
+          title
+          base64
+        }
+      }
       gallery {
         responsiveImage {
           src

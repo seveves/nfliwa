@@ -26,7 +26,7 @@ export default class ImageGallery extends Component {
         modules: [Navigation, Thumbs],
         thumbs: {
           swiper: this.thumbsSwiper,
-          autoScrollOffset: 1
+          autoScrollOffset: 1,
         },
       });
     }
@@ -35,12 +35,13 @@ export default class ImageGallery extends Component {
   render({ items }) {
     return (
       <>
+        <h2 style={{ textAlign: 'center' }}>Projektbilder</h2>
         <div className="swiper mySwiper2" ref={(r) => (this.mainSwiperRef = r)}>
           <div className="swiper-wrapper">
             {items.map((item, index) => (
               <div className="swiper-slide" key={`swiper-slide-${index}`}>
                 <img src={item.src} alt={item.alt} title={item.title} />
-                { item.title && <div className="slide-text">{item.title}</div> }
+                {item.title && <div className="slide-text">{item.title}</div>}
               </div>
             ))}
           </div>
