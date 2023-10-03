@@ -30,8 +30,13 @@ export default class Header extends Component {
             </Link>
           </li>
           <li>
-            <Link activeClassName={styles.active} href="/gruppen" alt="groups">
-              Gruppen
+            <Link activeClassName={styles.active} href="/uwd" alt="umweltdetektive">
+              Umweltdetektiv*innen
+            </Link>
+          </li>
+          <li>
+            <Link activeClassName={styles.active} href="/nfw" alt="naturforscher">
+              Naturforscher*innen
             </Link>
           </li>
           <li>

@@ -29,6 +29,8 @@ export default class SiteLayout extends Component {
           <Router onChange={this.onRouteChange}>
             <Home path="/" title="Willkommen" />
             <Posts path="/posts" title="Neuigkeiten" />
+            <StaticPage path="/uwd" title="Umweltdetektiv*innen" pageId="uwd" />
+            <StaticPage path="/nfw" title="Naturforscher*innen" pageId="nfw" />
             <StaticPage path="/gruppen" title="Gruppen" pageId="groups" />
             <StaticPage path="/wanderwege" title="Wanderwege" pageId="hikes" />
             <StaticPage path="/termine" title="Termine" pageId="events" />
