@@ -41,7 +41,7 @@
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "preact-markup": "^2.1.1",
-    "preact": "^10.11.3",
+    "preact": "^10.27.1",
     "preact-render-to-string": "^5.2.6",
     "preact-router": "^3.2.1",
     "swiper": "^8.4.4"
@@ -52,5 +52,8 @@
       "<rootDir>/tests/__mocks__/browserMocks.js",
       "<rootDir>/tests/__mocks__/setupTests.js"
     ]
+  },
+  "engines": {
+    "node": "21"
   }
 }
