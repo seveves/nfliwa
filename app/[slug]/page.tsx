@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import ImageGallery from "@/app/components/image-gallery";
-import * as StructuredText from "datocms-structured-text-to-html-string";
 import styles from "./page.module.css";
+import SafeHTML from "../components/safe-html";
 
 interface ResponsiveImage {
 	src: string;
@@ -56,7 +56,7 @@ export default function StaticPage() {
 			setLoading(true);
 			setError(null);
 			try {
-				const response = await fetch("/api/datocms", {
+				const response = await fetch("/api/static", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ pageid: SLUG_MAP[slug] || slug }),
@@ -88,11 +88,13 @@ export default function StaticPage() {
 	}, [slug]);
 
 	if (loading) {
-		return <div className="p-12 text-center">Loading...</div>;
+		return <div className="p-12 text-center">Lade Inhalte...</div>;
 	}
 
 	if (error || !pageData) {
-		return <div className="p-12 text-center">{error || "Page not found"}</div>;
+		return (
+			<div className="p-12 text-center">{error || "Kein Inhalt gefunden."}</div>
+		);
 	}
 
 	return (
@@ -121,11 +123,7 @@ export default function StaticPage() {
 			<div
 				className={`text-gray-800 text-base leading-7 mb-8 ${styles.structuredContent}`}
 			>
-				<div
-					dangerouslySetInnerHTML={{
-						__html: StructuredText.render(pageData.data),
-					}}
-				/>
+				<SafeHTML content={pageData.data} />
 			</div>
 
 			{pageData.enbw && (

@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { performRequest } from "@/app/lib/datocms";
-import { POSTS_QUERY } from "@/app/queries/posts";
-import PrettyDate from "@/app/components/pretty-date";
+"use client";
+
 import PostComponentClient from "@/app/components/post-component-client";
-import * as StructuredText from "datocms-structured-text-to-html-string";
+import PrettyDate from "@/app/components/pretty-date";
+import { useEffect, useState } from "react";
+import SafeHTML from "../components/safe-html";
 import styles from "./page.module.css";
 
 interface PostImage {
@@ -26,13 +26,61 @@ interface Post {
 	}>;
 }
 
-export default async function PostsPage() {
-	const data = await performRequest<{ allPosts: Post[] }>(POSTS_QUERY);
-	const posts = data.allPosts;
+export default function PostsPage() {
+	const [pageData, setPageData] = useState<Post[] | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			setLoading(true);
+			setError(null);
+			try {
+				const response = await fetch("/api/posts", {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to fetch from API");
+				}
+
+				const data = await response.json();
+				const page: Post[] = data.allPosts || [];
+
+				if (!page) {
+					setError("Page not found");
+					setPageData(null);
+				} else {
+					setPageData(page);
+				}
+			} catch (err) {
+				console.error("Error fetching page:", err);
+				setError("Failed to load page");
+				setPageData(null);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchData();
+	}, []);
+
+	if (loading) {
+		return <div className="p-12 text-center">Lade Inhalte...</div>;
+	}
+
+	if (error || !pageData) {
+		return (
+			<div className="p-12 text-center">{error || "Kein Inhalt gefunden."}</div>
+		);
+	}
+
+	console.log("PostsPage pageData:", pageData);
 
 	return (
 		<section className="p-12 pt-4 max-w-4xl mx-auto">
-			{posts.map((post) => (
+			{pageData.map((post) => (
 				<PostComponent key={post.id} post={post} />
 			))}
 		</section>
@@ -50,12 +98,9 @@ function PostComponent({ post }: { post: Post }) {
 					<span className="text-gray-800 uppercase text-sm">
 						| <PrettyDate date={post.createdAt} />
 					</span>
-					<div
-						className={`post-text mt-4 ${styles.postText}`}
-						dangerouslySetInnerHTML={{
-							__html: StructuredText.render(post.data),
-						}}
-					/>
+					<div className={`post-text mt-4 ${styles.postText}`}>
+						<SafeHTML content={post.data} />
+					</div>
 				</div>
 			</div>
 			{post.images.length > 0 && <PostComponentClient images={post.images} />}
