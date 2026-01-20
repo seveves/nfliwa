@@ -1,4 +1,4 @@
 {
   "version": 2,
-  "outputDirectory": ".next"
+  "outputDirectory": "/vercel/output"
 }
