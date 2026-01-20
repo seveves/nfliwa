@@ -1,0 +1,172 @@
+.postText a {
+  color: #0891b2;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.postText a:hover {
+  color: #0e7490;
+}
+
+.postText a:visited {
+  color: #6366f1;
+}
+
+/* Header styling */
+.postText h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.postText h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #374151;
+  margin-top: 1.25rem;
+  margin-bottom: 0.875rem;
+  line-height: 1.2;
+}
+
+.postText h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4b5563;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.postText h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-top: 0.875rem;
+  margin-bottom: 0.625rem;
+  line-height: 1.4;
+}
+
+.postText h5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.postText h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* List styling */
+.postText ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.postText ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.postText li {
+  margin-bottom: 0.375rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.postText ul ul,
+.postText ol ul {
+  list-style-type: circle;
+  margin-top: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+
+.postText ol ol,
+.postText ul ol {
+  list-style-type: lower-alpha;
+  margin-top: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+
+/* Blockquote styling */
+.postText blockquote {
+  border-left: 4px solid #0891b2;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: #6b7280;
+  font-style: italic;
+  background-color: #f3f4f6;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
+}
+
+/* Code and pre styling */
+.postText code {
+  background-color: #f3f4f6;
+  color: #e11d48;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.postText pre {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.postText pre code {
+  background-color: transparent;
+  color: #f3f4f6;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Paragraph styling */
+.postText p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* Strong and emphasis */
+.postText strong,
+.postText b {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.postText em,
+.postText i {
+  font-style: italic;
+}
+
+/* Horizontal rule */
+.postText hr {
+  border: none;
+  border-top: 2px solid #d1d5db;
+  margin: 2rem 0;
+}

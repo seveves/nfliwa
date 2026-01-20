@@ -1,56 +1,29 @@
 {
+  "name": "nextjs",
+  "version": "0.1.0",
   "private": true,
-  "name": "nfliwa",
-  "version": "0.0.2",
-  "license": "MIT",
-  "description": "A homepage for the Naturfreunde Deutschlands Ortsgruppe Plochingen-Reichenbach-Lichtenwald e.V.",
-  "author": "Severin Friede <sevefriede@gmail.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seveves/nfliwa.git"
-  },
-  "bugs": {
-    "url": "https://github.com/seveves/nfliwa"
-  },
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider preact build",
-    "serve": "sirv build --port 8080 --cors --single",
-    "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider preact watch",
-    "lint": "eslint src",
-    "test": "jest"
-  },
-  "eslintConfig": {
-    "extends": "preact",
-    "ignorePatterns": [
-      "build/"
-    ]
-  },
-  "devDependencies": {
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^4.0.0",
-    "eslint": "^8.30.0",
-    "eslint-config-preact": "^1.3.0",
-    "jest": "^27.0.0",
-    "jest-preset-preact": "^4.0.5",
-    "preact-cli": "^3.4.2",
-    "sirv-cli": "^2.0.2",
-    "cross-env": "^7.0.3"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "datocms-structured-text-to-html-string": "^2.1.11",
-    "graphql": "^16.8.1",
-    "graphql-request": "^6.1.0",
-    "preact-markup": "^2.1.1",
-    "preact": "^10.27.1",
-    "preact-render-to-string": "^5.2.6",
-    "preact-router": "^3.2.1",
-    "swiper": "^8.4.4"
+    "@datocms/cda-client": "^0.2.10",
+    "datocms-structured-text-to-html-string": "^5.1.7",
+    "next": "16.1.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
-  "jest": {
-    "preset": "jest-preset-preact",
-    "setupFiles": [
-      "<rootDir>/tests/__mocks__/browserMocks.js",
-      "<rootDir>/tests/__mocks__/setupTests.js"
-    ]
+  "devDependencies": {
+    "@biomejs/biome": "2.3.11",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
