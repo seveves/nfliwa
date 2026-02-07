@@ -67,19 +67,19 @@ export default function PostsPage() {
 	}, []);
 
 	if (loading) {
-		return <div className="p-12 text-center">Lade Inhalte...</div>;
+		return <div className="p-6 lg:p-12 text-center">Lade Inhalte...</div>;
 	}
 
 	if (error || !pageData) {
 		return (
-			<div className="p-12 text-center">{error || "Kein Inhalt gefunden."}</div>
+			<div className="p-6 lg:p-12 text-center">
+				{error || "Kein Inhalt gefunden."}
+			</div>
 		);
 	}
 
-	console.log("PostsPage pageData:", pageData);
-
 	return (
-		<section className="p-12 pt-4 max-w-4xl mx-auto">
+		<section className="p-6 lg:p-12 pt-4 max-w-4xl mx-auto">
 			{pageData.map((post) => (
 				<PostComponent key={post.id} post={post} />
 			))}
