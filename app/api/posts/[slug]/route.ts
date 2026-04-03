@@ -2,6 +2,10 @@ import { performRequest } from "@/app/lib/datocms";
 import { SINGLE_POST_QUERY } from "@/app/queries/posts";
 import { NextRequest, NextResponse } from "next/server";
 
+interface PostData {
+	post?: Record<string, unknown> | null;
+}
+
 export async function GET(
 	_request: NextRequest,
 	{ params }: { params: Promise<{ slug: string }> },
@@ -9,9 +13,9 @@ export async function GET(
 	try {
 		const { slug } = await params;
 
-		const data = await performRequest(SINGLE_POST_QUERY, {
+		const data = (await performRequest(SINGLE_POST_QUERY, {
 			variables: { slug },
-		});
+		})) as PostData;
 
 		if (!data.post) {
 			return NextResponse.json({ error: "Post not found" }, { status: 404 });
