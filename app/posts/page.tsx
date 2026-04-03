@@ -2,6 +2,7 @@
 
 import PostComponentClient from "@/app/components/post-component-client";
 import PrettyDate from "@/app/components/pretty-date";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import SafeHTML from "../components/safe-html";
 import styles from "./page.module.css";
@@ -16,6 +17,7 @@ interface PostImage {
 interface Post {
 	id: string;
 	title: string;
+	slug: string;
 	data: {
 		value: any;
 	};
@@ -91,9 +93,11 @@ function PostComponent({ post }: { post: Post }) {
 	return (
 		<div className="flex flex-col lg:flex-row gap-6 mb-8 border-b border-gray-300 pb-8">
 			<div className="flex-1">
-				<h3 className="text-gray-800 text-2xl font-bold leading-8 mb-1">
-					{post.title}
-				</h3>
+				<Link href={`/posts/${post.slug}`}>
+					<h3 className="text-gray-800 text-2xl font-bold leading-8 mb-1 hover:text-blue-600 transition-colors cursor-pointer">
+						{post.title}
+					</h3>
+				</Link>
 				<div className="text-gray-800 pb-5 text-base leading-7">
 					<span className="text-gray-800 uppercase text-sm">
 						| <PrettyDate date={post.createdAt} />
