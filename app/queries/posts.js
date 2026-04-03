@@ -3,7 +3,6 @@ export const POSTS_QUERY = `
     allPosts(orderBy: createdAt_DESC) {
       id
       title
-      slug
       data {
         value
       }
@@ -22,11 +21,10 @@ export const POSTS_QUERY = `
 `;
 
 export const SINGLE_POST_QUERY = `
-  query SinglePost($slug: String!) {
-    post(filter: { slug: { eq: $slug } }) {
+  query SinglePost($id: ItemId!) {
+    post(filter: { id: { eq: $id } }) {
       id
       title
-      slug
       data {
         value
       }

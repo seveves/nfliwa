@@ -17,7 +17,6 @@ interface PostImage {
 interface Post {
 	id: string;
 	title: string;
-	slug: string;
 	data: {
 		value: any;
 	};
@@ -93,7 +92,7 @@ function PostComponent({ post }: { post: Post }) {
 	return (
 		<div className="flex flex-col lg:flex-row gap-6 mb-8 border-b border-gray-300 pb-8">
 			<div className="flex-1">
-				<Link href={`/posts/${post.slug}`}>
+				<Link href={`/posts/${post.id}`}>
 					<h3 className="text-gray-800 text-2xl font-bold leading-8 mb-1 hover:text-blue-600 transition-colors cursor-pointer">
 						{post.title}
 					</h3>

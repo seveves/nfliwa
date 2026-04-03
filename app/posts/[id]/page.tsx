@@ -17,7 +17,6 @@ interface PostImage {
 interface Post {
 	id: string;
 	title: string;
-	slug: string;
 	data: {
 		value: any;
 	};
@@ -30,7 +29,7 @@ interface Post {
 
 export default function SinglePostPage() {
 	const params = useParams();
-	const slug = params.slug as string;
+	const id = params.id as string;
 	const [post, setPost] = useState<Post | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -40,7 +39,7 @@ export default function SinglePostPage() {
 			setLoading(true);
 			setError(null);
 			try {
-				const response = await fetch(`/api/posts/${slug}`, {
+				const response = await fetch(`/api/posts/${id}`, {
 					method: "GET",
 					headers: { "Content-Type": "application/json" },
 				});
@@ -73,10 +72,10 @@ export default function SinglePostPage() {
 			}
 		};
 
-		if (slug) {
+		if (id) {
 			fetchPost();
 		}
-	}, [slug]);
+	}, [id]);
 
 	if (loading) {
 		return <div className="p-6 lg:p-12 text-center">Lade Inhalte...</div>;

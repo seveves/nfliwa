@@ -8,13 +8,13 @@ interface PostData {
 
 export async function GET(
 	_request: NextRequest,
-	{ params }: { params: Promise<{ slug: string }> },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
-		const { slug } = await params;
+		const { id } = await params;
 
 		const data = (await performRequest(SINGLE_POST_QUERY, {
-			variables: { slug },
+			variables: { id },
 		})) as PostData;
 
 		if (!data.post) {
