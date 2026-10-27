@@ -38,7 +38,6 @@ const SLUG_MAP: Record<string, string> = {
 	asl: "asl",
 	termine: "events",
 	mitgliedschaft: "membership",
-	wanderwege: "hikes",
 	gruppen: "groups",
 	datenschutz: "dataprivacy",
 	impressum: "imprint",

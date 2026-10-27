@@ -23,7 +23,7 @@ export default function Header() {
 	];
 
 	const wegenetzItems = [
-		{ href: "/wanderwege", label: "Wanderwege" },
+		{ href: "/hikes", label: "Wanderwege" },
 		{
 			href: "https://trails.naturfreunde-lichtenwald.de",
 			label: "MTB-Trails",
